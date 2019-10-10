@@ -1,3 +1,5 @@
 .idea
 antlr_files
 venv
+gen
+*\__pycache__
