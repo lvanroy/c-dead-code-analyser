@@ -182,3 +182,188 @@ class ASTConstructor(CListener):
 
     def exitUnaryOperator(self, ctx: CParser.UnaryOperatorContext):
         pass
+
+    def enterCastExpression(self, ctx: CParser.CastExpressionContext):
+        if not ctx.unaryExpression():
+            new_node = self.grow_tree("Cast Expression", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitCastExpression(self, ctx: CParser.CastExpressionContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.CastExpressionContext:
+            self.__node_stack.pop(0)
+
+    def enterMultiplicativeExpression(self, ctx: CParser.MultiplicativeExpressionContext):
+        if not ctx.castExpression():
+            new_node = self.grow_tree("Multiplication Expression", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitMultiplicativeExpression(self, ctx: CParser.MultiplicativeExpressionContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.MultiplicativeExpressionContext:
+            if top_node.get_ctx().Star():
+                self.grow_on_index("*", ctx, 1)
+            elif top_node.get_ctx().Div():
+                self.grow_on_index("/", ctx, 1)
+            elif top_node.get_ctx().Mod():
+                self.grow_on_index("%", ctx, 1)
+            self.__node_stack.pop(0)
+
+    def enterAdditiveExpression(self, ctx: CParser.AdditiveExpressionContext):
+        if not ctx.multiplicativeExpression():
+            new_node = self.grow_tree("Additive Expression", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitAdditiveExpression(self, ctx: CParser.AdditiveExpressionContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.AdditiveExpressionContext:
+            if top_node.get_ctx().Plus():
+                self.grow_on_index("+", ctx, 1)
+            elif top_node.get_ctx().Minus():
+                self.grow_on_index("-", ctx, 1)
+            self.__node_stack.pop(0)
+
+    def enterShiftExpression(self, ctx: CParser.ShiftExpressionContext):
+        if not ctx.additiveExpression():
+            new_node = self.grow_tree("Shift Expression", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitShiftExpression(self, ctx: CParser.ShiftExpressionContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.ShiftExpressionContext:
+            if top_node.get_ctx().LeftShift():
+                self.grow_on_index("<<", ctx, 1)
+            elif top_node.get_ctx().RightShift():
+                self.grow_on_index(">>", ctx, 1)
+            self.__node_stack.pop(0)
+
+    def enterRelationalExpression(self, ctx: CParser.RelationalExpressionContext):
+        if not ctx.shiftExpression():
+            new_node = self.grow_tree("Relational Expression", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitRelationalExpression(self, ctx: CParser.RelationalExpressionContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.RelationalExpressionContext:
+            if top_node.get_ctx().Less():
+                self.grow_on_index("<", ctx, 1)
+            elif top_node.get_ctx().Greater():
+                self.grow_on_index(">", ctx, 1)
+            elif top_node.get_ctx().LessEqual():
+                self.grow_on_index("<=", ctx, 1)
+            elif top_node.get_ctx().GreaterEqual():
+                self.grow_on_index(">=", ctx, 1)
+            self.__node_stack.pop(0)
+
+    def enterEqualityExpression(self, ctx: CParser.EqualityExpressionContext):
+        if not ctx.relationalExpression():
+            new_node = self.grow_tree("Equality Expression", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitEqualityExpression(self, ctx: CParser.EqualityExpressionContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.EqualityExpressionContext:
+            if top_node.get_ctx().Equal():
+                self.grow_on_index("==", ctx, 1)
+            elif top_node.get_ctx().NotEqual():
+                self.grow_on_index("!=", ctx, 1)
+            self.__node_stack.pop(0)
+
+    def enterAndExpression(self, ctx: CParser.AndExpressionContext):
+        if not ctx.equalityExpression():
+            new_node = self.grow_tree("And Expression", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitAndExpression(self, ctx: CParser.AndExpressionContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.AndExpressionContext:
+            self.grow_on_index("&", ctx, 1)
+            self.__node_stack.pop(0)
+
+    def enterExclusiveOrExpression(self, ctx: CParser.ExclusiveOrExpressionContext):
+        if not ctx.andExpression():
+            new_node = self.grow_tree("Exclusive Or Expression", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitExclusiveOrExpression(self, ctx: CParser.ExclusiveOrExpressionContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.ExclusiveOrExpressionContext:
+            self.grow_on_index("^", ctx, 1)
+            self.__node_stack.pop(0)
+
+    def enterInclusiveOrExpression(self, ctx: CParser.InclusiveOrExpressionContext):
+        if not ctx.exclusiveOrExpression():
+            new_node = self.grow_tree("Inclusive Or Expression", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitInclusiveOrExpression(self, ctx: CParser.InclusiveOrExpressionContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.InclusiveOrExpressionContext:
+            self.grow_on_index("|", ctx, 1)
+            self.__node_stack.pop(0)
+
+    def enterLogicalAndExpression(self, ctx: CParser.LogicalAndExpressionContext):
+        if not ctx.inclusiveOrExpression():
+            new_node = self.grow_tree("Logical And Expression", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitLogicalAndExpression(self, ctx: CParser.LogicalAndExpressionContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.LogicalAndExpressionContext:
+            self.grow_on_index("&&", ctx, 1)
+            self.__node_stack.pop(0)
+
+    def enterLogicalOrExpression(self, ctx: CParser.LogicalOrExpressionContext):
+        if not ctx.logicalAndExpression():
+            new_node = self.grow_tree("Logical Or Expression", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitLogicalOrExpression(self, ctx: CParser.LogicalOrExpressionContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.LogicalOrExpressionContext:
+            self.grow_on_index("||", ctx, 1)
+            self.__node_stack.pop(0)
+
+    def enterConditionalExpression(self, ctx: CParser.ConditionalExpressionContext):
+        if ctx.conditionalExpression():
+            new_node = self.grow_tree("Conditional Expression", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitConditionalExpression(self, ctx: CParser.ConditionalExpressionContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.ConditionalExpressionContext:
+            self.grow_on_index("?", ctx, 1)
+            self.grow_on_index(":", ctx, 3)
+            self.__node_stack.pop(0)
+
+    def enterAssignmentExpression(self, ctx: CParser.AssignmentExpressionContext):
+        if not ctx.conditionalExpression():
+            new_node = self.grow_tree("Assignment Expression", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitAssignmentExpression(self, ctx: CParser.AssignmentExpressionContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.AssignmentExpressionContext:
+            self.__node_stack.pop(0)
+
+    def enterAssignmentOperator(self, ctx: CParser.AssignmentOperatorContext):
+        self.grow_tree(str(ctx.getChild(0)), ctx)
+
+    def exitAssignmentOperator(self, ctx: CParser.AssignmentOperatorContext):
+        pass
+
+    def enterExpression(self, ctx: CParser.ExpressionContext):
+        if not ctx.assignmentExpression():
+            new_node = self.grow_tree("Expression", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitExpression(self, ctx: CParser.ExpressionContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.ExpressionContext:
+            self.__node_stack.pop(0)
+
+    def enterConstantExpression(self, ctx: CParser.ConstantExpressionContext):
+        pass
+
+    def exitConstantExpression(self, ctx: CParser.ConstantExpressionContext):
+        pass
