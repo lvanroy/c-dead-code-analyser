@@ -367,3 +367,284 @@ class ASTConstructor(CListener):
 
     def exitConstantExpression(self, ctx: CParser.ConstantExpressionContext):
         pass
+
+    # declarations
+    def enterDeclaration(self, ctx: CParser.DeclarationContext):
+        if not ctx.staticAssertDeclaration():
+            new_node = self.grow_tree("Declaration", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitDeclaration(self, ctx: CParser.DeclarationContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.DeclarationContext:
+            self.__node_stack.pop(0)
+
+    def enterDeclarationSpecifiers(self, ctx: CParser.DeclarationSpecifiersContext):
+        pass
+
+    def exitDeclarationSpecifiers(self, ctx: CParser.DeclarationSpecifiersContext):
+        pass
+
+    def enterDeclarationSpecifiers2(self, ctx: CParser.DeclarationSpecifiers2Context):
+        pass
+
+    def exitDeclarationSpecifiers2(self, ctx: CParser.DeclarationSpecifiers2Context):
+        pass
+
+    def enterDeclarationSpecifier(self, ctx: CParser.DeclarationSpecifierContext):
+        pass
+
+    def exitDeclarationSpecifier(self, ctx: CParser.DeclarationSpecifierContext):
+        pass
+
+    def enterInitDeclaratorList(self, ctx: CParser.InitDeclaratorListContext):
+        if ctx.initDeclaratorList():
+            new_node = self.grow_tree("Init Declarator List", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitInitDeclaratorList(self, ctx: CParser.InitDeclaratorListContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.InitDeclaratorListContext:
+            self.__node_stack.pop(0)
+
+    def enterInitDeclarator(self, ctx: CParser.InitDeclaratorContext):
+        new_node = self.grow_tree("Init Declarator", ctx)
+        self.__node_stack.insert(0, new_node)
+
+    def exitInitDeclarator(self, ctx: CParser.InitDeclaratorContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.InitDeclaratorContext:
+            self.__node_stack.pop(0)
+
+    def enterStorageClassSpecifier(self, ctx: CParser.StorageClassSpecifierContext):
+        self.grow_tree(str(ctx.getChild(0)), ctx)
+
+    def exitStorageClassSpecifier(self, ctx: CParser.StorageClassSpecifierContext):
+        pass
+
+    def enterTypeSpecifier(self, ctx: CParser.TypeSpecifierContext):
+        new_node = self.grow_tree("Type Specifier", ctx)
+        self.__node_stack.insert(0, new_node)
+        if not ctx.atomicTypeSpecifier() and not ctx.structOrUnionSpecifier() and not ctx.enumSpecifier() and \
+           not ctx.typedefName() and not ctx.constantExpression() and not ctx.typeSpecifier():
+            for child in ctx.getChildren():
+                self.grow_tree(str(child), ctx)
+        if ctx.constantExpression():
+            self.grow_tree("__typeof__(", ctx)
+
+    def exitTypeSpecifier(self, ctx: CParser.TypeSpecifierContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.TypeSpecifierContext:
+            if ctx.constantExpression():
+                self.grow_tree(")", ctx)
+            self.__node_stack.pop(0)
+
+    def enterStructOrUnionSpecifier(self, ctx: CParser.StructOrUnionSpecifierContext):
+        new_node = self.grow_tree("Struct or Union Specifier", ctx)
+        self.__node_stack.insert(0, new_node)
+
+    def exitStructOrUnionSpecifier(self, ctx: CParser.StructOrUnionSpecifierContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.StructOrUnionSpecifierContext:
+            self.__node_stack.pop(0)
+
+    def enterStructOrUnion(self, ctx: CParser.StructOrUnionContext):
+        self.grow_tree(str(ctx.getChild(0)), ctx)
+
+    def exitStructOrUnion(self, ctx: CParser.StructOrUnionContext):
+        pass
+
+    def enterStructDeclarationList(self, ctx: CParser.StructDeclarationListContext):
+        if ctx.structDeclarationList():
+            new_node = self.grow_tree("Struct Declaration List", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitStructDeclarationList(self, ctx: CParser.StructDeclarationListContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.StructDeclarationContext:
+            self.__node_stack.pop(0)
+
+    def enterStructDeclaration(self, ctx: CParser.StructDeclarationContext):
+        if not ctx.staticAssertDeclaration():
+            new_node = self.grow_tree("Struct Declaration", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitStructDeclaration(self, ctx: CParser.StructDeclarationContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.StructDeclarationContext:
+            self.__node_stack.pop(0)
+
+    def enterSpecifierQualifierList(self, ctx: CParser.SpecifierQualifierListContext):
+        if ctx.specifierQualifierList():
+            new_node = self.grow_tree("Specifier Qualifier List", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitSpecifierQualifierList(self, ctx: CParser.SpecifierQualifierListContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.SpecifierQualifierListContext:
+            self.__node_stack.pop(0)
+
+    def enterStructDeclaratorList(self, ctx: CParser.StructDeclaratorListContext):
+        if ctx.structDeclaratorList():
+            new_node = self.grow_tree("Struct Declarator List", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitStructDeclaratorList(self, ctx: CParser.StructDeclaratorListContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.StructDeclaratorListContext:
+            self.__node_stack.pop(0)
+
+    def enterStructDeclarator(self, ctx: CParser.StructDeclaratorContext):
+        new_node = self.grow_tree("Struct Declarator", ctx)
+        self.__node_stack.insert(0, new_node)
+
+    def exitStructDeclarator(self, ctx: CParser.StructDeclaratorContext):
+        self.__node_stack.pop(0)
+
+    def enterEnumSpecifier(self, ctx: CParser.EnumSpecifierContext):
+        new_node = self.grow_tree("Enum Specifier", ctx)
+        self.__node_stack.insert(0, new_node)
+        if ctx.Identifier():
+            self.grow_tree(ctx.Identifier(), ctx)
+
+    def exitEnumSpecifier(self, ctx: CParser.EnumSpecifierContext):
+        self.__node_stack.pop(0)
+
+    def enterEnumeratorList(self, ctx: CParser.EnumeratorListContext):
+        if ctx.enumeratorList():
+            new_node = self.grow_tree("Enum List", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitEnumeratorList(self, ctx: CParser.EnumeratorListContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.EnumeratorListContext:
+            self.__node_stack.pop(0)
+
+    def enterEnumerator(self, ctx: CParser.EnumeratorContext):
+        new_node = self.grow_tree("Enum", ctx)
+        self.__node_stack.insert(0, new_node)
+
+    def exitEnumerator(self, ctx: CParser.EnumeratorContext):
+        self.__node_stack.pop(0)
+
+    def enterEnumerationConstant(self, ctx: CParser.EnumerationConstantContext):
+        self.grow_tree(ctx.Identifier(), ctx)
+
+    def exitEnumerationConstant(self, ctx: CParser.EnumerationConstantContext):
+        pass
+
+    def enterAtomicTypeSpecifier(self, ctx: CParser.AtomicTypeSpecifierContext):
+        new_node = self.grow_tree("Atomic Type Specifier", ctx)
+        self.__node_stack.insert(0, new_node)
+
+    def exitAtomicTypeSpecifier(self, ctx: CParser.AtomicTypeSpecifierContext):
+        self.__node_stack.pop(0)
+
+    def enterTypeQualifier(self, ctx: CParser.TypeQualifierContext):
+        self.grow_tree(str(ctx.getChild(0)), ctx)
+
+    def exitTypeQualifier(self, ctx: CParser.TypeQualifierContext):
+        pass
+
+    def enterFunctionSpecifier(self, ctx: CParser.FunctionSpecifierContext):
+        pass
+
+    def exitFunctionSpecifier(self, ctx: CParser.FunctionSpecifierContext):
+        pass
+
+    def enterAlignmentSpecifier(self, ctx: CParser.AlignmentSpecifierContext):
+        pass
+
+    def exitAlignmentSpecifier(self, ctx: CParser.AlignmentSpecifierContext):
+        pass
+
+    def enterDeclarator(self, ctx: CParser.DeclaratorContext):
+        new_node = self.grow_tree("Declarator", ctx)
+        self.__node_stack.insert(0, new_node)
+
+    def exitDeclarator(self, ctx: CParser.DeclaratorContext):
+        self.__node_stack.pop(0)
+
+    def enterDirectDeclarator(self, ctx: CParser.DirectDeclaratorContext):
+        new_node = self.grow_tree("Direct Declarator", ctx)
+        self.__node_stack.insert(0, new_node)
+        if ctx.Identifier():
+            self.grow_tree(str(ctx.Identifier()), ctx)
+        if ctx.DigitSequence():
+            self.grow_tree(str(ctx.DigitSequence()), ctx)
+
+    def exitDirectDeclarator(self, ctx: CParser.DirectDeclaratorContext):
+        self.__node_stack.pop(0)
+
+    def enterGccDeclaratorExtension(self, ctx: CParser.GccDeclaratorExtensionContext):
+        pass
+
+    def exitGccDeclaratorExtension(self, ctx: CParser.GccDeclaratorExtensionContext):
+        pass
+
+    def enterGccAttributeSpecifier(self, ctx: CParser.GccAttributeSpecifierContext):
+        pass
+
+    def exitGccAttributeSpecifier(self, ctx: CParser.GccAttributeSpecifierContext):
+        pass
+
+    def enterGccAttributeList(self, ctx: CParser.GccAttributeListContext):
+        pass
+
+    def exitGccAttributeList(self, ctx: CParser.GccAttributeListContext):
+        pass
+
+    def enterGccAttribute(self, ctx: CParser.GccAttributeContext):
+        pass
+
+    def exitGccAttribute(self, ctx: CParser.GccAttributeContext):
+        pass
+
+    def enterNestedParenthesesBlock(self, ctx: CParser.NestedParenthesesBlockContext):
+        pass
+
+    def exitNestedParenthesesBlock(self, ctx: CParser.NestedParenthesesBlockContext):
+        pass
+
+    def enterPointer(self, ctx: CParser.PointerContext):
+        if ctx.Star():
+            self.grow_tree("*", ctx)
+        elif ctx.Caret():
+            self.grow_tree("^", ctx)
+
+    def exitPointer(self, ctx: CParser.PointerContext):
+        pass
+
+    def enterTypeQualifierList(self, ctx:CParser.TypeQualifierListContext):
+        if ctx.typeQualifierList():
+            new_node = self.grow_tree("Type Qualifier List", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitTypeQualifierList(self, ctx:CParser.TypeQualifierListContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.TypeQualifierListContext:
+            self.__node_stack.pop(0)
+
+    def enterParameterTypeList(self, ctx:CParser.ParameterTypeListContext):
+        new_node = self.grow_tree("Parameter Type List", ctx)
+        self.__node_stack.insert(0, new_node)
+
+    def exitParameterTypeList(self, ctx:CParser.ParameterTypeListContext):
+        self.__node_stack.pop(0)
+
+    def enterParameterList(self, ctx:CParser.ParameterListContext):
+        if ctx.parameterList():
+            new_node = self.grow_tree("Parameter List", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitParameterList(self, ctx:CParser.ParameterListContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.ParameterListContext:
+            self.__node_stack.pop(0)
+
+    def enterParameterDeclaration(self, ctx:CParser.ParameterDeclarationContext):
+        new_node = self.grow_tree("Parameter Declaration", ctx)
+        self.__node_stack.insert(0, new_node)
+
+    def exitParameterDeclaration(self, ctx:CParser.ParameterDeclarationContext):
+        self.__node_stack.pop(0)
