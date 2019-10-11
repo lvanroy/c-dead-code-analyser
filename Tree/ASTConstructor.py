@@ -615,36 +615,240 @@ class ASTConstructor(CListener):
     def exitPointer(self, ctx: CParser.PointerContext):
         pass
 
-    def enterTypeQualifierList(self, ctx:CParser.TypeQualifierListContext):
+    def enterTypeQualifierList(self, ctx: CParser.TypeQualifierListContext):
         if ctx.typeQualifierList():
             new_node = self.grow_tree("Type Qualifier List", ctx)
             self.__node_stack.insert(0, new_node)
 
-    def exitTypeQualifierList(self, ctx:CParser.TypeQualifierListContext):
+    def exitTypeQualifierList(self, ctx: CParser.TypeQualifierListContext):
         top_node = self.__node_stack[0]
         if type(top_node.get_ctx()) == CParser.TypeQualifierListContext:
             self.__node_stack.pop(0)
 
-    def enterParameterTypeList(self, ctx:CParser.ParameterTypeListContext):
+    def enterParameterTypeList(self, ctx: CParser.ParameterTypeListContext):
         new_node = self.grow_tree("Parameter Type List", ctx)
         self.__node_stack.insert(0, new_node)
 
-    def exitParameterTypeList(self, ctx:CParser.ParameterTypeListContext):
+    def exitParameterTypeList(self, ctx: CParser.ParameterTypeListContext):
         self.__node_stack.pop(0)
 
-    def enterParameterList(self, ctx:CParser.ParameterListContext):
+    def enterParameterList(self, ctx: CParser.ParameterListContext):
         if ctx.parameterList():
             new_node = self.grow_tree("Parameter List", ctx)
             self.__node_stack.insert(0, new_node)
 
-    def exitParameterList(self, ctx:CParser.ParameterListContext):
+    def exitParameterList(self, ctx: CParser.ParameterListContext):
         top_node = self.__node_stack[0]
         if type(top_node.get_ctx()) == CParser.ParameterListContext:
             self.__node_stack.pop(0)
 
-    def enterParameterDeclaration(self, ctx:CParser.ParameterDeclarationContext):
+    def enterParameterDeclaration(self, ctx: CParser.ParameterDeclarationContext):
         new_node = self.grow_tree("Parameter Declaration", ctx)
         self.__node_stack.insert(0, new_node)
 
-    def exitParameterDeclaration(self, ctx:CParser.ParameterDeclarationContext):
+    def exitParameterDeclaration(self, ctx: CParser.ParameterDeclarationContext):
+        self.__node_stack.pop(0)
+
+    def enterIdentifierList(self, ctx: CParser.IdentifierListContext):
+        if ctx.Identifier():
+            new_node = self.grow_tree("Identifier List", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitIdentifierList(self, ctx: CParser.IdentifierListContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.IdentifierListContext:
+            self.__node_stack.pop(0)
+
+    def enterTypeName(self, ctx: CParser.TypeNameContext):
+        new_node = self.grow_tree("Type Name", ctx)
+        self.__node_stack.insert(0, new_node)
+
+    def exitTypeName(self, ctx: CParser.TypedefNameContext):
+        self.__node_stack.pop(0)
+
+    def enterAbstractDeclarator(self, ctx: CParser.AbstractDeclaratorContext):
+        new_node = self.grow_tree("Abstract Declarator", ctx)
+        self.__node_stack.insert(0, new_node)
+
+    def exitAbstractDeclarator(self, ctx: CParser.AbstractDeclaratorContext):
+        self.__node_stack.pop(0)
+
+    def enterDirectAbstractDeclarator(self, ctx: CParser.DirectAbstractDeclaratorContext):
+        pass
+
+    def exitDirectAbstractDeclarator(self, ctx: CParser.DirectAbstractDeclaratorContext):
+        pass
+
+    def enterTypedefName(self, ctx: CParser.TypedefNameContext):
+        self.grow_tree(str(ctx.Identifier()), ctx)
+
+    def exitTypedefName(self, ctx: CParser.TypedefNameContext):
+        pass
+
+    def enterInitializer(self, ctx: CParser.InitializerContext):
+        new_node = self.grow_tree("Initializer", ctx)
+        self.__node_stack.insert(0, new_node)
+
+    def exitInitializer(self, ctx: CParser.InitializerContext):
+        self.__node_stack.pop(0)
+
+    def enterInitializerList(self, ctx: CParser.InitializerListContext):
+        if ctx.initializerList():
+            new_node = self.grow_tree("Initializer List", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitInitializerList(self, ctx: CParser.InitializerListContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.InitializerListContext:
+            self.__node_stack.pop(0)
+
+    def enterDesignation(self, ctx: CParser.DesignationContext):
+        pass
+
+    def exitDesignation(self, ctx: CParser.DesignationContext):
+        pass
+
+    def enterDesignatorList(self, ctx: CParser.DesignatorListContext):
+        if ctx.designatorList():
+            new_node = self.grow_tree("Initializer List", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitDesignatorList(self, ctx: CParser.DesignatorListContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.DesignatorListContext:
+            self.__node_stack.pop(0)
+
+    def enterDesignator(self, ctx: CParser.DesignatorContext):
+        if ctx.Identifier():
+            self.grow_tree(str(ctx.Identifier()), ctx)
+
+    def exitDesignator(self, ctx: CParser.DesignatorContext):
+        pass
+
+    def enterStaticAssertDeclaration(self, ctx: CParser.StaticAssertDeclarationContext):
+        new_node = self.grow_tree("Static Assert Declaration", ctx)
+        self.__node_stack.insert(0, new_node)
+
+    def exitStaticAssertDeclaration(self, ctx: CParser.StaticAssertDeclarationContext):
+        self.__node_stack.pop(0)
+
+    # statements
+    def enterStatement(self, ctx: CParser.StatementContext):
+        if ctx.logicalOrExpression():
+            new_node = self.grow_tree("Statement", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitStatement(self, ctx: CParser.StatementContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.StatementContext:
+            self.__node_stack.pop(0)
+
+    def enterLabeledStatement(self, ctx: CParser.LabeledStatementContext):
+        new_node = self.grow_tree("Labeled Statement", ctx)
+        self.__node_stack.insert(0, new_node)
+        if ctx.Identifier():
+            self.grow_tree(str(ctx.Identifier()), ctx)
+        elif ctx.Case():
+            self.grow_tree("case", ctx)
+        elif ctx.Default():
+            self.grow_tree("default", ctx)
+
+    def exitLabeledStatement(self, ctx: CParser.LabeledStatementContext):
+        self.__node_stack.pop(0)
+
+    def enterCompoundStatement(self, ctx: CParser.CompoundStatementContext):
+        new_node = self.grow_tree("Compound Statement", ctx)
+        self.__node_stack.insert(0, new_node)
+
+    def exitCompoundStatement(self, ctx: CParser.CompoundStatementContext):
+        self.__node_stack.pop(0)
+
+    def enterBlockItemList(self, ctx: CParser.BlockItemListContext):
+        if ctx.blockItemList():
+            new_node = self.grow_tree("Block Item List", ctx)
+            self.__node_stack.insert(0, new_node)
+
+    def exitBlockItemList(self, ctx: CParser.BlockItemListContext):
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.BlockItemListContext:
+            self.__node_stack.pop(0)
+
+    def enterBlockItem(self, ctx: CParser.BlockItemContext):
+        pass
+
+    def exitBlockItem(self, ctx: CParser.BlockItemContext):
+        pass
+
+    def enterExpressionStatement(self, ctx: CParser.ExpressionStatementContext):
+        new_node = self.grow_tree("Expression Statement", ctx)
+        self.__node_stack.insert(0, new_node)
+
+    def exitExpressionStatement(self, ctx: CParser.ExpressionStatementContext):
+        self.__node_stack.pop(0)
+
+    def enterSelectionStatement(self, ctx: CParser.SelectionStatementContext):
+        new_node = self.grow_tree("Selection Statement", ctx)
+        self.__node_stack.insert(0, new_node)
+        if ctx.If():
+            self.grow_tree("if", ctx)
+        if ctx.Switch():
+            self.grow_tree("switch", ctx)
+
+    def exitSelectionStatement(self, ctx: CParser.SelectionStatementContext):
+        if ctx.Else():
+            self.grow_on_index("else", ctx, -2)
+        self.__node_stack.pop(0)
+
+    def enterIterationStatement(self, ctx: CParser.IterationStatementContext):
+        new_node = self.grow_tree("Iteration Statement", ctx)
+        self.__node_stack.insert(0, new_node)
+        if ctx.While() and not ctx.Do():
+            self.grow_tree("while", ctx)
+        elif ctx.Do():
+            self.grow_tree("do", ctx)
+        elif ctx.For():
+            self.grow_tree("for", ctx)
+
+    def exitIterationStatement(self, ctx: CParser.IterationStatementContext):
+        if ctx.Do():
+            self.grow_on_index("While", ctx, -2)
+        self.__node_stack.pop(0)
+
+    def enterForCondition(self, ctx: CParser.ForConditionContext):
+        new_node = self.grow_tree("For Condition", ctx)
+        self.__node_stack.insert(0, new_node)
+
+    def exitForCondition(self, ctx: CParser.ForConditionContext):
+        self.__node_stack.pop(0)
+
+    def enterForDeclaration(self, ctx: CParser.ForDeclarationContext):
+        new_node = self.grow_tree("For Declaration", ctx)
+        self.__node_stack.insert(0, new_node)
+
+    def exitForDeclaration(self, ctx: CParser.ForDeclarationContext):
+        self.__node_stack.pop(0)
+
+    def enterForExpression(self, ctx: CParser.ForExpressionContext):
+        new_node = self.grow_tree("For Expression", ctx)
+        self.__node_stack.insert(0, new_node)
+
+    def exitForExpression(self, ctx: CParser.ForExpressionContext):
+        self.__node_stack.pop(0)
+
+    def enterJumpStatement(self, ctx: CParser.JumpStatementContext):
+        new_node = self.grow_tree("Jump Statement", ctx)
+        self.__node_stack.insert(0, new_node)
+        if ctx.Goto() and ctx.Identifier():
+            self.grow_tree("goto", ctx)
+            self.grow_tree(str(ctx.Identifier()), ctx)
+        elif ctx.Continue():
+            self.grow_tree("continue", ctx)
+        elif ctx.Break():
+            self.grow_tree("break", ctx)
+        elif ctx.Return():
+            self.grow_tree("return", ctx)
+        elif ctx.Goto():
+            self.grow_tree("goto", ctx)
+
+    def exitJumpStatement(self, ctx: CParser.JumpStatementContext):
         self.__node_stack.pop(0)
