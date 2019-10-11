@@ -24,7 +24,8 @@ trace = False
 def grammar(grammar_file):
     if not os.path.exists("./Antlr_files"):
         os.mkdir("./Antlr_files")
-    os.system("java -jar ./grammar/antlr.jar -visitor -Dlanguage=Python3 -o ./Antlr_files {}".format(grammar_file))
+    os.system("cd ./Grammar")
+    os.system("java -jar ./antlr.jar -visitor -Dlanguage=Python3 -o ../Antlr_files {}".format(grammar_file))
     return 0
 
 
