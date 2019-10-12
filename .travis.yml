@@ -16,7 +16,10 @@ matrix:
             - export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
 
 install:
-  - pip3 install --upgrade pip
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; 
+    then pip3 install --upgrade pip --user; 
+    else pip3 install --upgrade pip;
+    fi
   - pip3 install -r requirements.txt
 
 script:
