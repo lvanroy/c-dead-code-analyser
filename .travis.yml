@@ -25,6 +25,6 @@ install:
 
 script:
   - if [ "$TRAVIS_OS_NAME" = "windows" ]; 
-    then coverage python MainTestSuite.py;
+    then coverage run MainTestSuite.py;
     else coverage python3.7 MainTestSuite.py;
     fi
