@@ -18,6 +18,9 @@ class ASTConstructor(CListener):
     def construct(self):
         self.__walker.walk(self, self.__parse_tree)
 
+    def get_ast(self):
+        return self.__ast_root
+
     def grow_tree(self, label, ctx):
         new_node = AbstractSyntaxTree(label, ctx)
 
@@ -84,13 +87,24 @@ class ASTConstructor(CListener):
             new_node = self.grow_tree("Val = {}".format(ctx.Constant()), ctx)
             self.__node_stack.insert(0, new_node)
         elif ctx.StringLiteral():
-            new_node = self.grow_tree("Val = ".format(ctx.StringLiteral()), ctx)
+            result = "Val = "
+            for token in ctx.StringLiteral():
+                result += str(token)
+            new_node = self.grow_tree(result, ctx)
+            self.__node_stack.insert(0, new_node)
+
+        elif ctx.LeftParen() and ctx.expression():
+            new_node = self.grow_tree("Primary Expression", ctx)
             self.__node_stack.insert(0, new_node)
 
     def exitPrimaryExpression(self, ctx: CParser.PrimaryExpressionContext):
         top_node = self.__node_stack[0]
         if type(top_node.get_ctx()) == CParser.PrimaryExpressionContext and (ctx.Identifier() or ctx.Constant()
-                                                                             or ctx.StringLiteral()):
+                                                                             or ctx.StringLiteral() or
+                                                                             (ctx.LeftParen() and ctx.expression())):
+            if ctx.LeftParen() and ctx.expression():
+                self.grow_on_index("(", ctx, 0)
+                self.grow_on_index(")", ctx, -1)
             self.__node_stack.pop(0)
 
     def enterGenericSelection(self, ctx: CParser.GenericSelectionContext):
@@ -121,7 +135,7 @@ class ASTConstructor(CListener):
 
     def exitPostfixExpression(self, ctx: CParser.PostfixExpressionContext):
         top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.PostfixExpressionContext:
+        if type(top_node.get_ctx()) == CParser.PostfixExpressionContext and not ctx.primaryExpression():
             if type(ctx.getChild(0)) == CParser.PostfixExpressionContext:
                 if ctx.LeftBracket():
                     self.grow_on_index("[", ctx, 1)
@@ -151,13 +165,13 @@ class ASTConstructor(CListener):
             self.__node_stack.pop(0)
 
     def enterArgumentExpressionList(self, ctx: CParser.ArgumentExpressionListContext):
-        if not ctx.assignmentExpression():
-            new_node = self.grow_tree("Argument", ctx)
+        if ctx.argumentExpressionList():
+            new_node = self.grow_tree("Arguments", ctx)
             self.__node_stack.insert(0, new_node)
 
     def exitArgumentExpressionList(self, ctx: CParser.ArgumentExpressionListContext):
         top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.ArgumentExpressionListContext:
+        if type(top_node.get_ctx()) == CParser.ArgumentExpressionListContext and ctx.argumentExpressionList():
             self.__node_stack.pop(0)
 
     def enterUnaryExpression(self, ctx: CParser.UnaryExpressionContext):
@@ -166,8 +180,8 @@ class ASTConstructor(CListener):
             self.__node_stack.insert(0, new_node)
             if not ctx.unaryOperator():
                 self.grow_tree(str(ctx.getChild(0)), ctx)
-            if ctx.LeftParen():
-                self.grow_on_index("(", ctx, -3)
+            if ctx.LeftParen() and not ctx.Alignof():
+                self.grow_on_index("(", ctx, -2)
                 self.grow_on_index(")", ctx, -1)
             if ctx.Identifier():
                 self.grow_tree(str(ctx.Identifier()), ctx)
@@ -175,6 +189,9 @@ class ASTConstructor(CListener):
     def exitUnaryExpression(self, ctx: CParser.UnaryExpressionContext):
         top_node = self.__node_stack[0]
         if type(top_node.get_ctx()) == CParser.UnaryExpressionContext:
+            if ctx.Alignof():
+                self.grow_on_index("(", ctx, 1)
+                self.grow_on_index(")", ctx, -1)
             self.__node_stack.pop(0)
 
     def enterUnaryOperator(self, ctx: CParser.UnaryOperatorContext):
@@ -194,13 +211,13 @@ class ASTConstructor(CListener):
             self.__node_stack.pop(0)
 
     def enterMultiplicativeExpression(self, ctx: CParser.MultiplicativeExpressionContext):
-        if not ctx.castExpression():
+        if ctx.multiplicativeExpression():
             new_node = self.grow_tree("Multiplication Expression", ctx)
             self.__node_stack.insert(0, new_node)
 
     def exitMultiplicativeExpression(self, ctx: CParser.MultiplicativeExpressionContext):
         top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.MultiplicativeExpressionContext:
+        if type(top_node.get_ctx()) == CParser.MultiplicativeExpressionContext and ctx.multiplicativeExpression():
             if top_node.get_ctx().Star():
                 self.grow_on_index("*", ctx, 1)
             elif top_node.get_ctx().Div():
@@ -210,13 +227,13 @@ class ASTConstructor(CListener):
             self.__node_stack.pop(0)
 
     def enterAdditiveExpression(self, ctx: CParser.AdditiveExpressionContext):
-        if not ctx.multiplicativeExpression():
+        if ctx.additiveExpression():
             new_node = self.grow_tree("Additive Expression", ctx)
             self.__node_stack.insert(0, new_node)
 
     def exitAdditiveExpression(self, ctx: CParser.AdditiveExpressionContext):
         top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.AdditiveExpressionContext:
+        if type(top_node.get_ctx()) == CParser.AdditiveExpressionContext and ctx.additiveExpression():
             if top_node.get_ctx().Plus():
                 self.grow_on_index("+", ctx, 1)
             elif top_node.get_ctx().Minus():
@@ -224,13 +241,13 @@ class ASTConstructor(CListener):
             self.__node_stack.pop(0)
 
     def enterShiftExpression(self, ctx: CParser.ShiftExpressionContext):
-        if not ctx.additiveExpression():
+        if ctx.shiftExpression():
             new_node = self.grow_tree("Shift Expression", ctx)
             self.__node_stack.insert(0, new_node)
 
     def exitShiftExpression(self, ctx: CParser.ShiftExpressionContext):
         top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.ShiftExpressionContext:
+        if type(top_node.get_ctx()) == CParser.ShiftExpressionContext and ctx.shiftExpression():
             if top_node.get_ctx().LeftShift():
                 self.grow_on_index("<<", ctx, 1)
             elif top_node.get_ctx().RightShift():
@@ -238,13 +255,13 @@ class ASTConstructor(CListener):
             self.__node_stack.pop(0)
 
     def enterRelationalExpression(self, ctx: CParser.RelationalExpressionContext):
-        if not ctx.shiftExpression():
+        if not ctx.relationalExpression():
             new_node = self.grow_tree("Relational Expression", ctx)
             self.__node_stack.insert(0, new_node)
 
     def exitRelationalExpression(self, ctx: CParser.RelationalExpressionContext):
         top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.RelationalExpressionContext:
+        if type(top_node.get_ctx()) == CParser.RelationalExpressionContext and ctx.relationalExpression():
             if top_node.get_ctx().Less():
                 self.grow_on_index("<", ctx, 1)
             elif top_node.get_ctx().Greater():
@@ -446,6 +463,7 @@ class ASTConstructor(CListener):
     def exitStructOrUnionSpecifier(self, ctx: CParser.StructOrUnionSpecifierContext):
         top_node = self.__node_stack[0]
         if type(top_node.get_ctx()) == CParser.StructOrUnionSpecifierContext:
+            self.grow_on_index(str(ctx.Identifier()), ctx, 1)
             self.__node_stack.pop(0)
 
     def enterStructOrUnion(self, ctx: CParser.StructOrUnionContext):
@@ -461,7 +479,7 @@ class ASTConstructor(CListener):
 
     def exitStructDeclarationList(self, ctx: CParser.StructDeclarationListContext):
         top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.StructDeclarationContext:
+        if type(top_node.get_ctx()) == CParser.StructDeclarationListContext:
             self.__node_stack.pop(0)
 
     def enterStructDeclaration(self, ctx: CParser.StructDeclarationContext):

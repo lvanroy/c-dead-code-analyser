@@ -58,6 +58,13 @@ def analysis(code_file):
     constructor = ASTConstructor(parse_tree)
     constructor.construct()
 
+    ast = constructor.get_ast()
+    f = open("output.dot", "w")
+    f.write(ast.to_dot())
+    f.close()
+
+    os.system("dot -Tpng output.dot -o temp.png")
+
     if trace:
         print("AST generation finished.")
 
