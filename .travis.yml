@@ -8,7 +8,7 @@ matrix:
         - os: osx
           language: generic
           env: TOXENV=py37
-      - os: windows
+        - os: windows
           language: sh
           python: "3.7"
           before_install:
