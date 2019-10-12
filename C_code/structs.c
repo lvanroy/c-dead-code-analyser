@@ -1,11 +1,27 @@
-struct TestClass{
-int value;
-double value2;
-};
+struct TestStruct{
+    int value       :8;
+    double value2   :32;
+} instance5, instance6;
+
+enum TestEnum {val1, val2 = 0};
+
+union Data {
+    int value;
+    double value2;
+}
 
 int main(){
-    struct TestClass instance;
-    struct TestClass* instance2 = &instance;
+    int a,b;
+    struct TestStruct instance, instance7;
+    struct TestStruct* instance2 = &instance;
+    struct TestStruct instane7 = {.value .value2 = 5};
+
+    enum TestEnum instance3(a, b);
+
+    union Data instance4;
+
+    customfloat f = 5.0;
+    __typeof__(f) g;
 
     instance.value = 5;
     instance2->value2 = 5.3;

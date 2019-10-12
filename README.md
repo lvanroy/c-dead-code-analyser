@@ -31,77 +31,78 @@ test coverage:
     castExpression              |    OK    |
     multiplicativeExpression    |    OK    |
     additiveExpression          |    OK    |
-    shiftExpression             |
-    relationExpression          |
-    equalityExpression          |
-    andExpression               |
-    exclusiveOrExpression       |
-    inclusiveOrExpression       |
-    logicalOrExpression         |
-    conditionalExpression       |
-    assignmentExpression        |
-    assignmentOperator          |
-    expression                  |
-    constantExpression          |
-    declaration                 |
-    declarationSpecifiers       |
-    declarationSpecifiers2      |
-    declarationSpecifier        |
-    initDeclarator              |
-    storageClassSpecifier       |
-    typeSpecifier               |
-    structOrUnionSpecifier      |
-    structOrUnion               |
-    structDeclarationList       |
-    structDeclaration           |
-    specifierQualifierList      |
-    structDeclaratorList        |
-    structDeclarator            |
-    enumSpecifier               |
-    enumeratorList              |
-    enumerator                  |
-    enumerationConstant         |
-    atomicTypeSpecifier         |
-    typeQualifier               |
-    functionSpecifier           |
-    alignmentSpecifier          |
-    declarator                  |
-    directDeclarator            |
-    gccDeclaratorExtension      |
-    gccAttributeSpecifier       |
-    gccAttributeList            |
-    gccAttribute                |
-    nestedParenthesesBlock      |
-    pointer                     |
-    typeQualifierList           |
-    parameterTypeList           |
-    parameterList               |
-    parameterDeclaration        |
-    identifierList              |
-    typeName                    |
-    abstractDeclarator          |
-    directAbstractDeclarator    |
-    typedefName                 |   
-    initializer                 |
-    initializerList             |   
-    designation                 |
-    designatorList              |
-    designator                  |
-    staticAssertDeclaration     |
-    statement                   |
-    labeledStatement            |
-    compoundStatement           |
-    blockItemList               |
-    blockItem                   |
-    expressionStatement         |
-    iterationStatement          |
-    forCondition                |
-    forDeclaration              |
-    forExpression               |
-    jumpStatement               |
+    shiftExpression             |    OK    |
+    relationExpression          |    OK    |
+    equalityExpression          |    OK    |
+    andExpression               |    OK    |
+    exclusiveOrExpression       |    OK    |
+    inclusiveOrExpression       |    OK    |
+    logicalOrExpression         |    OK    |
+    conditionalExpression       |    OK    |
+    assignmentExpression        |    OK    |
+    assignmentOperator          |    OK    |
+    expression                  |    OK    |
+    constantExpression          |    OK    |
+    declaration                 |    OK    |
+    declarationSpecifiers       |    OK    |
+    declarationSpecifiers2      |    OK    |
+    declarationSpecifier        |    OK    |
+    initDeclarator              |    OK    |
+    storageClassSpecifier       |    OK    |
+    typeSpecifier               |    OK    |
+    structOrUnionSpecifier      |    OK    |
+    structOrUnion               |    OK    |
+    structDeclarationList       |    OK    |
+    structDeclaration           |    OK    |
+    specifierQualifierList      |    OK    |
+    structDeclaratorList        |    OK    |
+    structDeclarator            |    OK    |
+    enumSpecifier               |    OK    |
+    enumeratorList              |    OK    |
+    enumerator                  |    OK    |
+    enumerationConstant         |    OK    |
+    atomicTypeSpecifier         |    OK    |
+    typeQualifier               |    OK    |
+    functionSpecifier           |    OK    |
+    alignmentSpecifier          |    OK    |
+    declarator                  |    OK    |
+    directDeclarator            |    OK    |
+    gccDeclaratorExtension      |    OK    |
+    gccAttributeSpecifier       |    OK    |
+    gccAttributeList            |    OK    |
+    gccAttribute                |    OK    |
+    nestedParenthesesBlock      |    OK    |
+    pointer                     |    OK    |
+    typeQualifierList           |    OK    |
+    parameterTypeList           |    OK    |
+    parameterList               |    OK    |
+    parameterDeclaration        |    OK    |
+    identifierList              |    OK    |
+    typeName                    |    OK    |
+    abstractDeclarator          |    OK    |
+    directAbstractDeclarator    |    OK    |
+    typedefName                 |    OK    |
+    initializer                 |    OK    |
+    initializerList             |    OK    |
+    designation                 |    OK    |
+    designatorList              |    OK    |
+    designator                  |    OK    |
+    staticAssertDeclaration     |    OK    |
+    statement                   |    OK    |
+    labeledStatement            |    OK    |
+    compoundStatement           |    OK    |
+    blockItemList               |    OK    |
+    blockItem                   |    OK    |
+    expressionStatement         |    OK    |
+    selectionStatement          |    OK    |
+    iterationStatement          |    OK    |
+    forCondition                |    OK    |
+    forDeclaration              |    OK    |
+    forExpression               |    OK    |
+    jumpStatement               |    OK    |
     compilationUnit             |    OK    |
-    translationUnit             |
-    externalDeclaration         |
-    functionDefinition          |
-    declarationList             |
+    translationUnit             |    OK    |
+    externalDeclaration         |    OK    |
+    functionDefinition          |    OK    |
+    declarationList             |    OK    |
   

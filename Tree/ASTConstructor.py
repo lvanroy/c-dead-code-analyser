@@ -153,14 +153,6 @@ class ASTConstructor(CListener):
                     self.grow_on_index("++", ctx, -1)
                 elif ctx.MinusMinus():
                     self.grow_on_index("--", ctx, -1)
-            else:
-                if ctx.LeftParen():
-                    self.grow_on_index("(", ctx, 0)
-                    self.grow_on_index(")", ctx, 2)
-                    self.grow_on_index("{", ctx, 3)
-                    self.grow_on_index("}", ctx, -1)
-                if ctx.Comma():
-                    self.grow_on_index(",", ctx, -2)
 
             self.__node_stack.pop(0)
 
@@ -183,8 +175,6 @@ class ASTConstructor(CListener):
             if ctx.LeftParen() and not ctx.Alignof():
                 self.grow_on_index("(", ctx, -2)
                 self.grow_on_index(")", ctx, -1)
-            if ctx.Identifier():
-                self.grow_tree(str(ctx.Identifier()), ctx)
 
     def exitUnaryExpression(self, ctx: CParser.UnaryExpressionContext):
         top_node = self.__node_stack[0]
@@ -255,7 +245,7 @@ class ASTConstructor(CListener):
             self.__node_stack.pop(0)
 
     def enterRelationalExpression(self, ctx: CParser.RelationalExpressionContext):
-        if not ctx.relationalExpression():
+        if ctx.relationalExpression():
             new_node = self.grow_tree("Relational Expression", ctx)
             self.__node_stack.insert(0, new_node)
 
@@ -273,13 +263,13 @@ class ASTConstructor(CListener):
             self.__node_stack.pop(0)
 
     def enterEqualityExpression(self, ctx: CParser.EqualityExpressionContext):
-        if not ctx.relationalExpression():
+        if ctx.equalityExpression():
             new_node = self.grow_tree("Equality Expression", ctx)
             self.__node_stack.insert(0, new_node)
 
     def exitEqualityExpression(self, ctx: CParser.EqualityExpressionContext):
         top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.EqualityExpressionContext:
+        if type(top_node.get_ctx()) == CParser.EqualityExpressionContext and ctx.equalityExpression():
             if top_node.get_ctx().Equal():
                 self.grow_on_index("==", ctx, 1)
             elif top_node.get_ctx().NotEqual():
@@ -287,57 +277,57 @@ class ASTConstructor(CListener):
             self.__node_stack.pop(0)
 
     def enterAndExpression(self, ctx: CParser.AndExpressionContext):
-        if not ctx.equalityExpression():
-            new_node = self.grow_tree("And Expression", ctx)
+        if ctx.andExpression():
+            new_node = self.grow_tree("Bitwise And Expression", ctx)
             self.__node_stack.insert(0, new_node)
 
     def exitAndExpression(self, ctx: CParser.AndExpressionContext):
         top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.AndExpressionContext:
+        if type(top_node.get_ctx()) == CParser.AndExpressionContext and ctx.andExpression():
             self.grow_on_index("&", ctx, 1)
             self.__node_stack.pop(0)
 
     def enterExclusiveOrExpression(self, ctx: CParser.ExclusiveOrExpressionContext):
-        if not ctx.andExpression():
-            new_node = self.grow_tree("Exclusive Or Expression", ctx)
+        if ctx.exclusiveOrExpression():
+            new_node = self.grow_tree("Bitwise Xor Expression", ctx)
             self.__node_stack.insert(0, new_node)
 
     def exitExclusiveOrExpression(self, ctx: CParser.ExclusiveOrExpressionContext):
         top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.ExclusiveOrExpressionContext:
+        if type(top_node.get_ctx()) == CParser.ExclusiveOrExpressionContext and ctx.exclusiveOrExpression():
             self.grow_on_index("^", ctx, 1)
             self.__node_stack.pop(0)
 
     def enterInclusiveOrExpression(self, ctx: CParser.InclusiveOrExpressionContext):
-        if not ctx.exclusiveOrExpression():
-            new_node = self.grow_tree("Inclusive Or Expression", ctx)
+        if ctx.inclusiveOrExpression():
+            new_node = self.grow_tree("Bitwise Or Expression", ctx)
             self.__node_stack.insert(0, new_node)
 
     def exitInclusiveOrExpression(self, ctx: CParser.InclusiveOrExpressionContext):
         top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.InclusiveOrExpressionContext:
+        if type(top_node.get_ctx()) == CParser.InclusiveOrExpressionContext and ctx.inclusiveOrExpression():
             self.grow_on_index("|", ctx, 1)
             self.__node_stack.pop(0)
 
     def enterLogicalAndExpression(self, ctx: CParser.LogicalAndExpressionContext):
-        if not ctx.inclusiveOrExpression():
+        if ctx.logicalAndExpression():
             new_node = self.grow_tree("Logical And Expression", ctx)
             self.__node_stack.insert(0, new_node)
 
     def exitLogicalAndExpression(self, ctx: CParser.LogicalAndExpressionContext):
         top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.LogicalAndExpressionContext:
+        if type(top_node.get_ctx()) == CParser.LogicalAndExpressionContext and ctx.logicalAndExpression():
             self.grow_on_index("&&", ctx, 1)
             self.__node_stack.pop(0)
 
     def enterLogicalOrExpression(self, ctx: CParser.LogicalOrExpressionContext):
-        if not ctx.logicalAndExpression():
+        if ctx.logicalOrExpression():
             new_node = self.grow_tree("Logical Or Expression", ctx)
             self.__node_stack.insert(0, new_node)
 
     def exitLogicalOrExpression(self, ctx: CParser.LogicalOrExpressionContext):
         top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.LogicalOrExpressionContext:
+        if type(top_node.get_ctx()) == CParser.LogicalOrExpressionContext and ctx.logicalOrExpression():
             self.grow_on_index("||", ctx, 1)
             self.__node_stack.pop(0)
 
@@ -348,7 +338,7 @@ class ASTConstructor(CListener):
 
     def exitConditionalExpression(self, ctx: CParser.ConditionalExpressionContext):
         top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.ConditionalExpressionContext:
+        if type(top_node.get_ctx()) == CParser.ConditionalExpressionContext and ctx.conditionalExpression():
             self.grow_on_index("?", ctx, 1)
             self.grow_on_index(":", ctx, 3)
             self.__node_stack.pop(0)
@@ -370,13 +360,11 @@ class ASTConstructor(CListener):
         pass
 
     def enterExpression(self, ctx: CParser.ExpressionContext):
-        if not ctx.assignmentExpression():
-            new_node = self.grow_tree("Expression", ctx)
-            self.__node_stack.insert(0, new_node)
+        if ctx.Comma():
+            self.__node_stack.insert(0, self.grow_tree("Expression", ctx))
 
     def exitExpression(self, ctx: CParser.ExpressionContext):
-        top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.ExpressionContext:
+        if ctx.Comma():
             self.__node_stack.pop(0)
 
     def enterConstantExpression(self, ctx: CParser.ConstantExpressionContext):
@@ -387,14 +375,11 @@ class ASTConstructor(CListener):
 
     # declarations
     def enterDeclaration(self, ctx: CParser.DeclarationContext):
-        if not ctx.staticAssertDeclaration():
-            new_node = self.grow_tree("Declaration", ctx)
-            self.__node_stack.insert(0, new_node)
+        new_node = self.grow_tree("Declaration", ctx)
+        self.__node_stack.insert(0, new_node)
 
     def exitDeclaration(self, ctx: CParser.DeclarationContext):
-        top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.DeclarationContext:
-            self.__node_stack.pop(0)
+        self.__node_stack.pop(0)
 
     def enterDeclarationSpecifiers(self, ctx: CParser.DeclarationSpecifiersContext):
         pass
@@ -415,14 +400,10 @@ class ASTConstructor(CListener):
         pass
 
     def enterInitDeclaratorList(self, ctx: CParser.InitDeclaratorListContext):
-        if ctx.initDeclaratorList():
-            new_node = self.grow_tree("Init Declarator List", ctx)
-            self.__node_stack.insert(0, new_node)
+        pass
 
     def exitInitDeclaratorList(self, ctx: CParser.InitDeclaratorListContext):
-        top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.InitDeclaratorListContext:
-            self.__node_stack.pop(0)
+        pass
 
     def enterInitDeclarator(self, ctx: CParser.InitDeclaratorContext):
         new_node = self.grow_tree("Init Declarator", ctx)
@@ -440,20 +421,21 @@ class ASTConstructor(CListener):
         pass
 
     def enterTypeSpecifier(self, ctx: CParser.TypeSpecifierContext):
-        new_node = self.grow_tree("Type Specifier", ctx)
-        self.__node_stack.insert(0, new_node)
+        if not ctx.atomicTypeSpecifier() and not ctx.structOrUnionSpecifier() and not ctx.enumSpecifier()\
+                and not ctx.typedefName():
+            new_node = self.grow_tree("Type Specifier", ctx)
+            self.__node_stack.insert(0, new_node)
         if not ctx.atomicTypeSpecifier() and not ctx.structOrUnionSpecifier() and not ctx.enumSpecifier() and \
            not ctx.typedefName() and not ctx.constantExpression() and not ctx.typeSpecifier():
             for child in ctx.getChildren():
                 self.grow_tree(str(child), ctx)
         if ctx.constantExpression():
-            self.grow_tree("__typeof__(", ctx)
+            self.grow_tree("typeof", ctx)
 
     def exitTypeSpecifier(self, ctx: CParser.TypeSpecifierContext):
         top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.TypeSpecifierContext:
-            if ctx.constantExpression():
-                self.grow_tree(")", ctx)
+        if type(top_node.get_ctx()) == CParser.TypeSpecifierContext and not ctx.atomicTypeSpecifier() \
+                and not ctx.structOrUnionSpecifier() and not ctx.enumSpecifier() and not ctx.typedefName():
             self.__node_stack.pop(0)
 
     def enterStructOrUnionSpecifier(self, ctx: CParser.StructOrUnionSpecifierContext):
@@ -473,44 +455,29 @@ class ASTConstructor(CListener):
         pass
 
     def enterStructDeclarationList(self, ctx: CParser.StructDeclarationListContext):
-        if ctx.structDeclarationList():
-            new_node = self.grow_tree("Struct Declaration List", ctx)
-            self.__node_stack.insert(0, new_node)
+        pass
 
     def exitStructDeclarationList(self, ctx: CParser.StructDeclarationListContext):
-        top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.StructDeclarationListContext:
-            self.__node_stack.pop(0)
+        pass
 
     def enterStructDeclaration(self, ctx: CParser.StructDeclarationContext):
-        if not ctx.staticAssertDeclaration():
-            new_node = self.grow_tree("Struct Declaration", ctx)
-            self.__node_stack.insert(0, new_node)
+        new_node = self.grow_tree("Struct Declaration", ctx)
+        self.__node_stack.insert(0, new_node)
 
     def exitStructDeclaration(self, ctx: CParser.StructDeclarationContext):
-        top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.StructDeclarationContext:
-            self.__node_stack.pop(0)
+        self.__node_stack.pop(0)
 
     def enterSpecifierQualifierList(self, ctx: CParser.SpecifierQualifierListContext):
-        if ctx.specifierQualifierList():
-            new_node = self.grow_tree("Specifier Qualifier List", ctx)
-            self.__node_stack.insert(0, new_node)
+        pass
 
     def exitSpecifierQualifierList(self, ctx: CParser.SpecifierQualifierListContext):
-        top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.SpecifierQualifierListContext:
-            self.__node_stack.pop(0)
+        pass
 
     def enterStructDeclaratorList(self, ctx: CParser.StructDeclaratorListContext):
-        if ctx.structDeclaratorList():
-            new_node = self.grow_tree("Struct Declarator List", ctx)
-            self.__node_stack.insert(0, new_node)
+        pass
 
     def exitStructDeclaratorList(self, ctx: CParser.StructDeclaratorListContext):
-        top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.StructDeclaratorListContext:
-            self.__node_stack.pop(0)
+        pass
 
     def enterStructDeclarator(self, ctx: CParser.StructDeclaratorContext):
         new_node = self.grow_tree("Struct Declarator", ctx)
@@ -523,30 +490,26 @@ class ASTConstructor(CListener):
         new_node = self.grow_tree("Enum Specifier", ctx)
         self.__node_stack.insert(0, new_node)
         if ctx.Identifier():
-            self.grow_tree(ctx.Identifier(), ctx)
+            self.grow_tree(str(ctx.Identifier()), ctx)
 
     def exitEnumSpecifier(self, ctx: CParser.EnumSpecifierContext):
         self.__node_stack.pop(0)
 
     def enterEnumeratorList(self, ctx: CParser.EnumeratorListContext):
-        if ctx.enumeratorList():
-            new_node = self.grow_tree("Enum List", ctx)
-            self.__node_stack.insert(0, new_node)
+        pass
 
     def exitEnumeratorList(self, ctx: CParser.EnumeratorListContext):
-        top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.EnumeratorListContext:
-            self.__node_stack.pop(0)
+        pass
 
     def enterEnumerator(self, ctx: CParser.EnumeratorContext):
-        new_node = self.grow_tree("Enum", ctx)
+        new_node = self.grow_tree("Enumerator", ctx)
         self.__node_stack.insert(0, new_node)
 
     def exitEnumerator(self, ctx: CParser.EnumeratorContext):
         self.__node_stack.pop(0)
 
     def enterEnumerationConstant(self, ctx: CParser.EnumerationConstantContext):
-        self.grow_tree(ctx.Identifier(), ctx)
+        self.grow_tree(str(ctx.Identifier()), ctx)
 
     def exitEnumerationConstant(self, ctx: CParser.EnumerationConstantContext):
         pass
@@ -565,16 +528,19 @@ class ASTConstructor(CListener):
         pass
 
     def enterFunctionSpecifier(self, ctx: CParser.FunctionSpecifierContext):
-        pass
+        if not ctx.gccAttributeSpecifier():
+            self.grow_tree(str(ctx.getChild(0)), ctx)
+        if ctx.Identifier():
+            self.grow_tree(str(ctx.Identifier()), ctx)
 
     def exitFunctionSpecifier(self, ctx: CParser.FunctionSpecifierContext):
         pass
 
     def enterAlignmentSpecifier(self, ctx: CParser.AlignmentSpecifierContext):
-        pass
+        self.__node_stack.insert(0, self.grow_tree("Alignment Specifier", ctx))
 
     def exitAlignmentSpecifier(self, ctx: CParser.AlignmentSpecifierContext):
-        pass
+        self.__node_stack.pop(0)
 
     def enterDeclarator(self, ctx: CParser.DeclaratorContext):
         new_node = self.grow_tree("Declarator", ctx)
@@ -584,15 +550,18 @@ class ASTConstructor(CListener):
         self.__node_stack.pop(0)
 
     def enterDirectDeclarator(self, ctx: CParser.DirectDeclaratorContext):
-        new_node = self.grow_tree("Direct Declarator", ctx)
-        self.__node_stack.insert(0, new_node)
+        if ctx.directDeclarator():
+            new_node = self.grow_tree("Direct Declarator", ctx)
+            self.__node_stack.insert(0, new_node)
         if ctx.Identifier():
             self.grow_tree(str(ctx.Identifier()), ctx)
         if ctx.DigitSequence():
             self.grow_tree(str(ctx.DigitSequence()), ctx)
 
     def exitDirectDeclarator(self, ctx: CParser.DirectDeclaratorContext):
-        self.__node_stack.pop(0)
+        top_node = self.__node_stack[0]
+        if type(top_node.get_ctx()) == CParser.DirectDeclaratorContext:
+            self.__node_stack.pop(0)
 
     def enterGccDeclaratorExtension(self, ctx: CParser.GccDeclaratorExtensionContext):
         pass
@@ -627,21 +596,15 @@ class ASTConstructor(CListener):
     def enterPointer(self, ctx: CParser.PointerContext):
         if ctx.Star():
             self.grow_tree("*", ctx)
-        elif ctx.Caret():
-            self.grow_tree("^", ctx)
 
     def exitPointer(self, ctx: CParser.PointerContext):
         pass
 
     def enterTypeQualifierList(self, ctx: CParser.TypeQualifierListContext):
-        if ctx.typeQualifierList():
-            new_node = self.grow_tree("Type Qualifier List", ctx)
-            self.__node_stack.insert(0, new_node)
+        pass
 
     def exitTypeQualifierList(self, ctx: CParser.TypeQualifierListContext):
-        top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.TypeQualifierListContext:
-            self.__node_stack.pop(0)
+        pass
 
     def enterParameterTypeList(self, ctx: CParser.ParameterTypeListContext):
         new_node = self.grow_tree("Parameter Type List", ctx)
@@ -651,14 +614,10 @@ class ASTConstructor(CListener):
         self.__node_stack.pop(0)
 
     def enterParameterList(self, ctx: CParser.ParameterListContext):
-        if ctx.parameterList():
-            new_node = self.grow_tree("Parameter List", ctx)
-            self.__node_stack.insert(0, new_node)
+        pass
 
     def exitParameterList(self, ctx: CParser.ParameterListContext):
-        top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.ParameterListContext:
-            self.__node_stack.pop(0)
+        pass
 
     def enterParameterDeclaration(self, ctx: CParser.ParameterDeclarationContext):
         new_node = self.grow_tree("Parameter Declaration", ctx)
@@ -685,11 +644,10 @@ class ASTConstructor(CListener):
         self.__node_stack.pop(0)
 
     def enterAbstractDeclarator(self, ctx: CParser.AbstractDeclaratorContext):
-        new_node = self.grow_tree("Abstract Declarator", ctx)
-        self.__node_stack.insert(0, new_node)
+        pass
 
     def exitAbstractDeclarator(self, ctx: CParser.AbstractDeclaratorContext):
-        self.__node_stack.pop(0)
+        pass
 
     def enterDirectAbstractDeclarator(self, ctx: CParser.DirectAbstractDeclaratorContext):
         pass
@@ -698,7 +656,9 @@ class ASTConstructor(CListener):
         pass
 
     def enterTypedefName(self, ctx: CParser.TypedefNameContext):
+        self.__node_stack.insert(0, self.grow_tree("Type Def Name", ctx))
         self.grow_tree(str(ctx.Identifier()), ctx)
+        self.__node_stack.pop(0)
 
     def exitTypedefName(self, ctx: CParser.TypedefNameContext):
         pass
@@ -711,14 +671,10 @@ class ASTConstructor(CListener):
         self.__node_stack.pop(0)
 
     def enterInitializerList(self, ctx: CParser.InitializerListContext):
-        if ctx.initializerList():
-            new_node = self.grow_tree("Initializer List", ctx)
-            self.__node_stack.insert(0, new_node)
+        pass
 
     def exitInitializerList(self, ctx: CParser.InitializerListContext):
-        top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.InitializerListContext:
-            self.__node_stack.pop(0)
+        pass
 
     def enterDesignation(self, ctx: CParser.DesignationContext):
         pass
@@ -727,14 +683,10 @@ class ASTConstructor(CListener):
         pass
 
     def enterDesignatorList(self, ctx: CParser.DesignatorListContext):
-        if ctx.designatorList():
-            new_node = self.grow_tree("Initializer List", ctx)
-            self.__node_stack.insert(0, new_node)
+        pass
 
     def exitDesignatorList(self, ctx: CParser.DesignatorListContext):
-        top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.DesignatorListContext:
-            self.__node_stack.pop(0)
+        pass
 
     def enterDesignator(self, ctx: CParser.DesignatorContext):
         if ctx.Identifier():
@@ -748,18 +700,18 @@ class ASTConstructor(CListener):
         self.__node_stack.insert(0, new_node)
 
     def exitStaticAssertDeclaration(self, ctx: CParser.StaticAssertDeclarationContext):
+        result = ""
+        for literal in ctx.StringLiteral():
+            result += str(literal)
+        self.grow_tree(result, ctx)
         self.__node_stack.pop(0)
 
     # statements
     def enterStatement(self, ctx: CParser.StatementContext):
-        if ctx.logicalOrExpression():
-            new_node = self.grow_tree("Statement", ctx)
-            self.__node_stack.insert(0, new_node)
+        pass
 
     def exitStatement(self, ctx: CParser.StatementContext):
-        top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.StatementContext:
-            self.__node_stack.pop(0)
+        pass
 
     def enterLabeledStatement(self, ctx: CParser.LabeledStatementContext):
         new_node = self.grow_tree("Labeled Statement", ctx)
@@ -798,11 +750,10 @@ class ASTConstructor(CListener):
         pass
 
     def enterExpressionStatement(self, ctx: CParser.ExpressionStatementContext):
-        new_node = self.grow_tree("Expression Statement", ctx)
-        self.__node_stack.insert(0, new_node)
+        pass
 
     def exitExpressionStatement(self, ctx: CParser.ExpressionStatementContext):
-        self.__node_stack.pop(0)
+        pass
 
     def enterSelectionStatement(self, ctx: CParser.SelectionStatementContext):
         new_node = self.grow_tree("Selection Statement", ctx)
@@ -847,8 +798,7 @@ class ASTConstructor(CListener):
         self.__node_stack.pop(0)
 
     def enterForExpression(self, ctx: CParser.ForExpressionContext):
-        new_node = self.grow_tree("For Expression", ctx)
-        self.__node_stack.insert(0, new_node)
+        self.__node_stack.insert(0, self.grow_tree("For Expression", ctx))
 
     def exitForExpression(self, ctx: CParser.ForExpressionContext):
         self.__node_stack.pop(0)

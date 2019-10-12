@@ -1,8 +1,9 @@
 int main(){
-    int a = 2;
-    int b = 3;
+    _Atomic(int) a = 2;
+    auto b = 3;
+    int c, d = 4;
 
-    int c = a*b;
+    int * const volatile c = a*b;
     int d = c/b;
     int e = d%c;
 
