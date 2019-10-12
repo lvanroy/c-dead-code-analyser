@@ -23,4 +23,7 @@ install:
   - pip3 install -r requirements.txt
 
 script:
-  - python3.7 MainTestSuite.py
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; 
+    then python MainTestSuite.py;
+    else python3.7 MainTestSuite.py;
+    fi
