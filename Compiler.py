@@ -11,6 +11,7 @@ For the software to properly work, the grammars start rule needs to be compilati
 
 import sys
 import os
+import platform
 
 from antlr4 import *
 from Antlr_files.CParser import CParser
@@ -24,8 +25,12 @@ trace = False
 def grammar(grammar_file):
     if not os.path.exists("./Antlr_files"):
         os.mkdir("./Antlr_files")
-    os.system("cd ./Grammar")
-    os.system("java -jar ./antlr.jar -visitor -Dlanguage=Python3 -o ../Antlr_files {}".format(grammar_file))
+    if platform.system() == 'Windows':
+        os.system("cd Grammar&java -jar antlr.jar -visitor -Dlanguage=Python3 -o ../Antlr_files {}"
+                  .format(grammar_file))
+    else:
+        os.system("cd Grammar;java -jar antlr.jar -visitor -Dlanguage=Python3 -o ../Antlr_files {}"
+                  .format(grammar_file))
     return 0
 
 
