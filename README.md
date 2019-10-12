@@ -70,17 +70,11 @@ test coverage:
     alignmentSpecifier          |    OK    |
     declarator                  |    OK    |
     directDeclarator            |    OK    |
-    gccDeclaratorExtension      |    OK    |
-    gccAttributeSpecifier       |    OK    |
-    gccAttributeList            |    OK    |
-    gccAttribute                |    OK    |
-    nestedParenthesesBlock      |    OK    |
     pointer                     |    OK    |
     typeQualifierList           |    OK    |
     parameterTypeList           |    OK    |
     parameterList               |    OK    |
     parameterDeclaration        |    OK    |
-    identifierList              |    OK    |
     typeName                    |    OK    |
     abstractDeclarator          |    OK    |
     directAbstractDeclarator    |    OK    |
