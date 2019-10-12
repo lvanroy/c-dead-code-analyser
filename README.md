@@ -1,5 +1,6 @@
 # c dead code analyser
  [![Build Status](https://travis-ci.com/larsVanRoy/c-dead-code-analyser.svg?token=tHFc7CLfuyXsTkRpN1EE&branch=master)](https://travis-ci.com/larsVanRoy/c-dead-code-analyser)
+ [![codecov](https://codecov.io/gh/larsVanRoy/c-dead-code-analyser/branch/master/graph/badge.svg?token=artU4I8t5Q)](https://codecov.io/gh/larsVanRoy/c-dead-code-analyser)
  
  Research thesis based on an existing research conserning general dead code detection. 
  

@@ -306,7 +306,6 @@ functionSpecifier
     |   '_Noreturn'
     |   '__inline__' // GCC extension
     |   '__stdcall')
-    |   gccAttributeSpecifier
     |   '__declspec' '(' Identifier ')'
     ;
 
@@ -316,7 +315,7 @@ alignmentSpecifier
     ;
 
 declarator
-    :   pointer? directDeclarator gccDeclaratorExtension*
+    :   pointer? directDeclarator
     ;
 
 directDeclarator
@@ -327,36 +326,35 @@ directDeclarator
     |   directDeclarator '[' typeQualifierList 'static' assignmentExpression ']'
     |   directDeclarator '[' typeQualifierList? '*' ']'
     |   directDeclarator '(' parameterTypeList ')'
-    |   directDeclarator '(' identifierList? ')'
-    |   Identifier ':' DigitSequence  // bit field
+    |   directDeclarator '(' ')'
     |   '(' typeSpecifier? pointer directDeclarator ')' // function pointer like: (__cdecl *f)
     ;
 
-gccDeclaratorExtension
-    :   '__asm' '(' StringLiteral+ ')'
-    |   gccAttributeSpecifier
-    ;
-
-gccAttributeSpecifier
-    :   '__attribute__' '(' '(' gccAttributeList ')' ')'
-    ;
-
-gccAttributeList
-    :   gccAttribute (',' gccAttribute)*
-    |   // empty
-    ;
-
-gccAttribute
-    :   ~(',' | '(' | ')') // relaxed def for "identifier or reserved word"
-        ('(' argumentExpressionList? ')')?
-    |   // empty
-    ;
-
-nestedParenthesesBlock
-    :   (   ~('(' | ')')
-        |   '(' nestedParenthesesBlock ')'
-        )*
-    ;
+//gccDeclaratorExtension
+//    :   '__asm' '(' StringLiteral+ ')'
+//    |   gccAttributeSpecifier
+//    ;
+//
+//gccAttributeSpecifier
+//    :   '__attribute__' '(' '(' gccAttributeList ')' ')'
+//    ;
+//
+//gccAttributeList
+//    :   gccAttribute (',' gccAttribute)*
+//    |   // empty
+//    ;
+//
+//gccAttribute
+//    :   ~(',' | '(' | ')') // relaxed def for "identifier or reserved word"
+//        ('(' argumentExpressionList? ')')?
+//    |   // empty
+//    ;
+//
+//nestedParenthesesBlock
+//    :   (   ~('(' | ')')
+//        |   '(' nestedParenthesesBlock ')'
+//        )*
+//    ;
 
 pointer
     :   '*' typeQualifierList?
@@ -383,10 +381,10 @@ parameterDeclaration
     |   declarationSpecifiers2 abstractDeclarator?
     ;
 
-identifierList
-    :   Identifier
-    |   identifierList ',' Identifier
-    ;
+//identifierList
+//    :   Identifier
+//    |   identifierList ',' Identifier
+//    ;
 
 typeName
     :   specifierQualifierList abstractDeclarator?
@@ -394,21 +392,21 @@ typeName
 
 abstractDeclarator
     :   pointer
-    |   pointer? directAbstractDeclarator gccDeclaratorExtension*
+    |   pointer? directAbstractDeclarator
     ;
 
 directAbstractDeclarator
-    :   '(' abstractDeclarator ')' gccDeclaratorExtension*
+    :   '(' abstractDeclarator ')'
     |   '[' typeQualifierList? assignmentExpression? ']'
     |   '[' 'static' typeQualifierList? assignmentExpression ']'
     |   '[' typeQualifierList 'static' assignmentExpression ']'
     |   '[' '*' ']'
-    |   '(' parameterTypeList? ')' gccDeclaratorExtension*
+    |   '(' parameterTypeList? ')'
     |   directAbstractDeclarator '[' typeQualifierList? assignmentExpression? ']'
     |   directAbstractDeclarator '[' 'static' typeQualifierList? assignmentExpression ']'
     |   directAbstractDeclarator '[' typeQualifierList 'static' assignmentExpression ']'
     |   directAbstractDeclarator '[' '*' ']'
-    |   directAbstractDeclarator '(' parameterTypeList? ')' gccDeclaratorExtension*
+    |   directAbstractDeclarator '(' parameterTypeList? ')'
     ;
 
 typedefName

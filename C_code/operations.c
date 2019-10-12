@@ -12,5 +12,7 @@ int main(){
 
     int h = g<<4;
     int i = h>>20;
+
+    int j = i--;
     return 0;
 }

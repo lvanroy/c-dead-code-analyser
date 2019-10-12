@@ -1,7 +1,7 @@
 bool main(){
     int x = 0;
     int y = 0;
-    for((x(0)); x < 10; x ++){
+    for(((x(0))); x < 10; x ++){
         y ++;
     }
     for(x=5, x=3;x<20; ++x){
@@ -17,11 +17,19 @@ bool main(){
     }
 
     if(x == 5 && y != 10){
+        continue;
         return true;
     }
 
     if(x & 5 && y | 4 && y ^ 5){
         return true;
+    }
+    else{
+        return false;
+    }
+
+    while(true){
+        break;
     }
 
     int a = true ? x : y;

@@ -36,9 +36,6 @@ def grammar(grammar_file):
 
 
 def analysis(code_file):
-    """
-        Initial antlr compilation
-    """
     if trace:
         print("Initial antlr compilation started.")
 
@@ -88,10 +85,13 @@ if __name__ == '__main__':
         grammar(file)
 
     elif handler == "analysis":
-        if len(sys.argv) != 3 and len(sys.argv) != 4:
+        if len(sys.argv) != 3 and len(sys.argv) != 4 and len(sys.argv) != 5:
             print("Error: incorrect number of arguments.")
-        elif len(sys.argv) == 4:
+        if len(sys.argv) >= 4:
             trace = sys.argv[3]
+        if len(sys.argv) >= 5:
+            image_output = sys.argv[4]
+
         file = sys.argv[2]
         analysis(file)
 

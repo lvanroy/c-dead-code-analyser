@@ -20,9 +20,6 @@ class AbstractSyntaxTree:
             index = len(self.__children)
         self.__children.insert(index, node)
 
-    def get_child_count(self):
-        return len(self.__children)
-
     def get_ctx(self):
         return self.__ctx
 

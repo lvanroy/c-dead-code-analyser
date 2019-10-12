@@ -1,62 +1,62 @@
 digraph G {
-		Q45[label="CompilationUnit"];
-		Q45 -> Q46
-		Q46[label="Function Definition"];
-		Q46 -> Q47
-		Q47[label="Type Specifier"];
-		Q47 -> Q48
-		Q48[label="int"];
-		Q46 -> Q49
-		Q49[label="Declarator"];
-		Q49 -> Q50
-		Q50[label="Direct Declarator"];
-		Q50 -> Q51
-		Q51[label="main"];
-		Q46 -> Q52
-		Q52[label="Compound Statement"];
-		Q52 -> Q53
-		Q53[label="Block Item List"];
-		Q53 -> Q54
-		Q54[label="Declaration"];
-		Q54 -> Q55
-		Q55[label="Type Specifier"];
-		Q55 -> Q56
-		Q56[label="int"];
-		Q54 -> Q57
-		Q57[label="Init Declarator"];
-		Q57 -> Q58
-		Q58[label="Declarator"];
-		Q58 -> Q59
-		Q59[label="a"];
-		Q57 -> Q60
-		Q60[label="Initializer"];
-		Q60 -> Q61
-		Q61[label="Postfix Expression"];
-		Q61 -> Q62
-		Q62[label="Type Name"];
-		Q62 -> Q63
-		Q63[label="Type Specifier"];
-		Q63 -> Q64
-		Q64[label="int"];
-		Q61 -> Q65
-		Q65[label="Initializer"];
-		Q65 -> Q66
-		Q66[label="Val = 'c'"];
-		Q52 -> Q67
-		Q67[label="Declaration"];
-		Q67 -> Q68
-		Q68[label="Alignment Specifier"];
-		Q68 -> Q69
-		Q69[label="Val = 16"];
-		Q67 -> Q70
-		Q70[label="Type Specifier"];
-		Q70 -> Q71
-		Q71[label="int"];
-		Q67 -> Q72
-		Q72[label="Init Declarator"];
-		Q72 -> Q73
-		Q73[label="Declarator"];
-		Q73 -> Q74
-		Q74[label="b"];
+		Q0[label="CompilationUnit"];
+		Q0 -> Q1
+		Q1[label="Function Definition"];
+		Q1 -> Q2
+		Q2[label="Type Specifier"];
+		Q2 -> Q3
+		Q3[label="int"];
+		Q1 -> Q4
+		Q4[label="Declarator"];
+		Q4 -> Q5
+		Q5[label="Direct Declarator"];
+		Q5 -> Q6
+		Q6[label="main"];
+		Q1 -> Q7
+		Q7[label="Compound Statement"];
+		Q7 -> Q8
+		Q8[label="Block Item List"];
+		Q8 -> Q9
+		Q9[label="Declaration"];
+		Q9 -> Q10
+		Q10[label="Type Specifier"];
+		Q10 -> Q11
+		Q11[label="int"];
+		Q9 -> Q12
+		Q12[label="Init Declarator"];
+		Q12 -> Q13
+		Q13[label="Declarator"];
+		Q13 -> Q14
+		Q14[label="a"];
+		Q12 -> Q15
+		Q15[label="Initializer"];
+		Q15 -> Q16
+		Q16[label="Postfix Expression"];
+		Q16 -> Q17
+		Q17[label="Type Name"];
+		Q17 -> Q18
+		Q18[label="Type Specifier"];
+		Q18 -> Q19
+		Q19[label="int"];
+		Q16 -> Q20
+		Q20[label="Initializer"];
+		Q20 -> Q21
+		Q21[label="Val = 'c'"];
+		Q7 -> Q22
+		Q22[label="Declaration"];
+		Q22 -> Q23
+		Q23[label="Alignment Specifier"];
+		Q23 -> Q24
+		Q24[label="Val = 16"];
+		Q22 -> Q25
+		Q25[label="Type Specifier"];
+		Q25 -> Q26
+		Q26[label="int"];
+		Q22 -> Q27
+		Q27[label="Init Declarator"];
+		Q27 -> Q28
+		Q28[label="Declarator"];
+		Q28 -> Q29
+		Q29[label="b"];
 		
 }

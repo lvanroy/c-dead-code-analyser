@@ -449,51 +449,6 @@ class CListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by CParser#gccDeclaratorExtension.
-    def enterGccDeclaratorExtension(self, ctx:CParser.GccDeclaratorExtensionContext):
-        pass
-
-    # Exit a parse tree produced by CParser#gccDeclaratorExtension.
-    def exitGccDeclaratorExtension(self, ctx:CParser.GccDeclaratorExtensionContext):
-        pass
-
-
-    # Enter a parse tree produced by CParser#gccAttributeSpecifier.
-    def enterGccAttributeSpecifier(self, ctx:CParser.GccAttributeSpecifierContext):
-        pass
-
-    # Exit a parse tree produced by CParser#gccAttributeSpecifier.
-    def exitGccAttributeSpecifier(self, ctx:CParser.GccAttributeSpecifierContext):
-        pass
-
-
-    # Enter a parse tree produced by CParser#gccAttributeList.
-    def enterGccAttributeList(self, ctx:CParser.GccAttributeListContext):
-        pass
-
-    # Exit a parse tree produced by CParser#gccAttributeList.
-    def exitGccAttributeList(self, ctx:CParser.GccAttributeListContext):
-        pass
-
-
-    # Enter a parse tree produced by CParser#gccAttribute.
-    def enterGccAttribute(self, ctx:CParser.GccAttributeContext):
-        pass
-
-    # Exit a parse tree produced by CParser#gccAttribute.
-    def exitGccAttribute(self, ctx:CParser.GccAttributeContext):
-        pass
-
-
-    # Enter a parse tree produced by CParser#nestedParenthesesBlock.
-    def enterNestedParenthesesBlock(self, ctx:CParser.NestedParenthesesBlockContext):
-        pass
-
-    # Exit a parse tree produced by CParser#nestedParenthesesBlock.
-    def exitNestedParenthesesBlock(self, ctx:CParser.NestedParenthesesBlockContext):
-        pass
-
-
     # Enter a parse tree produced by CParser#pointer.
     def enterPointer(self, ctx:CParser.PointerContext):
         pass
@@ -536,15 +491,6 @@ class CListener(ParseTreeListener):
 
     # Exit a parse tree produced by CParser#parameterDeclaration.
     def exitParameterDeclaration(self, ctx:CParser.ParameterDeclarationContext):
-        pass
-
-
-    # Enter a parse tree produced by CParser#identifierList.
-    def enterIdentifierList(self, ctx:CParser.IdentifierListContext):
-        pass
-
-    # Exit a parse tree produced by CParser#identifierList.
-    def exitIdentifierList(self, ctx:CParser.IdentifierListContext):
         pass
 
 

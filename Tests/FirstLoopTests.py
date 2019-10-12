@@ -1,9 +1,14 @@
 import unittest
 
 from Compiler import analysis
+from Tree.AbstractSyntaxTree import AbstractSyntaxTree
 
 
 class TestCases(unittest.TestCase):
+    def setUp(self):
+        instance = AbstractSyntaxTree
+        instance.node_count = 0
+
     def test_array(self):
         analysis("./C_code/array.c")
         with open('output.dot', 'r') as myFile:

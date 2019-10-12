@@ -8,7 +8,7 @@ enum TestEnum {val1, val2 = 0};
 union Data {
     int value;
     double value2;
-}
+};
 
 int main(){
     int a,b;
@@ -27,6 +27,7 @@ int main(){
     instance2->value2 = 5.3;
 
     printf("%d\n", (int)sizeof(instance));
+    printf("%d\n", (int)sizeof(int));
     printf("%d\n", (int) _Alignof(struct TestClass));
 
     return 0;

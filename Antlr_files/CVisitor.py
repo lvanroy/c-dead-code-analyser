@@ -254,31 +254,6 @@ class CVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by CParser#gccDeclaratorExtension.
-    def visitGccDeclaratorExtension(self, ctx:CParser.GccDeclaratorExtensionContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by CParser#gccAttributeSpecifier.
-    def visitGccAttributeSpecifier(self, ctx:CParser.GccAttributeSpecifierContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by CParser#gccAttributeList.
-    def visitGccAttributeList(self, ctx:CParser.GccAttributeListContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by CParser#gccAttribute.
-    def visitGccAttribute(self, ctx:CParser.GccAttributeContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by CParser#nestedParenthesesBlock.
-    def visitNestedParenthesesBlock(self, ctx:CParser.NestedParenthesesBlockContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by CParser#pointer.
     def visitPointer(self, ctx:CParser.PointerContext):
         return self.visitChildren(ctx)
@@ -301,11 +276,6 @@ class CVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by CParser#parameterDeclaration.
     def visitParameterDeclaration(self, ctx:CParser.ParameterDeclarationContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by CParser#identifierList.
-    def visitIdentifierList(self, ctx:CParser.IdentifierListContext):
         return self.visitChildren(ctx)
 
 

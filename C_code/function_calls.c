@@ -1,4 +1,4 @@
-int main(){
+__declspec(dllexport) int main()int d; int e;{
     a(5, 4);
 }
 
