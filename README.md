@@ -1,4 +1,6 @@
 # c dead code analyser
+ [![Build Status](https://travis-ci.com/larsVanRoy/c-dead-code-analyser.svg?token=tHFc7CLfuyXsTkRpN1EE&branch=master)](https://travis-ci.com/larsVanRoy/c-dead-code-analyser)
+ 
  Research thesis based on an existing research conserning general dead code detection. 
  
  This program will convert a given c code file into a one clock automaton, ready for further analysis.
