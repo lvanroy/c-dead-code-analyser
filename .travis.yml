@@ -30,5 +30,5 @@ script:
     then coverage run --source=SymbolTable,Tree MainTestSuite.py;
          coverage report;
          codecov -t=b8350209-0b8c-4993-8800-bbd630b0a8af;
-    else python3.7 MainTestSuite.py;
     fi
+  - if [ "$TRAVIS_OS_NAME" = "osx"     ]; then python3.7 MainTestSuite.py; fi
