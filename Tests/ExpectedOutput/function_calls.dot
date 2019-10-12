@@ -1,0 +1,70 @@
+digraph G {
+		Q278[label="CompilationUnit"];
+		Q278 -> Q279
+		Q279[label="Function Definition"];
+		Q279 -> Q280
+		Q280[label="Type Specifier"];
+		Q280 -> Q281
+		Q281[label="int"];
+		Q279 -> Q282
+		Q282[label="Declarator"];
+		Q282 -> Q283
+		Q283[label="Direct Declarator"];
+		Q283 -> Q284
+		Q284[label="main"];
+		Q279 -> Q285
+		Q285[label="Compound Statement"];
+		Q285 -> Q286
+		Q286[label="Postfix Expression"];
+		Q286 -> Q287
+		Q287[label="ID = a"];
+		Q286 -> Q288
+		Q288[label="("];
+		Q286 -> Q289
+		Q289[label="Arguments"];
+		Q289 -> Q290
+		Q290[label="Val = 5"];
+		Q289 -> Q291
+		Q291[label="Val = 4"];
+		Q286 -> Q292
+		Q292[label=")"];
+		Q278 -> Q293
+		Q293[label="Function Definition"];
+		Q293 -> Q294
+		Q294[label="inline"];
+		Q293 -> Q295
+		Q295[label="Type Specifier"];
+		Q295 -> Q296
+		Q296[label="void"];
+		Q293 -> Q297
+		Q297[label="Declarator"];
+		Q297 -> Q298
+		Q298[label="Direct Declarator"];
+		Q298 -> Q299
+		Q299[label="a"];
+		Q297 -> Q300
+		Q300[label="Parameter Type List"];
+		Q300 -> Q301
+		Q301[label="Parameter Declaration"];
+		Q301 -> Q302
+		Q302[label="Type Specifier"];
+		Q302 -> Q303
+		Q303[label="int"];
+		Q301 -> Q304
+		Q304[label="Declarator"];
+		Q304 -> Q305
+		Q305[label="b"];
+		Q300 -> Q306
+		Q306[label="Parameter Declaration"];
+		Q306 -> Q307
+		Q307[label="Type Specifier"];
+		Q307 -> Q308
+		Q308[label="int"];
+		Q306 -> Q309
+		Q309[label="Declarator"];
+		Q309 -> Q310
+		Q310[label="c"];
+		Q293 -> Q311
+		Q311[label="Compound Statement"];
+		
+}

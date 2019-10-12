@@ -14,7 +14,7 @@ usage:
 
     python Compiler.py grammar file.g4
 
-    python Compiler.py analysis file.c trace=False
+    python Compiler.py analysis file.c trace=False image_output=False
 
 test coverage:
 

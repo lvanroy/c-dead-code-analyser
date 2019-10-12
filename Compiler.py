@@ -5,7 +5,7 @@ The program consists of two main functionalities being generating the needed cod
   and analyzing c code given the generated code for a grammar
 usage:
     python Compiler.py grammar file.g4
-    python Compiler.py analysis file.c trace=False
+    python Compiler.py analysis file.c trace=False image_output=False
 For the software to properly work, the grammars start rule needs to be compilationUnit
 """
 
@@ -20,6 +20,7 @@ from Antlr_files.CLexer import CLexer
 from Tree.ASTConstructor import ASTConstructor
 
 trace = False
+image_output = False
 
 
 def grammar(grammar_file):
@@ -68,7 +69,8 @@ def analysis(code_file):
     f.write(ast.to_dot())
     f.close()
 
-    os.system("dot -Tpng output.dot -o temp.png")
+    if image_output:
+        os.system("dot -Tpng output.dot -o temp.png")
 
     if trace:
         print("AST generation finished.")
