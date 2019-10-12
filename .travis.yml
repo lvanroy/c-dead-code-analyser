@@ -8,6 +8,12 @@ matrix:
         - os: osx
           language: generic
           env: TOXENV=py37
+      - os: windows
+          language: sh
+          python: "3.7"
+          before_install:
+            - choco install python3
+            - export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
 
 install:
   - pip install -r requirements.txt
