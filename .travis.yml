@@ -1,5 +1,8 @@
 language: python
 
+env:
+    - Co
+
 matrix:
     include:
         - os: linux
@@ -30,4 +33,4 @@ script:
     fi
  
 after_succes:
-  - if [ "$TRAVIS_OS_NAME" = "windows" ]; bash <(curl -s https://codecov.io/bash; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; codecov -t=b8350209-0b8c-4993-8800-bbd630b0a8af; fi
