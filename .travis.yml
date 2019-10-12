@@ -1,8 +1,5 @@
 language: python
 
-env:
-    - Co
-
 matrix:
     include:
         - os: linux
