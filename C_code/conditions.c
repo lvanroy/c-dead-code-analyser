@@ -12,6 +12,8 @@ bool main(){
         goto Loop;
     }
 
+    for(int q; q < 10; q++){}
+
     if(x > 20 && x >= 10 || y <= 25){
         return false;
     }
@@ -36,7 +38,7 @@ bool main(){
 
     a *= 5;
 
-    _Static_assert(0, "lalala");
+    _Static_assert(0, "test");
 
     do {a++;} while (a < 300);
 

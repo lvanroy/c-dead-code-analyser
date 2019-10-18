@@ -12,6 +12,12 @@ class AbstractSyntaxTree:
     def set_parent(self, node):
         self.__parent = node
 
+    def set_label(self, label):
+        self.__label = label
+
+    def pop_child(self, index):
+        self.__children.pop(index)
+
     def add_child(self, node):
         self.__children.append(node)
 
@@ -22,6 +28,15 @@ class AbstractSyntaxTree:
 
     def get_ctx(self):
         return self.__ctx
+
+    def get_label(self):
+        return self.__label
+
+    def get_children(self):
+        return self.__children
+
+    def is_parent(self, label):
+        return self.__parent.get_label() == label
 
     def to_dot(self):
         result = ""

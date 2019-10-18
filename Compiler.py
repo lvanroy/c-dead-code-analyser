@@ -18,6 +18,7 @@ from Antlr_files.CParser import CParser
 from Antlr_files.CLexer import CLexer
 
 from Tree.ASTConstructor import ASTConstructor
+from Tree.ASTCleaner import ASTCleaner
 
 trace = False
 image_output = False
@@ -51,26 +52,49 @@ def analysis(code_file):
 
     if trace:
         print("Initial antlr compilation finished.")
-
-    """ 
-        generate AST 
-    """
-    if trace:
-        print("AST generation started.")
+        print("Basic AST generation started.")
 
     constructor = ASTConstructor(parse_tree)
     constructor.construct()
 
     ast = constructor.get_ast()
-    f = open("output.dot", "w")
-    f.write(ast.to_dot())
-    f.close()
 
     if image_output:
-        os.system("dot -Tpng output.dot -o temp.png")
+        f = open("output.dot", "w")
+        f.write(ast.to_dot())
+        f.close()
+
+        file_name = ""
+        file_names = code_file.split("/")
+        for temp in file_names:
+            if temp[-2:] == '.c':
+                file_name = temp[:-2]
+        os.system("dot -Tpng output.dot -o ./TreePlots/{}.png".format(file_name))
 
     if trace:
-        print("AST generation finished.")
+        print("Basic AST generation finished.")
+        print("Optimized AST generation started.")
+
+    cleaner = ASTCleaner(ast)
+    cleaner.perform_full_clean()
+
+    if image_output:
+        ast = cleaner.get_ast()
+        f = open("output.dot", "w")
+        f.write(ast.to_dot())
+        f.close()
+
+        file_name = ""
+        file_names = code_file.split("/")
+        for temp in file_names:
+            if temp[-2:] == '.c':
+                file_name = temp[:-2]
+        os.system("dot -Tpng output.dot -o ./TreePlots/{}_cleaned.png".format(file_name))
+
+    if trace:
+        print("Optimized AST generation finished.")
+        print("The following symbol table was derived from the code.")
+        cleaner.print_symbol_table()
 
     return 0
 

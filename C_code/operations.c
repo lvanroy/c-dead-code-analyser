@@ -2,17 +2,20 @@ int main(){
     _Atomic(int) a = 2;
     auto b = 3;
     int c, d = 4;
+    char* q = "loool";
 
     int * const volatile c = a*b;
-    int d = c/b;
-    int e = d%c;
+    b = c/b;
+    b = d%c;
+    b = a + 'c';
+    int z = a = d;
 
-    int f = a+b;
-    int g = d-e;
+    b = a+b+b+c+d;
+    b = d-e;
 
-    int h = g<<4;
-    int i = h>>20;
+    b = g<<4;
+    b = h>>20;
 
-    int j = i--;
+    b = i--;
     return 0;
 }

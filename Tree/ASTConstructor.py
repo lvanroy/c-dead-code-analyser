@@ -4,7 +4,6 @@ from Antlr_files.CParser import CParser
 from Antlr_files.CListener import CListener
 
 from Tree.AbstractSyntaxTree import AbstractSyntaxTree
-from SymbolTable.SymbolTable import SymbolTable
 
 
 class ASTConstructor(CListener):
@@ -13,7 +12,6 @@ class ASTConstructor(CListener):
         self.__walker = ParseTreeWalker()
         self.__parse_tree = parse_tree
         self.__node_stack = list()
-        self.__symbol_table = SymbolTable()
 
     def construct(self):
         self.__walker.walk(self, self.__parse_tree)
@@ -66,11 +64,9 @@ class ASTConstructor(CListener):
     def enterFunctionDefinition(self, ctx: CParser.FunctionDefinitionContext):
         new_node = self.grow_tree("Function Definition", ctx)
         self.__node_stack.insert(0, new_node)
-        self.__symbol_table.open_scope(str(ctx.declarator().directDeclarator()))
 
     def exitFunctionDefinition(self, ctx: CParser.FunctionDefinitionContext):
         self.__node_stack.pop(0)
-        self.__symbol_table.close_scope()
 
     def enterDeclarationList(self, ctx: CParser.DeclarationListContext):
         pass
@@ -108,10 +104,10 @@ class ASTConstructor(CListener):
             self.__node_stack.pop(0)
 
     def enterGenericSelection(self, ctx: CParser.GenericSelectionContext):
-        self.grow_tree("Generic", ctx)
+        self.__node_stack.insert(0, self.grow_tree("Generic", ctx))
 
     def exitGenericSelection(self, ctx: CParser.GenericSelectionContext):
-        pass
+        self.__node_stack.pop(0)
 
     def enterGenericAssocList(self, ctx: CParser.GenericAssocListContext):
         pass
@@ -515,14 +511,15 @@ class ASTConstructor(CListener):
         pass
 
     def enterAtomicTypeSpecifier(self, ctx: CParser.AtomicTypeSpecifierContext):
-        new_node = self.grow_tree("Atomic Type Specifier", ctx)
-        self.__node_stack.insert(0, new_node)
+        pass
 
     def exitAtomicTypeSpecifier(self, ctx: CParser.AtomicTypeSpecifierContext):
-        self.__node_stack.pop(0)
+        pass
 
     def enterTypeQualifier(self, ctx: CParser.TypeQualifierContext):
+        self.__node_stack.insert(0, self.grow_tree("Type Qualifier", ctx))
         self.grow_tree(str(ctx.getChild(0)), ctx)
+        self.__node_stack.pop(0)
 
     def exitTypeQualifier(self, ctx: CParser.TypeQualifierContext):
         pass
@@ -531,7 +528,7 @@ class ASTConstructor(CListener):
         # if not ctx.gccAttributeSpecifier():
         #     self.grow_tree(str(ctx.getChild(0)), ctx)
         if ctx.Identifier():
-            self.__node_stack.insert(0, self.grow_tree("function specifier", ctx))
+            self.__node_stack.insert(0, self.grow_tree("Function Specifier", ctx))
             self.grow_tree(str(ctx.Identifier()), ctx)
             self.__node_stack.pop(0)
 
@@ -564,8 +561,7 @@ class ASTConstructor(CListener):
             self.__node_stack.pop(0)
 
     def enterPointer(self, ctx: CParser.PointerContext):
-        if ctx.Star():
-            self.grow_tree("*", ctx)
+        self.grow_tree("pointer", ctx)
 
     def exitPointer(self, ctx: CParser.PointerContext):
         pass
@@ -704,14 +700,10 @@ class ASTConstructor(CListener):
         self.__node_stack.pop(0)
 
     def enterBlockItemList(self, ctx: CParser.BlockItemListContext):
-        if ctx.blockItemList():
-            new_node = self.grow_tree("Block Item List", ctx)
-            self.__node_stack.insert(0, new_node)
+        pass
 
     def exitBlockItemList(self, ctx: CParser.BlockItemListContext):
-        top_node = self.__node_stack[0]
-        if type(top_node.get_ctx()) == CParser.BlockItemListContext:
-            self.__node_stack.pop(0)
+        pass
 
     def enterBlockItem(self, ctx: CParser.BlockItemContext):
         pass

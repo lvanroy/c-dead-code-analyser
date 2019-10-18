@@ -315,7 +315,7 @@ alignmentSpecifier
     ;
 
 declarator
-    :   pointer? directDeclarator
+    :   directDeclarator
     ;
 
 directDeclarator
