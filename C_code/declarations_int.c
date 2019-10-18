@@ -1,5 +1,5 @@
 int main(){
-    // integers
+    // primary initializer
     int a = 0;
 
     // assignment initializer
@@ -23,15 +23,25 @@ int main(){
     // and initializer
     int m = 2 ^ 0 && 5;
 
-    // equalitiy initializer
+    // equality initializer
     int n = 2 == 3;
 
-    // basic additive initializer
+    // relational initializer
+
+    // shift initializer
+
+    // additive initializer
     int b = a + 5;
     int c = a - b;
 
-    // basic multiplicative initializer
+    // multiplicative initializer
     int d = b * 2;
     int e = b / 5;
     int f = d % 3;
+
+    // cast initializer
+
+    // unary initializer
+
+    // postfix initializer
 }
