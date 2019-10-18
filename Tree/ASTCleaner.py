@@ -10,7 +10,7 @@ class ASTCleaner:
 
         self.__scope_counter = 0  # this value is used to give scopes unique names
 
-        self.__assignments = dict()  # this dict keeps track of the last node that assigned to a variable to update them
+        self.__declarations = dict()  # this dict keeps track of the node that declared a variable
 
         self.__changes_occurred = True  # this value tracks whether or not something changes in a cycle
 
@@ -37,10 +37,14 @@ class ASTCleaner:
             except ValueError:
                 return float(value)
 
-    def perform_full_clean(self):
+    def perform_full_clean(self, trace=False):
         while self.__changes_occurred:
+            if trace:
+                print("Optimization cycle started")
             self.__changes_occurred = False
             self.clean(self.__root)
+            if trace:
+                print("Optimization cycle finished")
 
     # this is used when folding occurs, this will change the node name to the new node name,
     # and will pop all of its children
@@ -50,13 +54,65 @@ class ASTCleaner:
         for i in reversed(range(len(node.get_children()))):
             node.pop_child(i)
 
-    # this is used when a second assignment occurs, on a variable that did not get used in the meantime
-    def update_assigned_value(self, node_name, value):
-        label = self.__assignments[node_name].get_children()[1].get_label()
-        if label == "Init Declarator":
-            self.__assignments[node_name].get_children()[1].get_children()[1].get_children()[0].set_label(value)
-        elif label == "Assignment Expression":
-            self.__assignments[node_name].get_children()[2].set_label(value)
+    # this is used when a node is no longer needed/of value to the further execution
+    def remove_node(self, node_name):
+        node = self.__declarations[node_name]
+
+        parent = node.get_parent()
+        index = parent.find_child(node)
+
+        parent.pop_child(index)
+
+    # this is used when an assignment occurs, on a variable that did not get used in the meantime
+    def update_assigned_value(self, variable_name, assignment_node, value):
+        # set the assignment node equal to the desired value, and move the declaration to be the next statement
+        # in the current scope
+        self.clean_node(assignment_node, value)
+        self.remove_node(variable_name)
+
+        child = assignment_node
+        parent = assignment_node.get_parent()
+        while parent.get_label() != "Compound Statement":
+            child = parent
+            parent = parent.get_parent()
+
+        ctx = assignment_node.get_ctx()
+        variable_type = self.__symbol_table.get_type(variable_name)
+        index = parent.find_child(child) + 1
+
+        declaration_node = AbstractSyntaxTree("Declaration", ctx)
+        parent.add_child_at_index(declaration_node, index)
+        declaration_node.set_parent(parent)
+
+        type_specifier_node = AbstractSyntaxTree("Type Specifier", ctx)
+        declaration_node.add_child(type_specifier_node)
+        type_specifier_node.set_parent(declaration_node)
+
+        type_node = AbstractSyntaxTree(variable_type, ctx)
+        type_specifier_node.add_child(type_node)
+        type_node.set_parent(type_specifier_node)
+
+        init_declarator_node = AbstractSyntaxTree("Init Declarator", ctx)
+        declaration_node.add_child(init_declarator_node)
+        init_declarator_node.set_parent(declaration_node)
+
+        declarator_node = AbstractSyntaxTree("Declarator", ctx)
+        init_declarator_node.add_child(declarator_node)
+        declarator_node.set_parent(init_declarator_node)
+
+        variable_node = AbstractSyntaxTree(variable_name, ctx)
+        declarator_node.add_child(variable_node)
+        variable_node.set_parent(declarator_node)
+
+        initializer_node = AbstractSyntaxTree("Initializer", ctx)
+        init_declarator_node.add_child(initializer_node)
+        initializer_node.set_parent(init_declarator_node)
+
+        value_node = AbstractSyntaxTree(value, ctx)
+        initializer_node.add_child(value_node)
+        value_node.set_parent(initializer_node)
+
+        self.__declarations[variable_name] = declaration_node
 
     def clean(self, node: AbstractSyntaxTree):
         result = ""
@@ -117,7 +173,7 @@ class ASTCleaner:
                 if operator == "=":
                     value = self.perform_optimal_cast(operand_2[6:])
                     self.clean_node(node, "Val = {}".format(value))
-                    self.update_assigned_value(operand_1[5:], "Val = {}".format(value))
+                    self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
                     self.__symbol_table.set_value(operand_1[5:], value)
                     return "Val = {}".format(value)
                 elif operand_1_val is not None:
@@ -205,7 +261,18 @@ class ASTCleaner:
         # this defines an expression of the form: condition ? expression : condition
         # this is needed for folding
         elif node.get_label() == "Conditional Expression":
-            pass
+            condition = self.clean(node.get_children()[0])
+
+            if condition != "" and condition[:6] == "Val = ":
+                if condition[6:] == "true":
+                    value_1 = self.clean(node.get_children()[2])
+                    self.clean_node(node, value_1)
+                    return value_1
+                elif condition[6:] == "false":
+                    value_2 = self.clean(node.get_children()[4])
+                    self.clean_node(node, value_2)
+                    return value_2
+            return ""
 
         # this defines a new identifier, this is needed for the symbol table
         elif node.get_label() == "Declaration":
@@ -233,7 +300,7 @@ class ASTCleaner:
                 declarator_child = children[i].get_children()[0]
                 declarator = self.clean(declarator_child)
 
-                self.__assignments[declarator] = node
+                self.__declarations[declarator] = node
 
                 if len(children[i].get_children()) > 1:
                     initializer_child = children[i].get_children()[1]
@@ -276,7 +343,31 @@ class ASTCleaner:
 
         # defines a conditional expression with '==' or '!=' comparison, needed for condition evaluation
         elif node.get_label() == "Equality Expression":
-            pass
+            operand_1 = self.clean(node.get_children()[0])
+            operator = node.get_children()[1].get_label()
+            operand_2 = self.clean(node.get_children()[2])
+
+            if operand_1 != "" and operand_1[:5] == "ID = " and self.__symbol_table.is_initialized(operand_1[5:]):
+                operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
+
+            if operand_2 != "" and operand_2[:5] == "ID = " and self.__symbol_table.is_initialized(operand_2[5:]):
+                operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
+
+            if operand_1 != "" and operand_2 != "" and operand_1[:6] == "Val = " and operand_2[:6] == "Val = ":
+                if operator == "==":
+                    if operand_1[6:] == operand_2[6:]:
+                        self.clean_node(node, "Val = true")
+                        return "Val = true"
+                    if operand_1[6:] != operand_2[6:]:
+                        self.clean_node(node, "Val = false")
+                        return "Val = false"
+                if operator == "!=":
+                    if operand_1[6:] != operand_2[6:]:
+                        self.clean_node(node, "Val = true")
+                        return "Val = true"
+                    if operand_1[6:] == operand_2[6:]:
+                        self.clean_node(node, "Val = false")
+                        return "Val = false"
 
         # head node when multiple expression occur on the same line, needed for folding
         elif node.get_label() == "Expression":
@@ -363,6 +454,8 @@ class ASTCleaner:
             if label[:6] == "Val = ":
                 return node.get_children()[0].get_label()
             elif label == "Assignment Expression":
+                return self.clean(node.get_children()[0])
+            elif label == "Conditional Expression":
                 return self.clean(node.get_children()[0])
             elif label == "Additive Expression":
                 value = self.clean(node.get_children()[0])

@@ -23,7 +23,6 @@ class SymbolTable:
         self.__current_scope = self.__scopes["0"]
 
         self.__symbols = dict()
-        self.__symbols[self.__current_scope] = dict()
 
     def open_scope(self, label):
         if label in self.__scopes:
@@ -67,6 +66,14 @@ class SymbolTable:
         else:
             return self.set_value(symbol_name, value, scope.get_parent())
 
+    def get_type(self, symbol_name, scope=None):
+        if scope is None:
+            scope = self.__current_scope
+        if symbol_name in self.__symbols[scope]:
+            return self.__symbols[scope][symbol_name].get_type()
+        else:
+            return self.get_type(symbol_name, scope.get_parent())
+
     def print(self):
         for scope in self.__symbols.keys():
             print("================= {} =================".format(scope.get_label()))
@@ -100,6 +107,9 @@ class Symbol:
 
     def set_value(self, value):
         self.__value = value
+
+    def get_type(self):
+        return self.__type
 
     def set_used(self, value):
         self.__used = value

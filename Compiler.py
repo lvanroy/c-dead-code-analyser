@@ -76,7 +76,7 @@ def analysis(code_file):
         print("Optimized AST generation started.")
 
     cleaner = ASTCleaner(ast)
-    cleaner.perform_full_clean()
+    cleaner.perform_full_clean(trace)
 
     if image_output:
         ast = cleaner.get_ast()

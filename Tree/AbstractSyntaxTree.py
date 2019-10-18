@@ -12,6 +12,9 @@ class AbstractSyntaxTree:
     def set_parent(self, node):
         self.__parent = node
 
+    def get_parent(self):
+        return self.__parent
+
     def set_label(self, label):
         self.__label = label
 
@@ -25,6 +28,9 @@ class AbstractSyntaxTree:
         if index == -1:
             index = len(self.__children)
         self.__children.insert(index, node)
+
+    def find_child(self, child):
+        return self.__children.index(child)
 
     def get_ctx(self):
         return self.__ctx
