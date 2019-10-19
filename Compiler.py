@@ -37,6 +37,9 @@ def grammar(grammar_file):
 
 
 def analysis(code_file):
+    if not os.path.isdir("./TreePlots"):
+        os.mkdir("./TreePlots")
+
     if trace:
         print("Initial antlr compilation started.")
 
@@ -76,7 +79,7 @@ def analysis(code_file):
         print("Optimized AST generation started.")
 
     cleaner = ASTCleaner(ast)
-    cleaner.perform_full_clean(trace)
+    cleaner.perform_full_clean(trace, image_output)
 
     if image_output:
         ast = cleaner.get_ast()

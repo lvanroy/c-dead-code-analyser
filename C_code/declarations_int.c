@@ -3,45 +3,54 @@ int main(){
     int a = 0;
 
     // assignment initializer
-    int g = a = 5;
+    int b = a = 5;
 
     // conditional initializer
-    int h = a == 5 ? 3 : 4;
+    int c = a == 5 ? 3 : 4;
 
     // logical or initializer
-    int i = 5 || 0;
+    int d = 5 || 0;
 
     // logical and initializer
-    int j = 2 && 3;
+    int e = 2 && 3;
 
     // inclusive or initializer
-    int k = 2 | 0;
+    int f = 2 | 0;
 
     // exclusive or initializer
-    int l = 2 ^ 0;
+    int g = 2 ^ 0;
 
     // and initializer
-    int m = 2 ^ 0 && 5;
+    int h = 2 ^ 0 && 5;
 
     // equality initializer
-    int n = 2 == 3;
+    int i = 2 == 3;
 
     // relational initializer
+    int j = 2 < 3;
 
     // shift initializer
+    int k = 2 << 2;
 
     // additive initializer
-    int b = a + 5;
-    int c = a - b;
+    int l = a + 5;
+    int m = a - b;
 
     // multiplicative initializer
-    int d = b * 2;
-    int e = b / 5;
-    int f = d % 3;
+    int n = b * 2;
+    int o = b / 5;
+    int p = d % 3;
 
     // cast initializer
+    int q = (int) 5.0;
 
     // unary initializer
+    int s = --a;
+    int r = ++a;
+    int t = -a;
+    int u = ~a;
+    int v = !a;
+    int w = sizeof(a);
 
     // postfix initializer
 }

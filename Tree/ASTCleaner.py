@@ -1,3 +1,6 @@
+import sys
+import os
+
 from Tree.AbstractSyntaxTree import AbstractSyntaxTree
 
 from SymbolTable.SymbolTable import SymbolTable
@@ -21,8 +24,12 @@ class ASTCleaner:
         return self.__root
 
     def clean_children(self, node):
-        for child in node.get_children():
-            self.clean(child)
+        i = 0
+        if len(node.get_children()) >= 1:
+            while i < len(node.get_children()) - 1:
+                child = node.get_children()[i]
+                self.clean(child)
+                i += 1
 
     @staticmethod
     def perform_optimal_cast(value):
@@ -37,7 +44,23 @@ class ASTCleaner:
             except ValueError:
                 return float(value)
 
-    def perform_full_clean(self, trace=False):
+    @staticmethod
+    def perform_cast(value, var_type):
+        casts = dict()
+        casts['int'] = int
+        casts['float'] = float
+
+        if var_type == 'int':
+            return int(float(value))
+        elif var_type == 'float':
+            return float(value)
+        else:
+            if var_type == 'char' and value.isnumeric():
+                return chr(value)
+            elif var_type == 'char':
+                return value
+
+    def perform_full_clean(self, trace=False, image_output=False):
         while self.__changes_occurred:
             if trace:
                 print("Optimization cycle started")
@@ -45,6 +68,13 @@ class ASTCleaner:
             self.clean(self.__root)
             if trace:
                 print("Optimization cycle finished")
+            if image_output:
+                f = open("output.dot", "w")
+                f.write(self.__root.to_dot())
+                f.close()
+
+                os.system("dot -Tpng output.dot -o ./TreePlots/temp.png")
+                print("blub")
 
     # this is used when folding occurs, this will change the node name to the new node name,
     # and will pop all of its children
@@ -55,9 +85,8 @@ class ASTCleaner:
             node.pop_child(i)
 
     # this is used when a node is no longer needed/of value to the further execution
-    def remove_node(self, node_name):
-        node = self.__declarations[node_name]
-
+    @staticmethod
+    def remove_node(node):
         parent = node.get_parent()
         index = parent.find_child(node)
 
@@ -67,9 +96,6 @@ class ASTCleaner:
     def update_assigned_value(self, variable_name, assignment_node, value):
         # set the assignment node equal to the desired value, and move the declaration to be the next statement
         # in the current scope
-        self.clean_node(assignment_node, value)
-        self.remove_node(variable_name)
-
         child = assignment_node
         parent = assignment_node.get_parent()
         while parent.get_label() != "Compound Statement":
@@ -112,7 +138,49 @@ class ASTCleaner:
         initializer_node.add_child(value_node)
         value_node.set_parent(initializer_node)
 
+        if assignment_node.get_parent().get_label() != "Compound Statement":
+            self.clean_node(assignment_node, value)
+        else:
+            self.remove_node(assignment_node)
+        self.remove_node(self.__declarations[variable_name])
+
         self.__declarations[variable_name] = declaration_node
+
+    # this is used when a pre or postfix occurs, these functions do not automatically create assignment nodes
+    # but require us to make those, in case we want to apply folding to them
+    @staticmethod
+    def create_new_assignment(variable_name, value, originated_node):
+        parent = originated_node.get_parent()
+        child = originated_node
+
+        while parent.get_label() != "Compound Statement":
+            child = parent
+            parent = parent.get_parent()
+
+        index = parent.find_child(child)
+
+        if originated_node.get_label() == "Unary Expression":
+            index -= 1
+        else:
+            index += 1
+
+        ctx = originated_node.get_ctx()
+
+        assignment_node = AbstractSyntaxTree("Assignment Expression", ctx)
+        assignment_node.set_parent(parent)
+        parent.add_child_at_index(assignment_node, index)
+
+        id_node = AbstractSyntaxTree(variable_name, ctx)
+        id_node.set_parent(assignment_node)
+        assignment_node.add_child(id_node)
+
+        equals_node = AbstractSyntaxTree("=", ctx)
+        equals_node.set_parent(assignment_node)
+        assignment_node.add_child(equals_node)
+
+        value_node = AbstractSyntaxTree(value, ctx)
+        value_node.set_parent(assignment_node)
+        assignment_node.add_child(value_node)
 
     def clean(self, node: AbstractSyntaxTree):
         result = ""
@@ -172,7 +240,6 @@ class ASTCleaner:
             if operand_1 != "" and operand_2 != "" and operand_1[:5] == "ID = " and operand_2[:6] == "Val = ":
                 if operator == "=":
                     value = self.perform_optimal_cast(operand_2[6:])
-                    self.clean_node(node, "Val = {}".format(value))
                     self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
                     self.__symbol_table.set_value(operand_1[5:], value)
                     return "Val = {}".format(value)
@@ -225,21 +292,78 @@ class ASTCleaner:
 
         # this defines a bitwise and comparison, this is needed for condition evaluation
         elif node.get_label() == "Bitwise And Expression":
-            pass
+            operand_1 = self.clean(node.get_children()[0])
+            operand_2 = self.clean(node.get_children()[2])
+
+            if operand_1 != "" and operand_1[:5] == "ID = " and self.__symbol_table.is_initialized(operand_1[5:]):
+                operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
+
+            if operand_2 != "" and operand_2[:5] == "ID = " and self.__symbol_table.is_initialized(operand_2[5:]):
+                operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
+
+            if operand_1 != "" and operand_2 != "" and operand_1[:6] == "Val = " and operand_2[:6] == "Val = ":
+                casted_operand_1 = self.perform_optimal_cast(operand_1[6:])
+                casted_operand_2 = self.perform_optimal_cast(operand_2[6:])
+                value = "Val = {}".format(casted_operand_1 & casted_operand_2)
+                self.clean_node(node, value)
+                return value
+            else:
+                return ""
 
         # this defines a bitwise or comparison, this is needed for condition evaluation
         elif node.get_label() == "Bitwise Or Expression":
-            pass
+            operand_1 = self.clean(node.get_children()[0])
+            operand_2 = self.clean(node.get_children()[2])
+
+            if operand_1 != "" and operand_1[:5] == "ID = " and self.__symbol_table.is_initialized(operand_1[5:]):
+                operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
+
+            if operand_2 != "" and operand_2[:5] == "ID = " and self.__symbol_table.is_initialized(operand_2[5:]):
+                operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
+
+            if operand_1 != "" and operand_2 != "" and operand_1[:6] == "Val = " and operand_2[:6] == "Val = ":
+                casted_operand_1 = self.perform_optimal_cast(operand_1[6:])
+                casted_operand_2 = self.perform_optimal_cast(operand_2[6:])
+                value = "Val = {}".format(casted_operand_1 | casted_operand_2)
+                self.clean_node(node, value)
+                return value
+            else:
+                return ""
 
         # this defines a bitwise xor comparison, this is needed for condition evaluation
         elif node.get_label() == "Bitwise Xor Expression":
-            pass
+            operand_1 = self.clean(node.get_children()[0])
+            operand_2 = self.clean(node.get_children()[2])
+
+            if operand_1 != "" and operand_1[:5] == "ID = " and self.__symbol_table.is_initialized(operand_1[5:]):
+                operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
+
+            if operand_2 != "" and operand_2[:5] == "ID = " and self.__symbol_table.is_initialized(operand_2[5:]):
+                operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
+
+            if operand_1 != "" and operand_2 != "" and operand_1[:6] == "Val = " and operand_2[:6] == "Val = ":
+                casted_operand_1 = self.perform_optimal_cast(operand_1[6:])
+                casted_operand_2 = self.perform_optimal_cast(operand_2[6:])
+                value = "Val = {}".format(casted_operand_1 ^ casted_operand_2)
+                self.clean_node(node, value)
+                return value
+            else:
+                return ""
 
         # this defines a cast expression
         # its parameters are the type, and the value to cast
         # this is needed for folding
         elif node.get_label() == "Cast Expression":
-            pass
+            var_type = self.clean(node.get_children()[0])
+            value = self.clean(node.get_children()[1])
+
+            if value != "" and value[:5] == "ID = " and self.__symbol_table.is_initialized(value[5:]):
+                value = "Val = {}".format(self.__symbol_table.get_value(value[5:]))
+
+            if value != "" and value[:6] == "Val = ":
+                value = "Val = {}".format(self.perform_cast(value[6:], var_type))
+                self.clean_node(node, value)
+                return value
 
         # this is the root of the ast
         elif node.get_label() == "CompilationUnit":
@@ -264,11 +388,11 @@ class ASTCleaner:
             condition = self.clean(node.get_children()[0])
 
             if condition != "" and condition[:6] == "Val = ":
-                if condition[6:] == "true":
+                if condition[6:] == "1":
                     value_1 = self.clean(node.get_children()[2])
                     self.clean_node(node, value_1)
                     return value_1
-                elif condition[6:] == "false":
+                elif condition[6:] == "0":
                     value_2 = self.clean(node.get_children()[4])
                     self.clean_node(node, value_2)
                     return value_2
@@ -356,18 +480,18 @@ class ASTCleaner:
             if operand_1 != "" and operand_2 != "" and operand_1[:6] == "Val = " and operand_2[:6] == "Val = ":
                 if operator == "==":
                     if operand_1[6:] == operand_2[6:]:
-                        self.clean_node(node, "Val = true")
-                        return "Val = true"
+                        self.clean_node(node, "Val = 1")
+                        return "Val = 1"
                     if operand_1[6:] != operand_2[6:]:
-                        self.clean_node(node, "Val = false")
-                        return "Val = false"
+                        self.clean_node(node, "Val = 0")
+                        return "Val = 0"
                 if operator == "!=":
                     if operand_1[6:] != operand_2[6:]:
-                        self.clean_node(node, "Val = true")
-                        return "Val = true"
+                        self.clean_node(node, "Val = 1")
+                        return "Val = 1"
                     if operand_1[6:] == operand_2[6:]:
-                        self.clean_node(node, "Val = false")
-                        return "Val = false"
+                        self.clean_node(node, "Val = 0")
+                        return "Val = 0"
 
         # head node when multiple expression occur on the same line, needed for folding
         elif node.get_label() == "Expression":
@@ -412,7 +536,7 @@ class ASTCleaner:
                 self.clean(children[i].get_children()[1])
 
             # get the declarations that might have occurred
-            for i in range(i+1, len(children)):
+            for i in range(i + 1, len(children)):
                 child = children[i]
 
                 if child.get_label() == "Compound Statement":
@@ -457,10 +581,29 @@ class ASTCleaner:
                 return self.clean(node.get_children()[0])
             elif label == "Conditional Expression":
                 return self.clean(node.get_children()[0])
+            elif label == "Logical Or Expression":
+                return self.clean(node.get_children()[0])
+            elif label == "Logical And Expression":
+                return self.clean(node.get_children()[0])
+            elif label == "Bitwise Or Expression":
+                return self.clean(node.get_children()[0])
+            elif label == "Bitwise Xor Expression":
+                return self.clean(node.get_children()[0])
+            elif label == "Logical And Expression":
+                return self.clean(node.get_children()[0])
+            elif label == "Equality Expression":
+                return self.clean(node.get_children()[0])
+            elif label == "Relational Expression":
+                return self.clean(node.get_children()[0])
+            elif label == "Shift Expression":
+                return self.clean(node.get_children()[0])
             elif label == "Additive Expression":
-                value = self.clean(node.get_children()[0])
-                return value
+                return self.clean(node.get_children()[0])
             elif label == "Multiplication Expression":
+                return self.clean(node.get_children()[0])
+            elif label == "Cast Expression":
+                return self.clean(node.get_children()[0])
+            elif label == "Unary Expression":
                 return self.clean(node.get_children()[0])
 
         # head node for loops
@@ -477,11 +620,49 @@ class ASTCleaner:
 
         # head node for a logical and comparison, needed for condition evaluation
         elif node.get_label() == "Logical And Expression":
-            pass
+            operand_1 = self.clean(node.get_children()[0])
+            operand_2 = self.clean(node.get_children()[2])
+
+            if operand_1 != "" and operand_1[:5] == "ID = " and self.__symbol_table.is_initialized(operand_1[5:]):
+                operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
+
+            if operand_2 != "" and operand_2[:5] == "ID = " and self.__symbol_table.is_initialized(operand_2[5:]):
+                operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
+
+            if operand_1 != "" and operand_2 != "" and operand_1[:6] == "Val = " and operand_2[:6] == "Val = ":
+                casted_operand_1 = self.perform_optimal_cast(operand_1[6:])
+                casted_operand_2 = self.perform_optimal_cast(operand_2[6:])
+                if casted_operand_1 and casted_operand_2 != 0:
+                    value = "Val = 1"
+                else:
+                    value = "Val = 0"
+                self.clean_node(node, value)
+                return value
+            else:
+                return ""
 
         # head node for a logical or comparison, needed for condition evaluation
         elif node.get_label() == "Logical Or Expression":
-            pass
+            operand_1 = self.clean(node.get_children()[0])
+            operand_2 = self.clean(node.get_children()[2])
+
+            if operand_1 != "" and operand_1[:5] == "ID = " and self.__symbol_table.is_initialized(operand_1[5:]):
+                operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
+
+            if operand_2 != "" and operand_2[:5] == "ID = " and self.__symbol_table.is_initialized(operand_2[5:]):
+                operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
+
+            if operand_1 != "" and operand_2 != "" and operand_1[:6] == "Val = " and operand_2[:6] == "Val = ":
+                casted_operand_1 = self.perform_optimal_cast(operand_1[6:])
+                casted_operand_2 = self.perform_optimal_cast(operand_2[6:])
+                if casted_operand_1 or casted_operand_2 != 0:
+                    value = "Val = 1"
+                else:
+                    value = "Val = 0"
+                self.clean_node(node, value)
+                return value
+            else:
+                return ""
 
         # head node for a multiplication expression, needed for folding
         elif node.get_label() == "Multiplication Expression":
@@ -531,11 +712,51 @@ class ASTCleaner:
 
         # head node for a primary expression
         elif node.get_label() == "Primary Expression":
-            pass
+            children = node.get_children()
+            if len(children) == 3 and children[0].get_label() == "(" and children[2].get_label() == ")":
+                return self.clean(children[1])
 
         # head node for a relation expression
         elif node.get_label() == "Relational Expression":
-            pass
+            operand_1 = self.clean(node.get_children()[0])
+            operator = node.get_children()[1].get_label()
+            operand_2 = self.clean(node.get_children()[2])
+
+            if operand_1 != "" and operand_1[:5] == "ID = " and self.__symbol_table.is_initialized(operand_1[5:]):
+                operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
+
+            if operand_2 != "" and operand_2[:5] == "ID = " and self.__symbol_table.is_initialized(operand_2[5:]):
+                operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
+
+            if operand_1 != "" and operand_2 != "" and operand_1[:6] == "Val = " and operand_2[:6] == "Val = ":
+                casted_operand_1 = self.perform_optimal_cast(operand_1[6:])
+                casted_operand_2 = self.perform_optimal_cast(operand_2[6:])
+                value = None
+                if operator == "<":
+                    if casted_operand_1 < casted_operand_2:
+                        value = "Val = 1"
+                    else:
+                        value = "Val = 0"
+                if operator == ">":
+                    if casted_operand_1 > casted_operand_2:
+                        value = "Val = 1"
+                    else:
+                        value = "Val = 0"
+                if operator == "<=":
+                    if casted_operand_1 <= casted_operand_2:
+                        value = "Val = 1"
+                    else:
+                        value = "Val = 0"
+                if operator == ">=":
+                    if casted_operand_1 >= casted_operand_2:
+                        value = "Val = 1"
+                    else:
+                        value = "Val = 0"
+                if value is not None:
+                    self.clean_node(node, value)
+                    return value
+            else:
+                return ""
 
         # head node for a selection statement
         elif node.get_label() == "Selection Statement":
@@ -543,7 +764,29 @@ class ASTCleaner:
 
         # head node for a shift expression
         elif node.get_label() == "Shift Expression":
-            pass
+            operand_1 = self.clean(node.get_children()[0])
+            operator = node.get_children()[1].get_label()
+            operand_2 = self.clean(node.get_children()[2])
+
+            if operand_1 != "" and operand_1[:5] == "ID = " and self.__symbol_table.is_initialized(operand_1[5:]):
+                operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
+
+            if operand_2 != "" and operand_2[:5] == "ID = " and self.__symbol_table.is_initialized(operand_2[5:]):
+                operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
+
+            if operand_1 != "" and operand_2 != "" and operand_1[:6] == "Val = " and operand_2[:6] == "Val = ":
+                casted_operand_1 = self.perform_optimal_cast(operand_1[6:])
+                casted_operand_2 = self.perform_optimal_cast(operand_2[6:])
+                if operator == "<<":
+                    value = "Val = {}".format(casted_operand_1 << casted_operand_2)
+                    self.clean_node(node, value)
+                    return value
+                elif operator == ">>":
+                    value = "Val = {}".format(casted_operand_1 >> casted_operand_2)
+                    self.clean_node(node, value)
+                    return value
+            else:
+                return ""
 
         # head node for a struct declaration, specifying the variables and (possibly) their values
         elif node.get_label() == "Struct Declaration":
@@ -602,7 +845,55 @@ class ASTCleaner:
 
         # head node for a unary expression
         elif node.get_label() == "Unary Expression":
-            pass
+            operation = node.get_children()[0].get_label()
+            original = self.clean(node.get_children()[1])
+            operand = original
+            print(operation)
+
+            if original != "" and original[:5] == "ID = " and self.__symbol_table.is_initialized(original[5:]):
+                operand = "Val = {}".format(self.__symbol_table.get_value(original[5:]))
+
+            if operand != "" and operand[:6] == "Val = ":
+                if operation == "++":
+                    value = "Val = {}".format(self.perform_optimal_cast(operand[6:]) + 1)
+                    self.clean_node(node, value)
+                    if original != "" and original[:5] == "ID = ":
+                        self.create_new_assignment(original, value, node)
+                    return value
+                elif operation == "--":
+                    print("hmm")
+                    value = "Val = {}".format(self.perform_optimal_cast(operand[6:]) - 1)
+                    self.clean_node(node, value)
+                    if original != "" and original[:5] == "ID = ":
+                        self.create_new_assignment(original, value, node)
+                    return value
+                elif operation == "-":
+                    value = "Val = {}".format(-self.perform_optimal_cast(operand[6:]))
+                    self.clean_node(node, value)
+                    return value
+                elif operation == "~":
+                    value = "Val = {}".format(~self.perform_optimal_cast(operand[6:]))
+                    self.clean_node(node, value)
+                    return value
+                elif operation == "!":
+                    if not self.perform_optimal_cast(operand[6:]):
+                        value = "Val = 1"
+                    else:
+                        value = "Val = 0"
+                    self.clean_node(node, value)
+                    return value
+                elif operation == "sizeof":
+                    sizes = {
+                        'char': 1,
+                        'short': 2,
+                        'int': 4,
+                        'float': 4,
+                        'long': 8,
+                        'double': 8
+                    }
+                    value = "Val = {}".format(sizes[self.__symbol_table.get_type(original[5:])])
+                    self.clean_node(node, value)
+                    return value
 
         # node specifying a constant value
         elif node.get_label()[:5] == "Val =":
