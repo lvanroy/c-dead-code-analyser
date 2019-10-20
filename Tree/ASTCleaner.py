@@ -67,7 +67,7 @@ class ASTCleaner:
             return float(value)
         else:
             if var_type == 'char' and value.isnumeric():
-                return chr(value)
+                return chr(int(value))
             elif var_type == 'char':
                 return value
 

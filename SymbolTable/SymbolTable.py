@@ -1,4 +1,4 @@
-
+from math import floor
 
 # Symboltable
 # class that tracks all declared variables, has the scope dictionaries to keep track of the different scopes
@@ -118,16 +118,26 @@ class Symbol:
         self.__used = value
 
     def __str__(self):
-        output = "symbol {} with type {} has value {},".format(self.__name, self.__type, self.__value)
+        output = "symbol {} with type {} has value {}".format(self.__name, self.__type, self.__value)
+        if self.__type == 'char':
+            output += ", or {} in ascii".format(chr(int(self.__value)))
         if self.__counter:
-            output += " this variable is a counter."
+            output += ", this variable is a counter."
         else:
-            output += " this variable is not a counter."
+            output += ", this variable is not a counter."
         return output
 
 
 def cast(variable_value, variable_type):
     if variable_type == 'int':
         return int(float(variable_value))
+    elif variable_type == 'float':
+        return float(variable_value)
+    elif variable_type == 'char' and (type(variable_value) == int or variable_value.isnumeric()):
+        return int(variable_value)
+    elif variable_type == 'char' and (type(variable_value) == float or variable_value.replace(".", "").isnumeric()):
+        return int(float(variable_value))
+    elif variable_type == 'char' and type(variable_value) == str:
+        return ord(variable_value[int(floor(len(variable_value)/2))])
     else:
         return variable_value
