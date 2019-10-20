@@ -21,8 +21,7 @@ install:
          python -m pip install -r requirements.txt;
          python -m pip install coverage;
          python -m pip install codecov;
-    else pip3 install --upgrade pip;
-         pip3 install -r requirements.txt
+    else pip3 install -r requirements.txt
          pip3 install coverage;
          pip3 install codecov;
     fi
