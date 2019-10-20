@@ -23,6 +23,7 @@ class SymbolTable:
         self.__current_scope = self.__scopes["0"]
 
         self.__symbols = dict()
+        self.__symbols[self.__scopes["0"]] = dict()
 
     def open_scope(self, label):
         if label in self.__scopes:
@@ -44,6 +45,8 @@ class SymbolTable:
     def is_initialized(self, symbol_name, scope=None):
         if scope is None:
             scope = self.__current_scope
+        if self.__scopes["0"] == scope:
+            return False
         if symbol_name in self.__symbols[scope]:
             return self.__symbols[scope][symbol_name].get_value() is not None
         else:
@@ -76,10 +79,11 @@ class SymbolTable:
 
     def print(self):
         for scope in self.__symbols.keys():
-            print("================= {} =================".format(scope.get_label()))
-            for symbol in self.__symbols[scope]:
-                print(str(self.__symbols[scope][symbol]))
-            print()
+            if self.__symbols[scope]:
+                print("================= {} =================".format(scope.get_label()))
+                for symbol in self.__symbols[scope]:
+                    print(str(self.__symbols[scope][symbol]))
+                print()
 
 
 class Scope:
@@ -98,7 +102,10 @@ class Symbol:
     def __init__(self, symbol_type, symbol_name, symbol_value):
         self.__type = symbol_type
         self.__name = symbol_name
-        self.__value = cast(symbol_value, symbol_type)
+        if symbol_value is not None:
+            self.__value = cast(symbol_value, symbol_type)
+        else:
+            self.__value = symbol_value
         self.__used = False  # this is used to track whether or not an assignment had effect
         self.__counter = False
 

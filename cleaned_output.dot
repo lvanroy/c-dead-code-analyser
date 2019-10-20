@@ -1,0 +1,72 @@
+digraph G {
+		Q34[label="CompilationUnit"];
+		Q34 -> Q35
+		Q35[label="Function Definition"];
+		Q35 -> Q36
+		Q36[label="Type Specifier"];
+		Q36 -> Q37
+		Q37[label="int"];
+		Q35 -> Q38
+		Q38[label="Declarator"];
+		Q38 -> Q39
+		Q39[label="Direct Declarator"];
+		Q39 -> Q40
+		Q40[label="main"];
+		Q35 -> Q41
+		Q41[label="Compound Statement"];
+		Q41 -> Q42
+		Q42[label="Declaration"];
+		Q42 -> Q43
+		Q43[label="Type Specifier"];
+		Q43 -> Q44
+		Q44[label="int"];
+		Q42 -> Q45
+		Q45[label="Init Declarator"];
+		Q45 -> Q46
+		Q46[label="Declarator"];
+		Q46 -> Q47
+		Q47[label="a"];
+		Q41 -> Q48
+		Q48[label="Selection Statement"];
+		Q48 -> Q49
+		Q49[label="switch"];
+		Q48 -> Q50
+		Q50[label="ID = a"];
+		Q48 -> Q51
+		Q51[label="Compound Statement"];
+		Q51 -> Q52
+		Q52[label="Labeled Statement"];
+		Q52 -> Q53
+		Q53[label="case"];
+		Q52 -> Q54
+		Q54[label="Val = 5"];
+		Q52 -> Q55
+		Q55[label="Jump Statement"];
+		Q55 -> Q56
+		Q56[label="return"];
+		Q55 -> Q57
+		Q57[label="Val = 5"];
+		Q51 -> Q58
+		Q58[label="Labeled Statement"];
+		Q58 -> Q59
+		Q59[label="case"];
+		Q58 -> Q60
+		Q60[label="Val = 3"];
+		Q58 -> Q61
+		Q61[label="Jump Statement"];
+		Q61 -> Q62
+		Q62[label="return"];
+		Q61 -> Q63
+		Q63[label="Val = 3"];
+		Q51 -> Q64
+		Q64[label="Labeled Statement"];
+		Q64 -> Q65
+		Q65[label="default"];
+		Q64 -> Q66
+		Q66[label="Jump Statement"];
+		Q66 -> Q67
+		Q67[label="return"];
+		Q66 -> Q68
+		Q68[label="Val = 3"];
+		
+}

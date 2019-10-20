@@ -53,4 +53,7 @@ int main(){
     int w = sizeof(a);
 
     // postfix initializer
+    int x = a ++;
+    int y = a --;
+    int z = (int){5};
 }

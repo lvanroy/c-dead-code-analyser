@@ -1,0 +1,90 @@
+digraph G {
+		Q0[label="CompilationUnit"];
+		Q0 -> Q1
+		Q1[label="Function Definition"];
+		Q1 -> Q2
+		Q2[label="Type Specifier"];
+		Q2 -> Q3
+		Q3[label="int"];
+		Q1 -> Q4
+		Q4[label="Declarator"];
+		Q4 -> Q5
+		Q5[label="Direct Declarator"];
+		Q5 -> Q6
+		Q6[label="main"];
+		Q1 -> Q7
+		Q7[label="Compound Statement"];
+		Q7 -> Q8
+		Q8[label="Declaration"];
+		Q8 -> Q9
+		Q9[label="Type Specifier"];
+		Q9 -> Q10
+		Q10[label="Type Specifier"];
+		Q10 -> Q11
+		Q11[label="char"];
+		Q9 -> Q12
+		Q12[label="pointer"];
+		Q8 -> Q13
+		Q13[label="Init Declarator"];
+		Q13 -> Q14
+		Q14[label="Declarator"];
+		Q14 -> Q15
+		Q15[label="array"];
+		Q13 -> Q16
+		Q16[label="Initializer"];
+		Q16 -> Q17
+		Q17[label="Val = \"teststring\""];
+		Q7 -> Q18
+		Q18[label="Postfix Expression"];
+		Q18 -> Q19
+		Q19[label="ID = printf"];
+		Q18 -> Q20
+		Q20[label="("];
+		Q18 -> Q21
+		Q21[label="Arguments"];
+		Q21 -> Q22
+		Q22[label="Val = \"%c\""];
+		Q21 -> Q23
+		Q23[label="Postfix Expression"];
+		Q23 -> Q24
+		Q24[label="ID = array"];
+		Q23 -> Q25
+		Q25[label="["];
+		Q23 -> Q26
+		Q26[label="Val = 2"];
+		Q23 -> Q27
+		Q27[label="]"];
+		Q18 -> Q28
+		Q28[label=")"];
+		Q7 -> Q29
+		Q29[label="Declaration"];
+		Q29 -> Q30
+		Q30[label="Type Specifier"];
+		Q30 -> Q31
+		Q31[label="Type Specifier"];
+		Q31 -> Q32
+		Q32[label="char"];
+		Q30 -> Q33
+		Q33[label="pointer"];
+		Q29 -> Q34
+		Q34[label="Init Declarator"];
+		Q34 -> Q35
+		Q35[label="Declarator"];
+		Q35 -> Q36
+		Q36[label="array"];
+		Q34 -> Q37
+		Q37[label="Initializer"];
+		Q37 -> Q38
+		Q38[label="Initializer"];
+		Q38 -> Q39
+		Q39[label="Val = 'a'"];
+		Q37 -> Q40
+		Q40[label="Initializer"];
+		Q40 -> Q41
+		Q41[label="Val = 'b'"];
+		Q37 -> Q42
+		Q42[label="Initializer"];
+		Q42 -> Q43
+		Q43[label="Val = 'c'"];
+		
+}

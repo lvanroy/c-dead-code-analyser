@@ -13,6 +13,8 @@ class ASTConstructor(CListener):
         self.__parse_tree = parse_tree
         self.__node_stack = list()
 
+        AbstractSyntaxTree.node_count = 0
+
     def construct(self):
         self.__walker.walk(self, self.__parse_tree)
 

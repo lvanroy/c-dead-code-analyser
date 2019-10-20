@@ -1,4 +1,3 @@
-import sys
 import os
 
 from Tree.AbstractSyntaxTree import AbstractSyntaxTree
@@ -18,6 +17,8 @@ class ASTCleaner:
         self.__changes_occurred = True  # this value tracks whether or not something changes in a cycle
 
         self.__queued_for_pop = list()  # list that keeps track of which nodes are ready to get popped
+
+        AbstractSyntaxTree.node_count = 0
 
     def print_symbol_table(self):
         self.__symbol_table.print()
@@ -53,8 +54,16 @@ class ASTCleaner:
         casts['float'] = float
 
         if var_type == 'int':
+            if "'" in value:
+                value = value.replace("'", "")
+            if value.isalpha():
+                return ord(value)
             return int(float(value))
         elif var_type == 'float':
+            if "'" in value:
+                value = value.replace("'", "")
+            if value.isalpha():
+                return float(ord(value))
             return float(value)
         else:
             if var_type == 'char' and value.isnumeric():
@@ -420,7 +429,7 @@ class ASTCleaner:
                 elif child.get_label() == "Type Name":
                     declaration_type += self.clean(child)
                 elif child.get_label() == "Struct or Union Specifier":
-                    declaration_type += node.get_children()[1].get_label()
+                    pass
                 elif child.get_label() == "auto":
                     declaration_type += "auto"
                 elif child.get_label() == "Init Declarator":
@@ -611,6 +620,8 @@ class ASTCleaner:
                 return self.clean(node.get_children()[0])
             elif label == "Unary Expression":
                 return self.clean(node.get_children()[0])
+            elif label == "Postfix Expression":
+                return self.clean(node.get_children()[0])
 
         # head node for loops
         elif node.get_label() == "Iteration Statement":
@@ -714,7 +725,44 @@ class ASTCleaner:
 
         # head node for a postfix expression
         elif node.get_label() == "Postfix Expression":
-            pass
+            operand_1 = self.clean(node.get_children()[0])
+            original = operand_1
+
+            if operand_1 != "" and operand_1[:5] == "ID = " and node.get_children()[1].get_label() in {"++", "--"} \
+                    and self.__symbol_table.is_initialized(operand_1[5:]):
+                operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
+
+            if operand_1 != "" and operand_1[:6] == "Val = ":
+                operator = node.get_children()[1].get_label()
+                if operator == "++":
+                    value_post_op = "Val = {}".format(self.perform_optimal_cast(operand_1[6:]))
+                    self.clean_node(node, value_post_op)
+                    value = "Val = {}".format(self.perform_optimal_cast(operand_1[6:]) + 1)
+                    if original != "" and original[:5] == "ID = ":
+                        self.create_new_assignment(original, value, node)
+                    return value_post_op
+                elif operator == "--":
+                    value_post_op = "Val = {}".format(self.perform_optimal_cast(operand_1[6:]))
+                    self.clean_node(node, value_post_op)
+                    value = "Val = {}".format(self.perform_optimal_cast(operand_1[6:]) - 1)
+                    if original != "" and original[:5] == "ID = ":
+                        self.create_new_assignment(original, value, node)
+                    return value_post_op
+
+            elif node.get_children()[0].get_label() == "Type Name" and \
+                    node.get_children()[1].get_label() == "Initializer":
+                val = self.clean(node.get_children()[1])
+                var_type = self.clean(node.get_children()[0])
+
+                if val != "" and val[:5] == "ID = " and self.__symbol_table.is_initialized(val[5:]):
+                    val = "Val = {}".format(self.__symbol_table.get_value(val[5:]))
+
+                if val != "" and val[:6] == "Val = ":
+                    value = "Val = {}".format(self.perform_cast(val[6:], var_type))
+                    self.clean_node(node, value)
+                    return value
+                else:
+                    return ""
 
         # head node for a primary expression
         elif node.get_label() == "Primary Expression":
