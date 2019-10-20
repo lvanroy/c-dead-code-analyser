@@ -4,7 +4,7 @@ from Compiler import analysis
 from Tree.AbstractSyntaxTree import AbstractSyntaxTree
 
 
-class FirstLoopTests(unittest.TestCase):
+class TestFirstLoop(unittest.TestCase):
     def setUp(self):
         instance = AbstractSyntaxTree
         instance.node_count = 0
@@ -75,4 +75,4 @@ class FirstLoopTests(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(verbosity=2)
