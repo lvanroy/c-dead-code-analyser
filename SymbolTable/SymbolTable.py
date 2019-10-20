@@ -98,7 +98,7 @@ class Symbol:
     def __init__(self, symbol_type, symbol_name, symbol_value):
         self.__type = symbol_type
         self.__name = symbol_name
-        self.__value = symbol_value
+        self.__value = cast(symbol_value, symbol_type)
         self.__used = False  # this is used to track whether or not an assignment had effect
         self.__counter = False
 
@@ -106,7 +106,7 @@ class Symbol:
         return self.__value
 
     def set_value(self, value):
-        self.__value = value
+        self.__value = cast(value, self.__type)
 
     def get_type(self):
         return self.__type
@@ -121,3 +121,10 @@ class Symbol:
         else:
             output += " this variable is not a counter."
         return output
+
+
+def cast(variable_value, variable_type):
+    if variable_type == 'int':
+        return int(float(variable_value))
+    else:
+        return variable_value

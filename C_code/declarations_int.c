@@ -45,8 +45,8 @@ int main(){
     int q = (int) 5.0;
 
     // unary initializer
-    int s = --a;
     int r = ++a;
+    int s = --a;
     int t = -a;
     int u = ~a;
     int v = !a;

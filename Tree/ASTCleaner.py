@@ -17,6 +17,8 @@ class ASTCleaner:
 
         self.__changes_occurred = True  # this value tracks whether or not something changes in a cycle
 
+        self.__queued_for_pop = list()  # list that keeps track of which nodes are ready to get popped
+
     def print_symbol_table(self):
         self.__symbol_table.print()
 
@@ -26,7 +28,7 @@ class ASTCleaner:
     def clean_children(self, node):
         i = 0
         if len(node.get_children()) >= 1:
-            while i < len(node.get_children()) - 1:
+            while i < len(node.get_children()):
                 child = node.get_children()[i]
                 self.clean(child)
                 i += 1
@@ -66,15 +68,19 @@ class ASTCleaner:
                 print("Optimization cycle started")
             self.__changes_occurred = False
             self.clean(self.__root)
-            if trace:
-                print("Optimization cycle finished")
             if image_output:
                 f = open("output.dot", "w")
                 f.write(self.__root.to_dot())
                 f.close()
 
                 os.system("dot -Tpng output.dot -o ./TreePlots/temp.png")
-                print("blub")
+            for node in self.__queued_for_pop:
+                self.remove_node(node)
+
+            self.__queued_for_pop = list()
+
+            if trace:
+                print("Optimization cycle finished")
 
     # this is used when folding occurs, this will change the node name to the new node name,
     # and will pop all of its children
@@ -141,8 +147,8 @@ class ASTCleaner:
         if assignment_node.get_parent().get_label() != "Compound Statement":
             self.clean_node(assignment_node, value)
         else:
-            self.remove_node(assignment_node)
-        self.remove_node(self.__declarations[variable_name])
+            self.__queued_for_pop.append(assignment_node)
+        self.__queued_for_pop.append(self.__declarations[variable_name])
 
         self.__declarations[variable_name] = declaration_node
 
@@ -848,7 +854,6 @@ class ASTCleaner:
             operation = node.get_children()[0].get_label()
             original = self.clean(node.get_children()[1])
             operand = original
-            print(operation)
 
             if original != "" and original[:5] == "ID = " and self.__symbol_table.is_initialized(original[5:]):
                 operand = "Val = {}".format(self.__symbol_table.get_value(original[5:]))
@@ -861,7 +866,6 @@ class ASTCleaner:
                         self.create_new_assignment(original, value, node)
                     return value
                 elif operation == "--":
-                    print("hmm")
                     value = "Val = {}".format(self.perform_optimal_cast(operand[6:]) - 1)
                     self.clean_node(node, value)
                     if original != "" and original[:5] == "ID = ":
