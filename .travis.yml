@@ -17,12 +17,12 @@ matrix:
 
 install:
   - if [ "$TRAVIS_OS_NAME" = "windows" ]; 
-    then pip3 install --upgrade pip --user; 
-    else pip3 install --upgrade pip;
+    then python -m pip install --upgrade pip --user;
+    else python -m pip install --upgrade pip;
     fi
-  - pip3 install -r requirements.txt
-  - pip3 install coverage
-  - pip3 install codecov
+  - python -m pip install -r requirements.txt
+  - python -m pip install coverage
+  - python -m pip install codecov
 
 script:
   - if [ "$TRAVIS_OS_NAME" = "windows" ]; then python MainTestSuite.py; fi
