@@ -26,10 +26,6 @@ class SymbolTable:
         self.__symbols[self.__scopes["0"]] = dict()
 
     def open_scope(self, label):
-        if label in self.__scopes:
-            self.__current_scope = self.__scopes[label]
-            return
-
         new_scope = Scope(label, self.__current_scope)
         self.__current_scope = new_scope
         self.__scopes[label] = new_scope
