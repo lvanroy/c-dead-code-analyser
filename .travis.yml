@@ -27,10 +27,10 @@ install:
     fi
 
 script:
-  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then python MainTestSuite.py; fi
+  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then python test/test.py; fi
   - if [ "$TRAVIS_OS_NAME" = "linux"   ]; 
-    then coverage run --source=SymbolTable,Tree MainTestSuite.py;
+    then coverage run --source=SymbolTable,Tree test/test.py;
          coverage report;
          codecov -t=b8350209-0b8c-4993-8800-bbd630b0a8af;
     fi
-  - if [ "$TRAVIS_OS_NAME" = "osx"     ]; then python3.7 MainTestSuite.py; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx"     ]; then python3.7 test/test.py; fi
