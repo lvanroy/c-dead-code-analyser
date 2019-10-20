@@ -40,7 +40,7 @@ class Compiler:
         return 0
 
     def analysis(self, code_file):
-        if not os.path.isdir("./TreePlots") and image_output:
+        if not os.path.isdir("./TreePlots") and self.image_output:
             os.mkdir("./TreePlots")
 
         if self.trace:
