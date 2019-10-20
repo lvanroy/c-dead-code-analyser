@@ -28,9 +28,11 @@ install:
 
 script:
   - if [ "$TRAVIS_OS_NAME" = "windows" ]; then python test.py; fi
-  - if [ "$TRAVIS_OS_NAME" = "linux"   ]; 
-    then coverage run --source=SymbolTable,Tree test.py;
-         coverage report;
+  - if [ "$TRAVIS_OS_NAME" = "linux"   ]; then coverage run --source=SymbolTable,Tree test.py; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx"     ]; then python3.7 test.py; fi
+
+after_success:
+  - if [ "$TRAVIS_OS_NAME" = "linux"   ];
+    then coverage report;
          codecov -t=b8350209-0b8c-4993-8800-bbd630b0a8af;
     fi
-  - if [ "$TRAVIS_OS_NAME" = "osx"     ]; then python3.7 test.py; fi
