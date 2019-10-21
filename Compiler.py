@@ -12,7 +12,7 @@ For the software to properly work, the grammars start rule needs to be compilati
 import sys
 import os
 import platform
-from subprocess import run, DEVNULL, STDOUT
+import subprocess
 
 from antlr4 import *
 from Antlr_files.CParser import CParser
@@ -77,8 +77,7 @@ class Compiler:
             f.write(self.ast.to_dot())
             f.close()
 
-            run(["dot", "-Tpng", "./TreePlots/{0}_output.dot", "-o", "./TreePlots/{0}.png", ">/dev/null"],
-                stdout=DEVNULL, stderr=STDOUT)
+            os.system("dot -Tpng ./TreePlots/{0}_output.dot -o ./TreePlots/{0}.png".format(file_name))
 
         if self.trace:
             print("Basic AST generation finished.")
@@ -101,8 +100,8 @@ class Compiler:
             f.write(self.cleaned_ast.to_dot())
             f.close()
 
-            run(["dot", "-Tpng", "./TreePlots/{0}_cleaned_output.dot", "-o", "./TreePlots/{0}_cleaned.png",
-                 ">/dev/null"], stdout=DEVNULL, stderr=STDOUT)
+            os.system("dot -Tpng ./TreePlots/{0}_cleaned_output.dot -o ./TreePlots/{0}_cleaned.png"
+                      .format(file_name))
 
         if self.trace:
             print("Optimized AST generation finished.")
