@@ -12,6 +12,7 @@ For the software to properly work, the grammars start rule needs to be compilati
 import sys
 import os
 import platform
+from subprocess import run, DEVNULL, STDOUT
 
 from antlr4 import *
 from Antlr_files.CParser import CParser
@@ -66,17 +67,18 @@ class Compiler:
         self.ast = constructor.get_ast()
 
         if self.image_output:
-            f = open("output.dot", "w")
-            f.write(self.ast.to_dot())
-            f.close()
-
             file_name = ""
             file_names = code_file.split("/")
             for temp in file_names:
                 if temp[-2:] == '.c':
                     file_name = temp[:-2]
-            os.system("dot -Tpng output.dot -o ./TreePlots/{}.png".format(file_name))
-            print("Stored AST in ./TreePlots/{}.png".format(file_name))
+
+            f = open("./TreePlots/{}_output.dot".format(file_name), "w")
+            f.write(self.ast.to_dot())
+            f.close()
+
+            run(["dot", "-Tpng", "./TreePlots/{0}_output.dot", "-o", "./TreePlots/{0}.png", ">/dev/null"],
+                stdout=DEVNULL, stderr=STDOUT)
 
         if self.trace:
             print("Basic AST generation finished.")
@@ -86,22 +88,25 @@ class Compiler:
         cleaner.perform_full_clean(self.trace, self.image_output)
 
         if self.image_output:
-            self.cleaned_ast = cleaner.get_ast()
-            f = open("cleaned_output.dot", "w")
-            f.write(self.cleaned_ast.to_dot())
-            f.close()
 
             file_name = ""
             file_names = code_file.split("/")
             for temp in file_names:
                 if temp[-2:] == '.c':
                     file_name = temp[:-2]
-            os.system("dot -Tpng output.dot -o ./TreePlots/{}_cleaned.png".format(file_name))
-            print("Stored cleaned AST in ./TreePlots/{}.png".format(file_name))
+
+            self.cleaned_ast = cleaner.get_ast()
+
+            f = open("./TreePlots/{}_cleaned_output.dot".format(file_name), "w")
+            f.write(self.cleaned_ast.to_dot())
+            f.close()
+
+            run(["dot", "-Tpng", "./TreePlots/{0}_cleaned_output.dot", "-o", "./TreePlots/{0}_cleaned.png",
+                 ">/dev/null"], stdout=DEVNULL, stderr=STDOUT)
 
         if self.trace:
             print("Optimized AST generation finished.")
-            print("The following symbol table was derived from the code.")
+            print("The following symbol table was derived from the code:")
             cleaner.print_symbol_table()
 
         return 0

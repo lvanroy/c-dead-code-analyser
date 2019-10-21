@@ -1,5 +1,6 @@
 from math import floor
 
+
 # Symboltable
 # class that tracks all declared variables, has the scope dictionaries to keep track of the different scopes
 # the current_scope will always refer to the scope we are currently in when tracing a segment of code
@@ -26,17 +27,31 @@ class SymbolTable:
         self.__symbols[self.__scopes["0"]] = dict()
 
     def open_scope(self, label):
-        new_scope = Scope(label, self.__current_scope)
-        self.__current_scope = new_scope
-        self.__scopes[label] = new_scope
-        self.__symbols[new_scope] = dict()
+        if label not in self.__scopes:
+            new_scope = Scope(label, self.__current_scope)
+            self.__current_scope = new_scope
+            self.__scopes[label] = new_scope
+            self.__symbols[new_scope] = dict()
+        else:
+            self.__current_scope = self.__scopes[label]
 
     def close_scope(self):
         self.__current_scope = self.__current_scope.get_parent()
 
+    def get_scopes(self):
+        return self.__scopes.keys()
+
+    def clear_symbols(self):
+        self.__symbols = dict()
+        for scope in self.__scopes:
+            self.__symbols[self.__scopes[scope]] = dict()
+
     def add_symbol(self, symbol_type, symbol_name, symbol_value=None):
         new_symbol = Symbol(symbol_type, symbol_name, symbol_value)
         self.__symbols[self.__current_scope][symbol_name] = new_symbol
+
+    def get_symbols(self, scope):
+        return self.__symbols[self.__scopes[scope]].keys()
 
     def is_initialized(self, symbol_name, scope=None):
         if scope is None:
@@ -73,13 +88,26 @@ class SymbolTable:
         else:
             return self.get_type(symbol_name, scope.get_parent())
 
+    def is_used(self, symbol_name, scope):
+        if type(scope) == str:
+            scope = self.__scopes[scope]
+        if symbol_name in self.__symbols[scope]:
+            return self.__symbols[scope][symbol_name].get_used()
+        else:
+            return self.is_used(symbol_name, scope.get_parent())
+
     def print(self):
+        output = ""
         for scope in self.__symbols.keys():
             if self.__symbols[scope]:
-                print("================= {} =================".format(scope.get_label()))
+                output += "================= {} =================\n".format(scope.get_label())
                 for symbol in self.__symbols[scope]:
-                    print(str(self.__symbols[scope][symbol]))
-                print()
+                    output += str(self.__symbols[scope][symbol]) + "\n"
+                output += "\n"
+        if output != "":
+            print(output)
+        else:
+            print("No symbols were found/remained after the cleaning, the symbol table is empty.")
 
 
 class Scope:
@@ -117,10 +145,14 @@ class Symbol:
     def set_used(self, value):
         self.__used = value
 
+    def get_used(self):
+        return self.__used
+
     def __str__(self):
         output = "symbol {} with type {} has value {}".format(self.__name, self.__type, self.__value)
         if self.__type == 'char':
             output += ", or {} in ascii".format(chr(int(self.__value)))
+        output += ", this value is used: {}".format(self.__used)
         if self.__counter:
             output += ", this variable is a counter."
         else:
@@ -138,6 +170,6 @@ def cast(variable_value, variable_type):
     elif variable_type == 'char' and (type(variable_value) == float or variable_value.replace(".", "").isnumeric()):
         return int(float(variable_value))
     elif variable_type == 'char' and type(variable_value) == str:
-        return ord(variable_value[int(floor(len(variable_value)/2))])
+        return ord(variable_value[int(floor(len(variable_value) / 2))])
     else:
         return variable_value

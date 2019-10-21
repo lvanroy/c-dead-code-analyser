@@ -20,6 +20,42 @@ class ASTCleaner:
 
         AbstractSyntaxTree.node_count = 0
 
+    def perform_full_clean(self, trace=False, image_output=False):
+        while self.__changes_occurred:
+            if trace:
+                print("Optimization cycle started")
+
+            self.__changes_occurred = False
+            self.__symbol_table.clear_symbols()
+
+            self.clean(self.__root)
+
+            for node in self.__queued_for_pop:
+                self.remove_node(node)
+
+            for scope in self.__symbol_table.get_scopes():
+                for symbol in self.__symbol_table.get_symbols(scope):
+                    if not self.__symbol_table.is_used(symbol, scope) and symbol in self.__declarations \
+                            and self.__declarations[symbol] not in self.__queued_for_pop:
+                        self.remove_node(self.__declarations[symbol])
+                        removed_node = self.__declarations[symbol]
+
+                        # ensure all instances of structs, .. get removed, as these can refer to the same node
+                        staged_for_pop = list()
+                        for temp in self.__declarations:
+                            if self.__declarations[temp] == removed_node:
+                                staged_for_pop.append(temp)
+
+                        for temp in staged_for_pop:
+                            self.__declarations.pop(temp)
+
+            self.__declarations = dict()
+
+            self.__queued_for_pop = list()
+
+            if trace:
+                print("Optimization cycle finished")
+
     def print_symbol_table(self):
         self.__symbol_table.print()
 
@@ -71,37 +107,17 @@ class ASTCleaner:
             elif var_type == 'char':
                 return value
 
-    def perform_full_clean(self, trace=False, image_output=False):
-        while self.__changes_occurred:
-            if trace:
-                print("Optimization cycle started")
-            self.__changes_occurred = False
-            self.clean(self.__root)
-            if image_output:
-                f = open("output.dot", "w")
-                f.write(self.__root.to_dot())
-                f.close()
-
-                os.system("dot -Tpng output.dot -o ./TreePlots/temp.png")
-            for node in self.__queued_for_pop:
-                self.remove_node(node)
-
-            self.__queued_for_pop = list()
-
-            if trace:
-                print("Optimization cycle finished")
-
     # this is used when folding occurs, this will change the node name to the new node name,
     # and will pop all of its children
-    @staticmethod
-    def clean_node(node, new_label):
+    def clean_node(self, node, new_label):
+        self.__changes_occurred = True
         node.set_label(new_label)
         for i in reversed(range(len(node.get_children()))):
             node.pop_child(i)
 
     # this is used when a node is no longer needed/of value to the further execution
-    @staticmethod
-    def remove_node(node):
+    def remove_node(self, node):
+        self.__changes_occurred = True
         parent = node.get_parent()
         index = parent.find_child(node)
 
@@ -111,6 +127,7 @@ class ASTCleaner:
     def update_assigned_value(self, variable_name, assignment_node, value):
         # set the assignment node equal to the desired value, and move the declaration to be the next statement
         # in the current scope
+        self.__changes_occurred = True
         child = assignment_node
         parent = assignment_node.get_parent()
         while parent.get_label() != "Compound Statement":
@@ -153,18 +170,20 @@ class ASTCleaner:
         initializer_node.add_child(value_node)
         value_node.set_parent(initializer_node)
 
+        self.__symbol_table.set_value(variable_name, value[6:])
+
         if assignment_node.get_parent().get_label() != "Compound Statement":
             self.clean_node(assignment_node, value)
         else:
-            self.__queued_for_pop.append(assignment_node)
+            self.remove_node(assignment_node)
         self.__queued_for_pop.append(self.__declarations[variable_name])
 
         self.__declarations[variable_name] = declaration_node
 
     # this is used when a pre or postfix occurs, these functions do not automatically create assignment nodes
     # but require us to make those, in case we want to apply folding to them
-    @staticmethod
-    def create_new_assignment(variable_name, value, originated_node):
+    def create_new_assignment(self, variable_name, value, originated_node):
+        self.__changes_occurred = True
         parent = originated_node.get_parent()
         child = originated_node
 
@@ -236,10 +255,26 @@ class ASTCleaner:
 
         # these are the values passed in a function call, needed for folding
         elif node.get_label() == "Arguments":
-            pass
+            for child in node.get_children():
+                val = self.clean(child)
+                if val != "" and val[:5] == "ID = " and self.__symbol_table.is_initialized(val[5:]):
+                    value = "Val = {}".format(self.__symbol_table.get_value(val[5:]))
+                    self.clean_node(child, value)
+                if val != "" and val[:6] == "Val = ":
+                    if val != child.get_label():
+                        self.clean_node(child, val)
+            return ""
 
         # new values assigned to a variable, this is needed for folding
         elif node.get_label() == "Assignment Expression":
+            if len(node.get_children()) >= 3 and node.get_children()[2].get_label() == "Postfix Expression" and \
+                    node.get_children()[2].get_children()[0].get_label() == node.get_children()[0].get_label() and \
+                    node.get_children()[2].get_children()[1].get_label() in {"++", "--"}:
+                value = "Val = {}".format(self.__symbol_table.get_value(node.get_children()[0].get_label()[5:]))
+                if node.get_parent().get_label() == "Compound Statement":
+                    self.__queued_for_pop.append(node)
+                return value
+
             operand_1 = self.clean(node.get_children()[0])
             operator = node.get_children()[1].get_label()
             operand_2 = self.clean(node.get_children()[2])
@@ -256,48 +291,47 @@ class ASTCleaner:
                 if operator == "=":
                     value = self.perform_optimal_cast(operand_2[6:])
                     self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
-                    self.__symbol_table.set_value(operand_1[5:], value)
                     return "Val = {}".format(value)
                 elif operand_1_val is not None:
                     if operator == "*=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) * self.perform_optimal_cast(operand_2[6:])
-                        self.__symbol_table.set_value(operand_1[5:], value)
+                        self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
                         return value
                     elif operator == "/=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) / self.perform_optimal_cast(operand_2[6:])
-                        self.__symbol_table.set_value(operand_1[5:], value)
+                        self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
                         return value
                     elif operator == "%=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) % self.perform_optimal_cast(operand_2[6:])
-                        self.__symbol_table.set_value(operand_1[5:], value)
+                        self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
                         return value
-                    elif operator == "+:":
+                    elif operator == "+=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) + self.perform_optimal_cast(operand_2[6:])
-                        self.__symbol_table.set_value(operand_1[5:], value)
+                        self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
                         return value
                     elif operator == "-=":
-                        value = self.perform_optimal_cast(operand_1_val[6:]) + self.perform_optimal_cast(operand_2[6:])
-                        self.__symbol_table.set_value(operand_1[5:], value)
+                        value = self.perform_optimal_cast(operand_1_val[6:]) - self.perform_optimal_cast(operand_2[6:])
+                        self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
                         return value
                     elif operator == "<<=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) << self.perform_optimal_cast(operand_2[6:])
-                        self.__symbol_table.set_value(operand_1[5:], value)
+                        self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
                         return value
                     elif operator == ">>=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) >> self.perform_optimal_cast(operand_2[6:])
-                        self.__symbol_table.set_value(operand_1[5:], value)
+                        self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
                         return value
-                    elif operator == "$=":
+                    elif operator == "&=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) & self.perform_optimal_cast(operand_2[6:])
-                        self.__symbol_table.set_value(operand_1[5:], value)
+                        self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
                         return value
                     elif operator == "^=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) ^ self.perform_optimal_cast(operand_2[6:])
-                        self.__symbol_table.set_value(operand_1[5:], value)
+                        self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
                         return value
                     elif operator == "|=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) | self.perform_optimal_cast(operand_2[6:])
-                        self.__symbol_table.set_value(operand_1[5:], value)
+                        self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
                         return value
 
         # this defines an atomic type, not really needed given the goal but returned as type to ensure
@@ -763,6 +797,10 @@ class ASTCleaner:
                     return value
                 else:
                     return ""
+
+            elif node.get_children()[1].get_label() == "(":
+                self.clean(node.get_children()[2])
+                return ""
 
         # head node for a primary expression
         elif node.get_label() == "Primary Expression":
