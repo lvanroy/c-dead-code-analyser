@@ -1,5 +1,3 @@
-import os
-
 from Tree.AbstractSyntaxTree import AbstractSyntaxTree
 
 from SymbolTable.SymbolTable import SymbolTable
@@ -20,7 +18,7 @@ class ASTCleaner:
 
         AbstractSyntaxTree.node_count = 0
 
-    def perform_full_clean(self, trace=False, image_output=False):
+    def perform_full_clean(self, trace=False):
         while self.__changes_occurred:
             if trace:
                 print("Optimization cycle started")
@@ -55,6 +53,7 @@ class ASTCleaner:
 
             if trace:
                 print("Optimization cycle finished")
+                self.print_symbol_table()
 
     def print_symbol_table(self):
         self.__symbol_table.print()
@@ -475,13 +474,26 @@ class ASTCleaner:
 
                 self.__declarations[declarator] = node
 
+                size = None
+
+                if "[" in declarator and "]" in declarator:
+                    declaration_type += " array"
+                    size = declarator.split("[")[1].split("]")[0]
+                    declarator = declarator.split("[")[0]
+
                 if len(children[i].get_children()) > 1:
                     initializer_child = children[i].get_children()[1]
                     initializer = self.clean(initializer_child)
                     if initializer[:6] == "Val = ":
-                        self.__symbol_table.add_symbol(declaration_type, declarator, initializer[6:])
+                        if size is None:
+                            self.__symbol_table.add_symbol(declaration_type, declarator, initializer[6:])
+                        else:
+                            self.__symbol_table.add_array_symbol(declaration_type, declarator, size, initializer[6:])
                     else:
-                        self.__symbol_table.add_symbol(declaration_type, declarator)
+                        if size is None:
+                            self.__symbol_table.add_symbol(declaration_type, declarator)
+                        else:
+                            self.__symbol_table.add_array_symbol(declaration_type, declarator, size)
 
                 else:
                     self.__symbol_table.add_symbol(declaration_type, declarator)
@@ -493,9 +505,17 @@ class ASTCleaner:
             children = node.get_children()
 
             if children[0].get_label() == "Direct Declarator":
-                return self.clean(children[0])
+                value = self.clean(children[0])
             else:
-                return children[0].get_label()
+                value = children[0].get_label()
+            if len(children) >= 2 and children[1].get_label() == "Size":
+                size = self.clean(children[1].get_children()[0])
+                if size != "" and size[:6] == "Val = ":
+                    value += "[{}]".format(size[6:])
+                else:
+                    return ""
+            if value != "":
+                return value
 
         # used to specify the default option in switch statements, possibly needed for advanced folding
         elif node.get_label() == "Default":
@@ -656,6 +676,16 @@ class ASTCleaner:
                 return self.clean(node.get_children()[0])
             elif label == "Postfix Expression":
                 return self.clean(node.get_children()[0])
+            elif label == "Initializer":
+                val = "Val = {"
+                for child in node.get_children():
+                    child_val = self.clean(child)
+                    if child_val != "" and child_val[:6] == "Val = ":
+                        val += "{}, ".format(child_val[6:])
+                    else:
+                        return ""
+                self.clean_node(node, val[:-2] + "}")
+                return val[:-2] + "}"
 
         # head node for loops
         elif node.get_label() == "Iteration Statement":

@@ -47,7 +47,11 @@ class SymbolTable:
             self.__symbols[self.__scopes[scope]] = dict()
 
     def add_symbol(self, symbol_type, symbol_name, symbol_value=None):
-        new_symbol = Symbol(symbol_type, symbol_name, symbol_value)
+        new_symbol = Symbol(symbol_type, symbol_name, None, symbol_value)
+        self.__symbols[self.__current_scope][symbol_name] = new_symbol
+
+    def add_array_symbol(self, symbol_type, symbol_name, symbol_size, symbol_value=None):
+        new_symbol = Symbol(symbol_type, symbol_name, symbol_size, symbol_value)
         self.__symbols[self.__current_scope][symbol_name] = new_symbol
 
     def get_symbols(self, scope):
@@ -123,7 +127,7 @@ class Scope:
 
 
 class Symbol:
-    def __init__(self, symbol_type, symbol_name, symbol_value):
+    def __init__(self, symbol_type, symbol_name, symbol_size, symbol_value):
         self.__type = symbol_type
         self.__name = symbol_name
         if symbol_value is not None:
@@ -132,6 +136,7 @@ class Symbol:
             self.__value = symbol_value
         self.__used = False  # this is used to track whether or not an assignment had effect
         self.__counter = False
+        self.__size = symbol_size
 
     def get_value(self):
         return self.__value
@@ -149,7 +154,11 @@ class Symbol:
         return self.__used
 
     def __str__(self):
-        output = "symbol {} with type {} has value {}".format(self.__name, self.__type, self.__value)
+        if self.__size is None:
+            output = "symbol {} with type {} has value {}".format(self.__name, self.__type, self.__value)
+        else:
+            output = "symbol {} with type {} has size {} and value {}".format(self.__name, self.__type,
+                                                                              self.__size, self.__value)
         if self.__type == 'char':
             output += ", or {} in ascii".format(chr(int(self.__value)))
         output += ", this value is used: {}".format(self.__used)

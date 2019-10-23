@@ -512,7 +512,7 @@ jumpStatement
     |   'goto' unaryExpression ';' // GCC extension
     ;
 
-compilationUnit
+comfpilationUnit
     :   translationUnit? EOF
     ;
 

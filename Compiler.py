@@ -84,7 +84,7 @@ class Compiler:
             print("Optimized AST generation started.")
 
         cleaner = ASTCleaner(self.ast)
-        cleaner.perform_full_clean(self.trace, self.image_output)
+        cleaner.perform_full_clean(self.trace)
 
         if self.image_output:
 
