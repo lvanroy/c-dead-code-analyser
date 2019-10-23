@@ -100,6 +100,14 @@ class SymbolTable:
         else:
             return self.is_used(symbol_name, scope.get_parent())
 
+    def get_array_value_at_index(self, symbol_name, index, scope=None):
+        if scope is None:
+            scope = self.__current_scope
+        if symbol_name in self.__symbols[scope]:
+            return self.__symbols[scope][symbol_name].get_array_value_at_index(index)
+        else:
+            return self.get_array_value_at_index(symbol_name, index, scope.get_parent())
+
     def print(self):
         output = ""
         for scope in self.__symbols.keys():
@@ -131,7 +139,10 @@ class Symbol:
         self.__type = symbol_type
         self.__name = symbol_name
         if symbol_value is not None:
-            self.__value = cast(symbol_value, symbol_type)
+            if symbol_size is None:
+                self.__value = cast(symbol_value, symbol_type)
+            else:
+                self.__value = cast_array(symbol_value, symbol_type[:-6])
         else:
             self.__value = symbol_value
         self.__used = False  # this is used to track whether or not an assignment had effect
@@ -153,6 +164,11 @@ class Symbol:
     def get_used(self):
         return self.__used
 
+    def get_array_value_at_index(self, index):
+        value = self.__value.replace("{", "").replace("}", "").replace(" ", "")
+        values = value.split(",")
+        return values[int(index)]
+
     def __str__(self):
         if self.__size is None:
             output = "symbol {} with type {} has value {}".format(self.__name, self.__type, self.__value)
@@ -171,7 +187,10 @@ class Symbol:
 
 def cast(variable_value, variable_type):
     if variable_type == 'int':
-        return int(float(variable_value))
+        if variable_value.replace(".", "").replace("-", "").isnumeric():
+            return int(float(variable_value))
+        else:
+            return ord(variable_value)
     elif variable_type == 'float':
         return float(variable_value)
     elif variable_type == 'char' and (type(variable_value) == int or variable_value.isnumeric()):
@@ -182,3 +201,30 @@ def cast(variable_value, variable_type):
         return ord(variable_value[int(floor(len(variable_value) / 2))])
     else:
         return variable_value
+
+
+def cast_array(variable_value, variable_type):
+    variable_value = variable_value.replace("{", "").replace("}", "").replace(" ", "").split(",")
+    result = "{"
+    for val in variable_value:
+        if variable_type == "int":
+            if val.replace(".", "").replace("-", "").isnumeric():
+                result += "{}, ".format(int(float(val)))
+                continue
+            else:
+                result += "{}, ".format(ord(val[int((len(val)-1)/2)]))
+                continue
+
+        elif variable_type == "float":
+            if val.replace(".", "").replace("-", "").isnumeric():
+                result += "{}, ".format(float(val))
+            else:
+                result += "{}, ".format(float(ord(val[int((len(val)-1)/2)])))
+
+        elif variable_type[:4] == "char":
+            if val.replace(".", "").replace("-", "").isnumeric():
+                result += "{}, ".format(int(float(val)))
+            else:
+                result += "{}, ".format(ord(val[int((len(val)-1)/2)]))
+    result = result[:-2] + "}"
+    return result

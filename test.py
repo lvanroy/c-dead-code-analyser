@@ -124,6 +124,19 @@ class TestCleanerLoop(unittest.TestCase):
             expected_output = myFile.read()
         self.assertEqual(expected_output, actual_output)
 
+    def test_array_declaration(self):
+        self.compiler.analysis("./C_code/declarations_array.c")
+        with open('./TreePlots/declarations_array_output.dot', 'r') as myFile:
+            actual_output = myFile.read()
+        with open('ExpectedTestOutput/declarations_array_output.dot', 'r') as myFile:
+            expected_output = myFile.read()
+        self.assertEqual(expected_output, actual_output)
+        with open('./TreePlots/declarations_array_cleaned_output.dot', 'r') as myFile:
+            actual_output = myFile.read()
+        with open('ExpectedTestOutput/declarations_array_cleaned_output.dot', 'r') as myFile:
+            expected_output = myFile.read()
+        self.assertEqual(expected_output, actual_output)
+
     def test_int_assignment(self):
         self.compiler.analysis("./C_code/assignments_int.c")
         with open('./TreePlots/assignments_int_output.dot', 'r') as myFile:

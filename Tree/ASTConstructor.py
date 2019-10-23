@@ -560,8 +560,7 @@ class ASTConstructor(CListener):
     def exitDirectDeclarator(self, ctx: CParser.DirectDeclaratorContext):
         top_node = self.__node_stack[0]
 
-        if ctx.LeftBracket():
-            print("reached")
+        if ctx.LeftBracket() and ctx.assignmentExpression():
             new_node = self.grow_tree("Size", ctx)
             size = top_node.get_children()[-2]
 

@@ -472,7 +472,7 @@ class ASTCleaner:
                 declarator_child = children[i].get_children()[0]
                 declarator = self.clean(declarator_child)
 
-                self.__declarations[declarator] = node
+                self.__declarations[declarator.split("[")[0]] = node
 
                 size = None
 
@@ -484,11 +484,30 @@ class ASTCleaner:
                 if len(children[i].get_children()) > 1:
                     initializer_child = children[i].get_children()[1]
                     initializer = self.clean(initializer_child)
+                    if declaration_type[:4] == "char" and initializer[:6] == "Val = " and initializer[6] != "{" and\
+                            len(initializer[6:].replace("\\", "").replace("'", "")) > 1 and \
+                            not initializer[6:].replace(".", "").replace("-", "").isnumeric():
+                        if declaration_type[-5:] != "array":
+                            declaration_type += " array"
+                        result = "Val = {"
+                        index = initializer.find("\"")
+                        index2 = initializer.rfind("\"")
+                        for token in initializer[index+1:index2-1]:
+                            result += "{}, ".format(token)
+                        initializer = result[:-2] + "}"
+                        size = len(initializer.replace("{", "").replace("}", "").replace(" ", "").split(","))
+
                     if initializer[:6] == "Val = ":
-                        if size is None:
+                        if declaration_type[-5:] != "array" and \
+                                not (declaration_type != "char*" and initializer[-1] == "}"):
                             self.__symbol_table.add_symbol(declaration_type, declarator, initializer[6:])
-                        else:
+                        elif size is not None:
                             self.__symbol_table.add_array_symbol(declaration_type, declarator, size, initializer[6:])
+                        else:
+                            size = len(initializer.replace("{", "").replace("}", "").replace(" ", "").split(","))
+                            declaration_type += " array"
+                            self.__symbol_table.add_array_symbol(declaration_type, declarator, size, initializer[6:])
+
                     else:
                         if size is None:
                             self.__symbol_table.add_symbol(declaration_type, declarator)
@@ -796,41 +815,51 @@ class ASTCleaner:
                     and self.__symbol_table.is_initialized(operand_1[5:]):
                 operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
 
-            if operand_1 != "" and operand_1[:6] == "Val = ":
+            if len(node.get_children()) > 1:
                 operator = node.get_children()[1].get_label()
-                if operator == "++":
-                    value_post_op = "Val = {}".format(self.perform_optimal_cast(operand_1[6:]))
-                    self.clean_node(node, value_post_op)
-                    value = "Val = {}".format(self.perform_optimal_cast(operand_1[6:]) + 1)
-                    if original != "" and original[:5] == "ID = ":
-                        self.create_new_assignment(original, value, node)
-                    return value_post_op
-                elif operator == "--":
-                    value_post_op = "Val = {}".format(self.perform_optimal_cast(operand_1[6:]))
-                    self.clean_node(node, value_post_op)
-                    value = "Val = {}".format(self.perform_optimal_cast(operand_1[6:]) - 1)
-                    if original != "" and original[:5] == "ID = ":
-                        self.create_new_assignment(original, value, node)
-                    return value_post_op
 
-            elif node.get_children()[0].get_label() == "Type Name" and \
-                    node.get_children()[1].get_label() == "Initializer":
-                val = self.clean(node.get_children()[1])
-                var_type = self.clean(node.get_children()[0])
+                if operand_1 != "" and operand_1[:6] == "Val = ":
+                    if operator == "++":
+                        value_post_op = "Val = {}".format(self.perform_optimal_cast(operand_1[6:]))
+                        self.clean_node(node, value_post_op)
+                        value = "Val = {}".format(self.perform_optimal_cast(operand_1[6:]) + 1)
+                        if original != "" and original[:5] == "ID = ":
+                            self.create_new_assignment(original, value, node)
+                        return value_post_op
+                    elif operator == "--":
+                        value_post_op = "Val = {}".format(self.perform_optimal_cast(operand_1[6:]))
+                        self.clean_node(node, value_post_op)
+                        value = "Val = {}".format(self.perform_optimal_cast(operand_1[6:]) - 1)
+                        if original != "" and original[:5] == "ID = ":
+                            self.create_new_assignment(original, value, node)
+                        return value_post_op
 
-                if val != "" and val[:5] == "ID = " and self.__symbol_table.is_initialized(val[5:]):
-                    val = "Val = {}".format(self.__symbol_table.get_value(val[5:]))
+                elif operand_1 != "" and operand_1[:5] == "ID = " and operator == "[":
+                    index = self.clean(node.get_children()[2])
+                    if index != "" and index[:6] == "Val = ":
+                        value = self.__symbol_table.get_array_value_at_index(operand_1[5:], index[6:])
+                        value = "Val = {}".format(value)
+                        self.clean_node(node, value)
+                        return value
 
-                if val != "" and val[:6] == "Val = ":
-                    value = "Val = {}".format(self.perform_cast(val[6:], var_type))
-                    self.clean_node(node, value)
-                    return value
-                else:
+                elif node.get_children()[0].get_label() == "Type Name" and \
+                        node.get_children()[1].get_label() == "Initializer":
+                    val = self.clean(node.get_children()[1])
+                    var_type = self.clean(node.get_children()[0])
+
+                    if val != "" and val[:5] == "ID = " and self.__symbol_table.is_initialized(val[5:]):
+                        val = "Val = {}".format(self.__symbol_table.get_value(val[5:]))
+
+                    if val != "" and val[:6] == "Val = ":
+                        value = "Val = {}".format(self.perform_cast(val[6:], var_type))
+                        self.clean_node(node, value)
+                        return value
+                    else:
+                        return ""
+
+                elif node.get_children()[1].get_label() == "(":
+                    self.clean(node.get_children()[2])
                     return ""
-
-            elif node.get_children()[1].get_label() == "(":
-                self.clean(node.get_children()[2])
-                return ""
 
         # head node for a primary expression
         elif node.get_label() == "Primary Expression":
