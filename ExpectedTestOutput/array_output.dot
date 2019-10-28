@@ -71,7 +71,7 @@ digraph G {
 		Q34 -> Q35
 		Q35[label="Declarator"];
 		Q35 -> Q36
-		Q36[label="array"];
+		Q36[label="array2"];
 		Q34 -> Q37
 		Q37[label="Initializer"];
 		Q37 -> Q38

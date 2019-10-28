@@ -12,7 +12,6 @@ For the software to properly work, the grammars start rule needs to be compilati
 import sys
 import os
 import platform
-import subprocess
 
 from antlr4 import *
 from Antlr_files.CParser import CParser
@@ -27,6 +26,7 @@ class Compiler:
     image_output = False
     ast = None
     cleaned_ast = None
+    cleaner = None
 
     @staticmethod
     def grammar(grammar_file):
@@ -83,8 +83,8 @@ class Compiler:
             print("Basic AST generation finished.")
             print("Optimized AST generation started.")
 
-        cleaner = ASTCleaner(self.ast)
-        cleaner.perform_full_clean(self.trace)
+        self.cleaner = ASTCleaner(self.ast)
+        self.cleaner.perform_full_clean(self.trace)
 
         if self.image_output:
 
@@ -94,7 +94,7 @@ class Compiler:
                 if temp[-2:] == '.c':
                     file_name = temp[:-2]
 
-            self.cleaned_ast = cleaner.get_ast()
+            self.cleaned_ast = self.cleaner.get_ast()
 
             f = open("./TreePlots/{}_cleaned_output.dot".format(file_name), "w")
             f.write(self.cleaned_ast.to_dot())
@@ -106,7 +106,7 @@ class Compiler:
         if self.trace:
             print("Optimized AST generation finished.")
             print("The following symbol table was derived from the code:")
-            cleaner.print_symbol_table()
+            self.cleaner.print_symbol_table()
 
         return 0
 

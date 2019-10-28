@@ -98,7 +98,7 @@ class ASTCleaner:
 
             if trace:
                 print("Optimization cycle finished")
-                self.print_symbol_table()
+                self.__symbol_table.print()
 
     def print_symbol_table(self):
         self.__symbol_table.print()
@@ -635,6 +635,8 @@ class ASTCleaner:
                             len(initializer[6:].replace("\\", "").replace("'", "")) > 1 and \
                             not initializer[6:].replace(".", "").replace("-", "").isnumeric():
                         if declaration_type[-5:] != "array":
+                            if "*" in declaration_type:
+                                declaration_type = declaration_type.replace("*", "")
                             declaration_type += " array"
                         result = "Val = {"
                         index = initializer.find("\"")
@@ -646,7 +648,7 @@ class ASTCleaner:
 
                     if initializer[:6] == "Val = ":
                         if declaration_type[-5:] != "array" and \
-                                not (declaration_type != "char*" and initializer[-1] == "}"):
+                                not (declaration_type == "char*" or initializer[-1] == "}"):
                             self.__symbol_table.add_symbol(declaration_type, declarator, initializer[6:])
                         elif size is not None:
                             self.__symbol_table.add_array_symbol(declaration_type, declarator, size, initializer[6:])
@@ -657,7 +659,7 @@ class ASTCleaner:
 
                     else:
                         if size is None:
-                            if "*" in declaration_type:
+                            if "*" in declaration_type and declaration_type != "char*":
                                 self.__symbol_table.set_referenced_object(declarator, initializer[5:])
                             elif declaration_type.split(" ")[0] in {"struct", "union"} and initializer != "":
                                 init_list = initializer.split(":")[1].split(",")

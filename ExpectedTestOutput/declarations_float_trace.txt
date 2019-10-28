@@ -1,0 +1,76 @@
+Initial antlr compilation started.
+Initial antlr compilation finished.
+Basic AST generation started.
+Basic AST generation finished.
+Optimized AST generation started.
+Optimization cycle started
+Optimization cycle finished
+================= main =================
+symbol a with type float has value 5.2, this value is used: True, this variable is not a counter.
+symbol b with type float has value 5.2, this value is used: True, this variable is not a counter.
+symbol c with type float has value 4.5, this value is used: True, this variable is not a counter.
+symbol d with type float has value 1.0, this value is used: True, this variable is not a counter.
+symbol e with type float has value 1.0, this value is used: True, this variable is not a counter.
+symbol f with type float has value 2.0, this value is used: True, this variable is not a counter.
+symbol g with type float has value 2.0, this value is used: True, this variable is not a counter.
+symbol h with type float has value 1.0, this value is used: True, this variable is not a counter.
+symbol i with type float has value 0.0, this value is used: True, this variable is not a counter.
+symbol j with type float has value 1.0, this value is used: True, this variable is not a counter.
+symbol k with type float has value 8.0, this value is used: True, this variable is not a counter.
+symbol l with type float has value 10.9, this value is used: True, this variable is not a counter.
+symbol m with type float has value 0.0, this value is used: True, this variable is not a counter.
+symbol n with type float has value 10.4, this value is used: True, this variable is not a counter.
+symbol o with type float has value 0.9629629629629629, this value is used: True, this variable is not a counter.
+symbol p with type float has value 2.0, this value is used: True, this variable is not a counter.
+symbol q with type float has value 5.0, this value is used: True, this variable is not a counter.
+symbol r with type float has value 6.2, this value is used: True, this variable is not a counter.
+symbol s with type float has value 5.2, this value is used: True, this variable is not a counter.
+symbol t with type float has value -5.2, this value is used: True, this variable is not a counter.
+symbol u with type float has value -6.0, this value is used: True, this variable is not a counter.
+symbol v with type float has value 0.0, this value is used: True, this variable is not a counter.
+symbol w with type float has value 4.0, this value is used: True, this variable is not a counter.
+symbol x with type float has value 5.2, this value is used: True, this variable is not a counter.
+symbol y with type float has value 6.2, this value is used: True, this variable is not a counter.
+symbol z with type float has value 5.1, this value is used: True, this variable is not a counter.
+
+
+Optimization cycle started
+Optimization cycle finished
+================= main =================
+symbol b with type float has value 5.2, this value is used: False, this variable is not a counter.
+symbol c with type float has value 4.5, this value is used: False, this variable is not a counter.
+symbol d with type float has value 1.0, this value is used: False, this variable is not a counter.
+symbol e with type float has value 1.0, this value is used: False, this variable is not a counter.
+symbol f with type float has value 2.0, this value is used: False, this variable is not a counter.
+symbol g with type float has value 2.0, this value is used: False, this variable is not a counter.
+symbol h with type float has value 1.0, this value is used: False, this variable is not a counter.
+symbol i with type float has value 0.0, this value is used: False, this variable is not a counter.
+symbol j with type float has value 1.0, this value is used: False, this variable is not a counter.
+symbol k with type float has value 8.0, this value is used: False, this variable is not a counter.
+symbol l with type float has value 10.9, this value is used: False, this variable is not a counter.
+symbol m with type float has value 0.0, this value is used: False, this variable is not a counter.
+symbol n with type float has value 10.4, this value is used: False, this variable is not a counter.
+symbol o with type float has value 0.9629629629629629, this value is used: False, this variable is not a counter.
+symbol p with type float has value 2.0, this value is used: False, this variable is not a counter.
+symbol q with type float has value 5.0, this value is used: False, this variable is not a counter.
+symbol r with type float has value 6.2, this value is used: False, this variable is not a counter.
+symbol s with type float has value 5.2, this value is used: False, this variable is not a counter.
+symbol t with type float has value -5.2, this value is used: False, this variable is not a counter.
+symbol u with type float has value -6.0, this value is used: False, this variable is not a counter.
+symbol v with type float has value 0.0, this value is used: False, this variable is not a counter.
+symbol w with type float has value 4.0, this value is used: False, this variable is not a counter.
+symbol x with type float has value 5.2, this value is used: False, this variable is not a counter.
+symbol y with type float has value 6.2, this value is used: False, this variable is not a counter.
+symbol a with type float has value 5.2, this value is used: False, this variable is not a counter.
+symbol z with type float has value 5.1, this value is used: False, this variable is not a counter.
+
+
+Optimization cycle started
+Optimization cycle finished
+No symbols were found/remained after the cleaning, the symbol table is empty.
+
+Optimized AST generation finished.
+The following symbol table was derived from the code:
+No symbols were found/remained after the cleaning, the symbol table is empty.
+
+

@@ -1,0 +1,24 @@
+Initial antlr compilation started.
+Initial antlr compilation finished.
+Basic AST generation started.
+Basic AST generation finished.
+Optimized AST generation started.
+Optimization cycle started
+Optimization cycle finished
+================= main =================
+symbol j with type int has value 0, this value is used: True, this variable is not a counter.
+================= f =================
+symbol a with type int has value 0, this value is used: True, this variable is not a counter.
+symbol b with type float has value 0, this value is used: True, this variable is not a counter.
+
+
+Optimized AST generation finished.
+The following symbol table was derived from the code:
+================= main =================
+symbol j with type int has value 0, this value is used: True, this variable is not a counter.
+================= f =================
+symbol a with type int has value 0, this value is used: True, this variable is not a counter.
+symbol b with type float has value 0, this value is used: True, this variable is not a counter.
+
+
+
