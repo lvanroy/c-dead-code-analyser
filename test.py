@@ -15,6 +15,7 @@ class TestFirstLoop(unittest.TestCase):
         self.instance.node_count = 0
 
     def test_array(self):
+        self.compiler.analysis("./C_code/array.c")
         with open('./TreePlots/array_output.dot', 'r') as myFile:
             actual_output = myFile.read()
         with open('ExpectedTestOutput/array_output.dot') as myFile:
@@ -22,6 +23,7 @@ class TestFirstLoop(unittest.TestCase):
         self.assertEqual(expected_output, actual_output)
 
     def test_assignments(self):
+        self.compiler.analysis("./C_code/assignments.c")
         with open('./TreePlots/assignments_output.dot', 'r') as myFile:
             actual_output = myFile.read()
         with open('ExpectedTestOutput/assignments_output.dot', 'r') as myFile:
@@ -29,6 +31,7 @@ class TestFirstLoop(unittest.TestCase):
         self.assertEqual(expected_output, actual_output)
 
     def test_conditions(self):
+        self.compiler.analysis("./C_code/conditions.c")
         with open('./TreePlots/conditions_output.dot', 'r') as myFile:
             actual_output = myFile.read()
         with open('ExpectedTestOutput/conditions_output.dot', 'r') as myFile:
@@ -36,6 +39,7 @@ class TestFirstLoop(unittest.TestCase):
         self.assertEqual(expected_output, actual_output)
 
     def test_function_calls(self):
+        self.compiler.analysis("./C_code/function_calls.c")
         with open('./TreePlots/function_calls_output.dot', 'r') as myFile:
             actual_output = myFile.read()
         with open('ExpectedTestOutput/function_calls_output.dot', 'r') as myFile:
@@ -43,6 +47,7 @@ class TestFirstLoop(unittest.TestCase):
         self.assertEqual(expected_output, actual_output)
 
     def test_generic(self):
+        self.compiler.analysis("./C_code/generic.c")
         with open('./TreePlots/generic_output.dot', 'r') as myFile:
             actual_output = myFile.read()
         with open('ExpectedTestOutput/generic_output.dot', 'r') as myFile:
@@ -50,6 +55,7 @@ class TestFirstLoop(unittest.TestCase):
         self.assertEqual(expected_output, actual_output)
 
     def test_operations(self):
+        self.compiler.analysis("./C_code/operations.c")
         with open('./TreePlots/operations_output.dot', 'r') as myFile:
             actual_output = myFile.read()
         with open('ExpectedTestOutput/operations_output.dot', 'r') as myFile:
@@ -57,6 +63,7 @@ class TestFirstLoop(unittest.TestCase):
         self.assertEqual(expected_output, actual_output)
 
     def test_structs(self):
+        self.compiler.analysis("./C_code/structs.c")
         with open('./TreePlots/structs_output.dot', 'r') as myFile:
             actual_output = myFile.read()
         with open('ExpectedTestOutput/structs_output.dot', 'r') as myFile:
@@ -64,6 +71,7 @@ class TestFirstLoop(unittest.TestCase):
         self.assertEqual(expected_output, actual_output)
 
     def test_switch(self):
+        self.compiler.analysis("./C_code/switch.c")
         with open('./TreePlots/switch_output.dot', 'r') as myFile:
             actual_output = myFile.read()
         with open('ExpectedTestOutput/switch_output.dot', 'r') as myFile:
@@ -76,7 +84,6 @@ class TestCleanerLoop(unittest.TestCase):
     compiler = Compiler()
     compiler.image_output = True
     compiler.trace = True
-    maxDiff = None
 
     def setUp(self):
         self.instance.node_count = 0
