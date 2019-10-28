@@ -150,6 +150,19 @@ class TestCleanerLoop(unittest.TestCase):
             expected_output = myFile.read()
         self.assertEqual(expected_output, actual_output)
 
+    def test_groups(self):
+        self.compiler.analysis("./C_code/structs_unions_enums.c")
+        with open('./TreePlots/structs_unions_enums_output.dot', 'r') as myFile:
+            actual_output = myFile.read()
+        with open('ExpectedTestOutput/structs_unions_enums_output.dot', 'r') as myFile:
+            expected_output = myFile.read()
+        self.assertEqual(expected_output, actual_output)
+        with open('./TreePlots/structs_unions_enums_cleaned_output.dot', 'r') as myFile:
+            actual_output = myFile.read()
+        with open('ExpectedTestOutput/structs_unions_enums_cleaned_output.dot', 'r') as myFile:
+            expected_output = myFile.read()
+        self.assertEqual(expected_output, actual_output)
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

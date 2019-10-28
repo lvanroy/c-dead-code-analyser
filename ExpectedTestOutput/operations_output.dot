@@ -83,7 +83,7 @@ digraph G {
 		Q40 -> Q41
 		Q41[label="Declarator"];
 		Q41 -> Q42
-		Q42[label="q"];
+		Q42[label="e"];
 		Q40 -> Q43
 		Q43[label="Initializer"];
 		Q43 -> Q44
@@ -111,7 +111,7 @@ digraph G {
 		Q54 -> Q55
 		Q55[label="Declarator"];
 		Q55 -> Q56
-		Q56[label="c"];
+		Q56[label="f"];
 		Q54 -> Q57
 		Q57[label="Initializer"];
 		Q57 -> Q58
@@ -149,7 +149,7 @@ digraph G {
 		Q72 -> Q74
 		Q74[label="%"];
 		Q72 -> Q75
-		Q75[label="ID = c"];
+		Q75[label="ID = d"];
 		Q7 -> Q76
 		Q76[label="Assignment Expression"];
 		Q76 -> Q77
@@ -175,13 +175,13 @@ digraph G {
 		Q86 -> Q87
 		Q87[label="Declarator"];
 		Q87 -> Q88
-		Q88[label="z"];
+		Q88[label="g"];
 		Q86 -> Q89
 		Q89[label="Initializer"];
 		Q89 -> Q90
 		Q90[label="Assignment Expression"];
 		Q90 -> Q91
-		Q91[label="ID = a"];
+		Q91[label="ID = b"];
 		Q90 -> Q92
 		Q92[label="="];
 		Q90 -> Q93
@@ -231,7 +231,7 @@ digraph G {
 		Q113 -> Q115
 		Q115[label="-"];
 		Q113 -> Q116
-		Q116[label="ID = e"];
+		Q116[label="ID = b"];
 		Q7 -> Q117
 		Q117[label="Assignment Expression"];
 		Q117 -> Q118
@@ -255,7 +255,7 @@ digraph G {
 		Q124 -> Q127
 		Q127[label="Shift Expression"];
 		Q127 -> Q128
-		Q128[label="ID = h"];
+		Q128[label="ID = b"];
 		Q127 -> Q129
 		Q129[label=">>"];
 		Q127 -> Q130
@@ -269,7 +269,7 @@ digraph G {
 		Q131 -> Q134
 		Q134[label="Postfix Expression"];
 		Q134 -> Q135
-		Q135[label="ID = i"];
+		Q135[label="ID = b"];
 		Q134 -> Q136
 		Q136[label="--"];
 		Q7 -> Q137

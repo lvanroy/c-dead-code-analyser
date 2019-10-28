@@ -444,6 +444,9 @@ class ASTConstructor(CListener):
         top_node = self.__node_stack[0]
         if type(top_node.get_ctx()) == CParser.StructOrUnionSpecifierContext:
             self.grow_on_index(str(ctx.Identifier()), ctx, 1)
+            if ctx.LeftBrace():
+                self.grow_on_index("{", ctx, 2)
+                self.grow_on_index("}", ctx, -1)
             self.__node_stack.pop(0)
 
     def enterStructOrUnion(self, ctx: CParser.StructOrUnionContext):
@@ -489,8 +492,12 @@ class ASTConstructor(CListener):
         self.__node_stack.insert(0, new_node)
         if ctx.Identifier():
             self.grow_tree(str(ctx.Identifier()), ctx)
+        if ctx.LeftBrace():
+            self.grow_tree("{", ctx)
 
     def exitEnumSpecifier(self, ctx: CParser.EnumSpecifierContext):
+        if ctx.RightBrace():
+            self.grow_tree("}", ctx)
         self.__node_stack.pop(0)
 
     def enterEnumeratorList(self, ctx: CParser.EnumeratorListContext):
@@ -752,7 +759,7 @@ class ASTConstructor(CListener):
 
     def exitIterationStatement(self, ctx: CParser.IterationStatementContext):
         if ctx.Do():
-            self.grow_on_index("While", ctx, -2)
+            self.grow_on_index("While", ctx, 2)
         self.__node_stack.pop(0)
 
     def enterForCondition(self, ctx: CParser.ForConditionContext):

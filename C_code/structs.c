@@ -1,34 +1,38 @@
+#include "stdio.h"
+
 struct TestStruct{
-    int value       :8;
-    double value2   :32;
+    int value1       :8;
+    int value2      :32;
 } instance5, instance6;
 
 enum TestEnum {val1, val2 = 0};
 
 union Data {
-    int value;
-    double value2;
+    int value1;
+    float value2;
 };
 
 int main(){
     int a,b;
     struct TestStruct instance, instance7;
     struct TestStruct* instance2 = &instance;
-    struct TestStruct instane7 = {.value .value2 = 5};
+    struct TestStruct instance8 = {.value1 = 3, .value2 = 5};
 
-    enum TestEnum instance3(a, b);
+    printf("%d\n", instance8.value1);
+
+    enum TestEnum instance3 = val1;
+    printf("%d\n", instance3);
 
     union Data instance4;
 
-    customfloat f = 5.0;
-    __typeof__(f) g;
+    __typeof__(a) g;
 
-    instance.value = 5;
+    instance.value1 = 5;
     instance2->value2 = 5.3;
 
     printf("%d\n", (int)sizeof(instance));
     printf("%d\n", (int)sizeof(int));
-    printf("%d\n", (int) _Alignof(struct TestClass));
+    printf("%d\n", (int) _Alignof(struct TestStruct));
 
     return 0;
 }

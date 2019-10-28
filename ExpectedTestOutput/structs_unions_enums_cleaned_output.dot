@@ -1,0 +1,334 @@
+digraph G {
+		Q0[label="CompilationUnit"];
+		Q0 -> Q1
+		Q1[label="Declaration"];
+		Q1 -> Q2
+		Q2[label="Struct or Union Specifier"];
+		Q2 -> Q3
+		Q3[label="struct"];
+		Q2 -> Q4
+		Q4[label="Books"];
+		Q2 -> Q5
+		Q5[label="{"];
+		Q2 -> Q6
+		Q6[label="Struct Declaration"];
+		Q6 -> Q7
+		Q7[label="Type Specifier"];
+		Q7 -> Q8
+		Q8[label="Type Specifier"];
+		Q8 -> Q9
+		Q9[label="char"];
+		Q7 -> Q10
+		Q10[label="pointer"];
+		Q6 -> Q11
+		Q11[label="Type Def Name"];
+		Q11 -> Q12
+		Q12[label="title"];
+		Q2 -> Q13
+		Q13[label="Struct Declaration"];
+		Q13 -> Q14
+		Q14[label="Type Specifier"];
+		Q14 -> Q15
+		Q15[label="Type Specifier"];
+		Q15 -> Q16
+		Q16[label="char"];
+		Q14 -> Q17
+		Q17[label="pointer"];
+		Q13 -> Q18
+		Q18[label="Type Def Name"];
+		Q18 -> Q19
+		Q19[label="author"];
+		Q2 -> Q20
+		Q20[label="Struct Declaration"];
+		Q20 -> Q21
+		Q21[label="Type Specifier"];
+		Q21 -> Q22
+		Q22[label="char"];
+		Q20 -> Q23
+		Q23[label="Struct Declarator"];
+		Q23 -> Q24
+		Q24[label="Declarator"];
+		Q24 -> Q25
+		Q25[label="Direct Declarator"];
+		Q25 -> Q26
+		Q26[label="subject"];
+		Q24 -> Q27
+		Q27[label="Size"];
+		Q27 -> Q28
+		Q28[label="Val = 100"];
+		Q2 -> Q29
+		Q29[label="Struct Declaration"];
+		Q29 -> Q30
+		Q30[label="Type Specifier"];
+		Q30 -> Q31
+		Q31[label="int"];
+		Q29 -> Q32
+		Q32[label="Type Def Name"];
+		Q32 -> Q33
+		Q33[label="book_id"];
+		Q2 -> Q34
+		Q34[label="}"];
+		Q1 -> Q35
+		Q35[label="Init Declarator"];
+		Q35 -> Q36
+		Q36[label="Declarator"];
+		Q36 -> Q37
+		Q37[label="book"];
+		Q0 -> Q38
+		Q38[label="Declaration"];
+		Q38 -> Q39
+		Q39[label="Struct or Union Specifier"];
+		Q39 -> Q40
+		Q40[label="union"];
+		Q39 -> Q41
+		Q41[label="numberRepresentation"];
+		Q39 -> Q42
+		Q42[label="{"];
+		Q39 -> Q43
+		Q43[label="Struct Declaration"];
+		Q43 -> Q44
+		Q44[label="Type Specifier"];
+		Q44 -> Q45
+		Q45[label="int"];
+		Q43 -> Q46
+		Q46[label="Type Def Name"];
+		Q46 -> Q47
+		Q47[label="option1"];
+		Q39 -> Q48
+		Q48[label="Struct Declaration"];
+		Q48 -> Q49
+		Q49[label="Type Specifier"];
+		Q49 -> Q50
+		Q50[label="float"];
+		Q48 -> Q51
+		Q51[label="Type Def Name"];
+		Q51 -> Q52
+		Q52[label="option2"];
+		Q39 -> Q53
+		Q53[label="}"];
+		Q0 -> Q54
+		Q54[label="Function Definition"];
+		Q54 -> Q55
+		Q55[label="Type Specifier"];
+		Q55 -> Q56
+		Q56[label="int"];
+		Q54 -> Q57
+		Q57[label="Declarator"];
+		Q57 -> Q58
+		Q58[label="Direct Declarator"];
+		Q58 -> Q59
+		Q59[label="main"];
+		Q54 -> Q60
+		Q60[label="Compound Statement"];
+		Q60 -> Q61
+		Q61[label="Assignment Expression"];
+		Q61 -> Q62
+		Q62[label="Postfix Expression"];
+		Q62 -> Q63
+		Q63[label="ID = book"];
+		Q62 -> Q64
+		Q64[label="."];
+		Q62 -> Q65
+		Q65[label="title"];
+		Q61 -> Q66
+		Q66[label="="];
+		Q61 -> Q67
+		Q67[label="Val = \"Lord Of The Rings\""];
+		Q60 -> Q68
+		Q68[label="Assignment Expression"];
+		Q68 -> Q69
+		Q69[label="Postfix Expression"];
+		Q69 -> Q70
+		Q70[label="ID = book"];
+		Q69 -> Q71
+		Q71[label="."];
+		Q69 -> Q72
+		Q72[label="author"];
+		Q68 -> Q73
+		Q73[label="="];
+		Q68 -> Q74
+		Q74[label="Val = \"J.R.R. Tolkien\""];
+		Q60 -> Q75
+		Q75[label="Assignment Expression"];
+		Q75 -> Q76
+		Q76[label="Postfix Expression"];
+		Q76 -> Q77
+		Q77[label="ID = book"];
+		Q76 -> Q78
+		Q78[label="."];
+		Q76 -> Q79
+		Q79[label="book_id"];
+		Q75 -> Q80
+		Q80[label="="];
+		Q75 -> Q81
+		Q81[label="Val = 2"];
+		Q60 -> Q82
+		Q82[label="Postfix Expression"];
+		Q82 -> Q83
+		Q83[label="ID = printf"];
+		Q82 -> Q84
+		Q84[label="("];
+		Q82 -> Q85
+		Q85[label="Arguments"];
+		Q85 -> Q86
+		Q86[label="Val = \"%d\\n\""];
+		Q85 -> Q87
+		Q87[label="Val = 76"];
+		Q82 -> Q88
+		Q88[label=")"];
+		Q60 -> Q89
+		Q89[label="Postfix Expression"];
+		Q89 -> Q90
+		Q90[label="ID = printf"];
+		Q89 -> Q91
+		Q91[label="("];
+		Q89 -> Q92
+		Q92[label="Arguments"];
+		Q92 -> Q93
+		Q93[label="Val = \"%d\\n\""];
+		Q92 -> Q94
+		Q94[label="Val = 2"];
+		Q89 -> Q95
+		Q95[label=")"];
+		Q60 -> Q96
+		Q96[label="Postfix Expression"];
+		Q96 -> Q97
+		Q97[label="ID = printf"];
+		Q96 -> Q98
+		Q98[label="("];
+		Q96 -> Q99
+		Q99[label="Arguments"];
+		Q99 -> Q100
+		Q100[label="Val = \"%d\\n\""];
+		Q99 -> Q101
+		Q101[label="Val = 84"];
+		Q96 -> Q102
+		Q102[label=")"];
+		Q60 -> Q103
+		Q103[label="Postfix Expression"];
+		Q103 -> Q104
+		Q104[label="ID = printf"];
+		Q103 -> Q105
+		Q105[label="("];
+		Q103 -> Q106
+		Q106[label="Arguments"];
+		Q106 -> Q107
+		Q107[label="Val = \"%d\\n\""];
+		Q106 -> Q108
+		Q108[label="Val = 1"];
+		Q103 -> Q109
+		Q109[label=")"];
+		Q60 -> Q110
+		Q110[label="Postfix Expression"];
+		Q110 -> Q111
+		Q111[label="ID = printf"];
+		Q110 -> Q112
+		Q112[label="("];
+		Q110 -> Q113
+		Q113[label="Arguments"];
+		Q113 -> Q114
+		Q114[label="Val = \"%d\\n\""];
+		Q113 -> Q115
+		Q115[label="Val = 84"];
+		Q110 -> Q116
+		Q116[label=")"];
+		Q60 -> Q117
+		Q117[label="Postfix Expression"];
+		Q117 -> Q118
+		Q118[label="ID = printf"];
+		Q117 -> Q119
+		Q119[label="("];
+		Q117 -> Q120
+		Q120[label="Arguments"];
+		Q120 -> Q121
+		Q121[label="Val = \"%d\\n\""];
+		Q120 -> Q122
+		Q122[label="Val = 1"];
+		Q117 -> Q123
+		Q123[label=")"];
+		Q60 -> Q124
+		Q124[label="Postfix Expression"];
+		Q124 -> Q125
+		Q125[label="ID = printf"];
+		Q124 -> Q126
+		Q126[label="("];
+		Q124 -> Q127
+		Q127[label="Arguments"];
+		Q127 -> Q128
+		Q128[label="Val = \"%d\\n\""];
+		Q127 -> Q129
+		Q129[label="Val = 5"];
+		Q124 -> Q130
+		Q130[label=")"];
+		Q60 -> Q131
+		Q131[label="Declaration"];
+		Q131 -> Q132
+		Q132[label="Struct or Union Specifier"];
+		Q132 -> Q133
+		Q133[label="union"];
+		Q132 -> Q134
+		Q134[label="numberRepresentation"];
+		Q131 -> Q135
+		Q135[label="Init Declarator"];
+		Q135 -> Q136
+		Q136[label="Declarator"];
+		Q136 -> Q137
+		Q137[label="reel"];
+		Q60 -> Q138
+		Q138[label="Assignment Expression"];
+		Q138 -> Q139
+		Q139[label="Postfix Expression"];
+		Q139 -> Q140
+		Q140[label="ID = reel"];
+		Q139 -> Q141
+		Q141[label="."];
+		Q139 -> Q142
+		Q142[label="option2"];
+		Q138 -> Q143
+		Q143[label="="];
+		Q138 -> Q144
+		Q144[label="Val = 'c'"];
+		Q60 -> Q145
+		Q145[label="Postfix Expression"];
+		Q145 -> Q146
+		Q146[label="ID = printf"];
+		Q145 -> Q147
+		Q147[label="("];
+		Q145 -> Q148
+		Q148[label="Arguments"];
+		Q148 -> Q149
+		Q149[label="Val = \"%f\\n\""];
+		Q148 -> Q150
+		Q150[label="Val = 99.0"];
+		Q145 -> Q151
+		Q151[label=")"];
+		Q60 -> Q152
+		Q152[label="Postfix Expression"];
+		Q152 -> Q153
+		Q153[label="ID = printf"];
+		Q152 -> Q154
+		Q154[label="("];
+		Q152 -> Q155
+		Q155[label="Arguments"];
+		Q155 -> Q156
+		Q156[label="Val = \"%d\\n\""];
+		Q155 -> Q157
+		Q157[label="Val = 2"];
+		Q152 -> Q158
+		Q158[label=")"];
+		Q60 -> Q159
+		Q159[label="Postfix Expression"];
+		Q159 -> Q160
+		Q160[label="ID = printf"];
+		Q159 -> Q161
+		Q161[label="("];
+		Q159 -> Q162
+		Q162[label="Arguments"];
+		Q162 -> Q163
+		Q163[label="Val = \"%d\\n\""];
+		Q162 -> Q164
+		Q164[label="Val = 1"];
+		Q159 -> Q165
+		Q165[label=")"];
+		
+}

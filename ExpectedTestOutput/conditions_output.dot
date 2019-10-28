@@ -429,15 +429,15 @@ digraph G {
 		Q213 -> Q214
 		Q214[label="do"];
 		Q213 -> Q215
-		Q215[label="While"];
-		Q213 -> Q216
-		Q216[label="Compound Statement"];
+		Q215[label="Compound Statement"];
+		Q215 -> Q216
+		Q216[label="Postfix Expression"];
 		Q216 -> Q217
-		Q217[label="Postfix Expression"];
-		Q217 -> Q218
-		Q218[label="ID = a"];
-		Q217 -> Q219
-		Q219[label="++"];
+		Q217[label="ID = a"];
+		Q216 -> Q218
+		Q218[label="++"];
+		Q213 -> Q219
+		Q219[label="While"];
 		Q213 -> Q220
 		Q220[label="Relational Expression"];
 		Q220 -> Q221

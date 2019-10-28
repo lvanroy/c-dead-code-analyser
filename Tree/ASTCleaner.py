@@ -32,20 +32,65 @@ class ASTCleaner:
                 self.remove_node(node)
 
             for scope in self.__symbol_table.get_scopes():
-                for symbol in self.__symbol_table.get_symbols(scope):
-                    if not self.__symbol_table.is_used(symbol, scope) and symbol in self.__declarations \
-                            and self.__declarations[symbol] not in self.__queued_for_pop:
-                        self.remove_node(self.__declarations[symbol])
-                        removed_node = self.__declarations[symbol]
+                if "for" not in scope:
+                    for symbol in self.__symbol_table.get_symbols(scope):
+                        if not self.__symbol_table.is_used(symbol, scope) and symbol in self.__declarations \
+                                and self.__declarations[symbol] not in self.__queued_for_pop and not \
+                                self.__symbol_table.is_counter(symbol, scope):
+                            self.remove_node(self.__declarations[symbol])
+                            removed_node = self.__declarations[symbol]
 
-                        # ensure all instances of structs, .. get removed, as these can refer to the same node
-                        staged_for_pop = list()
-                        for temp in self.__declarations:
-                            if self.__declarations[temp] == removed_node:
-                                staged_for_pop.append(temp)
+                            # ensure all instances of structs, .. get removed, as these can refer to the same node
+                            staged_for_pop = list()
+                            for temp in self.__declarations:
+                                if self.__declarations[temp] == removed_node:
+                                    staged_for_pop.append(temp)
 
-                        for temp in staged_for_pop:
-                            self.__declarations.pop(temp)
+                            for temp in staged_for_pop:
+                                self.__declarations.pop(temp)
+
+                    for instance in self.__symbol_table.get_group_instances(scope):
+                        if not self.__symbol_table.is_instance_used(instance, scope) and instance in self.__declarations \
+                                and self.__declarations[instance] not in self.__queued_for_pop:
+                            self.remove_node(self.__declarations[instance])
+                            removed_node = self.__declarations[instance]
+
+                            staged_for_pop = list()
+                            for temp in self.__declarations:
+                                if self.__declarations[temp] == removed_node:
+                                    staged_for_pop.append(temp)
+
+                            for temp in staged_for_pop:
+                                self.__declarations.pop(temp)
+
+                    for reference in self.__symbol_table.get_references(scope):
+                        if not self.__symbol_table.is_reference_used(reference,
+                                                                     scope) and reference in self.__declarations \
+                                and self.__declarations[reference] not in self.__queued_for_pop:
+                            self.remove_node(self.__declarations[reference])
+                            removed_node = self.__declarations[reference]
+
+                            staged_for_pop = list()
+                            for temp in self.__declarations:
+                                if self.__declarations[temp] == removed_node:
+                                    staged_for_pop.append(temp)
+
+                            for temp in staged_for_pop:
+                                self.__declarations.pop(temp)
+
+                    for enum in self.__symbol_table.get_enumerators(scope):
+                        if not self.__symbol_table.is_enumerator_used(enum, scope) and enum in self.__declarations \
+                                and self.__declarations[enum] not in self.__queued_for_pop:
+                            self.remove_node(self.__declarations[enum])
+                            removed_node = self.__declarations[enum]
+
+                            staged_for_pop = list()
+                            for temp in self.__declarations:
+                                if self.__declarations[temp] == removed_node:
+                                    staged_for_pop.append(temp)
+
+                            for temp in staged_for_pop:
+                                self.__declarations.pop(temp)
 
             self.__declarations = dict()
 
@@ -71,7 +116,7 @@ class ASTCleaner:
 
     @staticmethod
     def perform_optimal_cast(value):
-        if value[0] == "\"":  # string
+        if value[0] == "\\":  # string
             return value
         elif value[0] == "'":  # character
             return ord(value[1])
@@ -286,7 +331,11 @@ class ASTCleaner:
             if operand_2 != "" and operand_2[:5] == "ID = " and self.__symbol_table.is_initialized(operand_2[5:]):
                 operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
 
-            if operand_1 != "" and operand_2 != "" and operand_1[:5] == "ID = " and operand_2[:6] == "Val = ":
+            if operand_1[5:] == "Val = ":
+                operand_1_val = operand_1
+
+            if operand_1 != "" and operand_2 != "" and operand_1[:5] == "ID = " and operand_2[:6] == "Val = " \
+                    and "." not in operand_1 and "->" not in operand_1:
                 if operator == "=":
                     value = self.perform_optimal_cast(operand_2[6:])
                     self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
@@ -332,6 +381,92 @@ class ASTCleaner:
                         value = self.perform_optimal_cast(operand_1_val[6:]) | self.perform_optimal_cast(operand_2[6:])
                         self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
                         return value
+                else:
+                    return ""
+
+            elif operand_1 != "" and operand_2 != "" and operand_1[:5] == "ID = " and operand_2[:6] == "Val = ":
+                if "." in operand_1:
+                    access_op = "."
+                else:
+                    access_op = "->"
+                if operator == "=":
+                    value = self.perform_optimal_cast(operand_2[6:])
+                    instance_name = operand_1.split(" = ")[1].split(access_op)[0]
+                    variable_name = operand_1.split(" = ")[1].split(access_op)[1]
+                    self.__symbol_table.set_group_instance_variable(instance_name, variable_name, value)
+                    return "Val = {}".format(value)
+                elif operand_1_val is not None:
+                    if operator == "*=":
+                        value = self.perform_optimal_cast(operand_1_val[6:]) * self.perform_optimal_cast(operand_2[6:])
+                        instance_name = operand_1.split(" = ")[1].split(access_op)[0]
+                        variable_name = operand_1.split(" = ")[1].split(access_op)[1]
+                        self.__symbol_table.set_group_instance_variable(instance_name, variable_name, value)
+                        return value
+                    elif operator == "/=":
+                        value = self.perform_optimal_cast(operand_1_val[6:]) / self.perform_optimal_cast(operand_2[6:])
+                        instance_name = operand_1.split(" = ")[1].split(access_op)[0]
+                        variable_name = operand_1.split(" = ")[1].split(access_op)[1]
+                        self.__symbol_table.set_group_instance_variable(instance_name, variable_name, value)
+                        return value
+                    elif operator == "%=":
+                        value = self.perform_optimal_cast(operand_1_val[6:]) % self.perform_optimal_cast(operand_2[6:])
+                        instance_name = operand_1.split(" = ")[1].split(access_op)[0]
+                        variable_name = operand_1.split(" = ")[1].split(access_op)[1]
+                        self.__symbol_table.set_group_instance_variable(instance_name, variable_name, value)
+                        return value
+                    elif operator == "+=":
+                        value = self.perform_optimal_cast(operand_1_val[6:]) + self.perform_optimal_cast(operand_2[6:])
+                        instance_name = operand_1.split(" = ")[1].split(access_op)[0]
+                        variable_name = operand_1.split(" = ")[1].split(access_op)[1]
+                        self.__symbol_table.set_group_instance_variable(instance_name, variable_name, value)
+                        return value
+                    elif operator == "-=":
+                        value = self.perform_optimal_cast(operand_1_val[6:]) - self.perform_optimal_cast(operand_2[6:])
+                        instance_name = operand_1.split(" = ")[1].split(access_op)[0]
+                        variable_name = operand_1.split(" = ")[1].split(access_op)[1]
+                        self.__symbol_table.set_group_instance_variable(instance_name, variable_name, value)
+                        return value
+                    elif operator == "<<=":
+                        value = self.perform_optimal_cast(operand_1_val[6:]) << self.perform_optimal_cast(operand_2[6:])
+                        instance_name = operand_1.split(" = ")[1].split(access_op)[0]
+                        variable_name = operand_1.split(" = ")[1].split(access_op)[1]
+                        self.__symbol_table.set_group_instance_variable(instance_name, variable_name, value)
+                        return value
+                    elif operator == ">>=":
+                        value = self.perform_optimal_cast(operand_1_val[6:]) >> self.perform_optimal_cast(operand_2[6:])
+                        instance_name = operand_1.split(" = ")[1].split(access_op)[0]
+                        variable_name = operand_1.split(" = ")[1].split(access_op)[1]
+                        self.__symbol_table.set_group_instance_variable(instance_name, variable_name, value)
+                        return value
+                    elif operator == "&=":
+                        value = self.perform_optimal_cast(operand_1_val[6:]) & self.perform_optimal_cast(operand_2[6:])
+                        instance_name = operand_1.split(" = ")[1].split(access_op)[0]
+                        variable_name = operand_1.split(" = ")[1].split(access_op)[1]
+                        self.__symbol_table.set_group_instance_variable(instance_name, variable_name, value)
+                        return value
+                    elif operator == "^=":
+                        value = self.perform_optimal_cast(operand_1_val[6:]) ^ self.perform_optimal_cast(operand_2[6:])
+                        instance_name = operand_1.split(" = ")[1].split(access_op)[0]
+                        variable_name = operand_1.split(" = ")[1].split(access_op)[1]
+                        self.__symbol_table.set_group_instance_variable(instance_name, variable_name, value)
+                        return value
+                    elif operator == "|=":
+                        value = self.perform_optimal_cast(operand_1_val[6:]) | self.perform_optimal_cast(operand_2[6:])
+                        instance_name = operand_1.split(" = ")[1].split(access_op)[0]
+                        variable_name = operand_1.split(" = ")[1].split(access_op)[1]
+                        self.__symbol_table.set_group_instance_variable(instance_name, variable_name, value)
+                        return value
+                else:
+                    return ""
+
+            elif operand_1[:5] == "ID = " and operand_2[:5] == "ID = " and \
+                    not self.__symbol_table.symbol_exists(operand_2[5:]):
+                enum_type = self.__symbol_table.get_type(operand_1[5:])
+                value = self.__symbol_table.get_enumerator_val_for_id(enum_type, operand_2[5:])
+                self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
+                return "Val = {}".format(value)
+
+            return ""
 
         # this defines an atomic type, not really needed given the goal but returned as type to ensure
         # declarations don't break
@@ -413,6 +548,9 @@ class ASTCleaner:
                 self.clean_node(node, value)
                 return value
 
+            if value == "":
+                return ""
+
         # this is the root of the ast
         elif node.get_label() == "CompilationUnit":
             self.clean_children(node)
@@ -422,13 +560,14 @@ class ASTCleaner:
         # in case of a function the scope will be opened as soon as the definition occurs, so that the parameters
         # are enclosed within the functions scope
         elif node.get_label() == "Compound Statement":
-            if not node.is_parent("Function Definition"):
+            if not node.is_parent("Function Definition") and not node.is_parent("Iteration Statement"):
                 self.__symbol_table.open_scope("scope_{}".format(self.__scope_counter))
                 self.__scope_counter += 1
                 self.clean_children(node)
                 self.__symbol_table.close_scope()
             else:
                 self.clean_children(node)
+            return ""
 
         # this defines an expression of the form: condition ? expression : condition
         # this is needed for folding
@@ -462,11 +601,16 @@ class ASTCleaner:
                 elif child.get_label() == "Type Name":
                     declaration_type += self.clean(child)
                 elif child.get_label() == "Struct or Union Specifier":
-                    pass
+                    declaration_type += self.clean(child)
                 elif child.get_label() == "auto":
                     declaration_type += "auto"
+                elif child.get_label() == "Enum Specifier":
+                    declaration_type += self.clean(child)
                 elif child.get_label() == "Init Declarator":
                     break
+
+            if i == len(children) - 1 and child.get_label() != "Init Declarator":
+                return ""
 
             for i in range(i, len(children)):
                 declarator_child = children[i].get_children()[0]
@@ -481,10 +625,13 @@ class ASTCleaner:
                     size = declarator.split("[")[1].split("]")[0]
                     declarator = declarator.split("[")[0]
 
+                if declaration_type.split(" ")[0] in {"struct", "union"}:
+                    self.__symbol_table.add_symbol(declaration_type, declarator)
+
                 if len(children[i].get_children()) > 1:
                     initializer_child = children[i].get_children()[1]
                     initializer = self.clean(initializer_child)
-                    if declaration_type[:4] == "char" and initializer[:6] == "Val = " and initializer[6] != "{" and\
+                    if declaration_type[:4] == "char" and initializer[:6] == "Val = " and initializer[6] != "{" and \
                             len(initializer[6:].replace("\\", "").replace("'", "")) > 1 and \
                             not initializer[6:].replace(".", "").replace("-", "").isnumeric():
                         if declaration_type[-5:] != "array":
@@ -492,7 +639,7 @@ class ASTCleaner:
                         result = "Val = {"
                         index = initializer.find("\"")
                         index2 = initializer.rfind("\"")
-                        for token in initializer[index+1:index2-1]:
+                        for token in initializer[index + 1:index2 - 1]:
                             result += "{}, ".format(token)
                         initializer = result[:-2] + "}"
                         size = len(initializer.replace("{", "").replace("}", "").replace(" ", "").split(","))
@@ -510,13 +657,23 @@ class ASTCleaner:
 
                     else:
                         if size is None:
-                            self.__symbol_table.add_symbol(declaration_type, declarator)
+                            if "*" in declaration_type:
+                                self.__symbol_table.set_referenced_object(declarator, initializer[5:])
+                            elif declaration_type.split(" ")[0] in {"struct", "union"} and initializer != "":
+                                init_list = initializer.split(":")[1].split(",")
+                                for i in range(len(init_list)):
+                                    variable = init_list[i].split("=", 1)[0].replace(" ", "")
+                                    value = init_list[i].split("=", 1)[1]
+                                    if value[:6] == "Val = ":
+                                        self.__symbol_table.set_group_instance_variable(declarator, variable, value[6:])
+                            else:
+                                self.__symbol_table.add_symbol(declaration_type, declarator)
+
                         else:
                             self.__symbol_table.add_array_symbol(declaration_type, declarator, size)
 
                 else:
                     self.__symbol_table.add_symbol(declaration_type, declarator)
-
             return ""
 
         # this node occurs when declaring a variable with another variable or an expression
@@ -551,7 +708,24 @@ class ASTCleaner:
 
         # head node for an enumerator, this has the name of the enumerator plus the values part of the enumeration
         elif node.get_label() == "Enum Specifier":
-            pass
+            children = node.get_children()
+            identifier = ""
+            variables = list()
+            declaration = False
+
+            for child in children:
+                if child.get_label() not in {"Enumerator", "{", "}"}:
+                    identifier = child.get_label()
+                elif child.get_label() in {"{", "}"}:
+                    declaration = True
+                else:
+                    variables.append(child.get_children()[0].get_label())
+
+            if declaration:
+                self.__declarations[identifier] = node.get_parent()
+                self.__symbol_table.add_enumerator(identifier, variables)
+
+            return identifier
 
         # defines a conditional expression with '==' or '!=' comparison, needed for condition evaluation
         elif node.get_label() == "Equality Expression":
@@ -583,19 +757,109 @@ class ASTCleaner:
 
         # head node when multiple expression occur on the same line, needed for folding
         elif node.get_label() == "Expression":
-            pass
+            for child in node.get_children():
+                self.clean(child)
+            return ""
 
         # defines a variable inside the first clause of a for specifier, needed for condition evaluation
         elif node.get_label() == "For Declaration":
-            pass
+            children = node.get_children()
+
+            declaration_type = ""
+
+            i = 0
+            for i in range(len(children)):
+                child = children[i]
+                if child.get_label() == "Type Specifier":
+                    declaration_type += self.clean(child)
+                elif child.get_label() == "Type Def Name":
+                    declaration_type += self.clean(child)
+                elif child.get_label() == "Type Name":
+                    declaration_type += self.clean(child)
+                elif child.get_label() == "Struct or Union Specifier":
+                    declaration_type += self.clean(child)
+                elif child.get_label() == "auto":
+                    declaration_type += "auto"
+                elif child.get_label() == "Enum Specifier":
+                    declaration_type += self.clean(child)
+                elif child.get_label() == "Init Declarator":
+                    break
+
+            if i == len(children) - 1 and child.get_label() != "Init Declarator":
+                return ""
+
+            for i in range(i, len(children)):
+                declarator_child = children[i].get_children()[0]
+                declarator = self.clean(declarator_child)
+
+                self.__declarations[declarator.split("[")[0]] = node
+
+                size = None
+
+                if "[" in declarator and "]" in declarator:
+                    declaration_type += " array"
+                    size = declarator.split("[")[1].split("]")[0]
+                    declarator = declarator.split("[")[0]
+
+                if len(children[i].get_children()) > 1:
+                    initializer_child = children[i].get_children()[1]
+                    initializer = self.clean(initializer_child)
+                    if declaration_type[:4] == "char" and initializer[:6] == "Val = " and initializer[6] != "{" and \
+                            len(initializer[6:].replace("\\", "").replace("'", "")) > 1 and \
+                            not initializer[6:].replace(".", "").replace("-", "").isnumeric():
+                        if declaration_type[-5:] != "array":
+                            declaration_type += " array"
+                        result = "Val = {"
+                        index = initializer.find("\"")
+                        index2 = initializer.rfind("\"")
+                        for token in initializer[index + 1:index2 - 1]:
+                            result += "{}, ".format(token)
+                        initializer = result[:-2] + "}"
+                        size = len(initializer.replace("{", "").replace("}", "").replace(" ", "").split(","))
+
+                    if initializer[:6] == "Val = ":
+                        if declaration_type[-5:] != "array" and \
+                                not (declaration_type != "char*" and initializer[-1] == "}"):
+                            self.__symbol_table.add_symbol(declaration_type, declarator, initializer[6:])
+                        elif size is not None:
+                            self.__symbol_table.add_array_symbol(declaration_type, declarator, size, initializer[6:])
+                        else:
+                            size = len(initializer.replace("{", "").replace("}", "").replace(" ", "").split(","))
+                            declaration_type += " array"
+                            self.__symbol_table.add_array_symbol(declaration_type, declarator, size, initializer[6:])
+
+                    else:
+                        if size is None:
+                            self.__symbol_table.add_symbol(declaration_type, declarator)
+                            if "*" in declaration_type:
+                                self.__symbol_table.set_referenced_object(declarator, initializer[5:])
+                            elif declaration_type.split(" ")[0] in {"struct", "union"} and initializer != "":
+                                init_list = initializer.split(":")[1].split(",")
+                                for i in range(len(init_list)):
+                                    variable = init_list[i].split("=", 1)[0].replace(" ", "")
+                                    value = init_list[i].split("=", 1)[1]
+                                    if value[:6] == "Val = ":
+                                        self.__symbol_table.set_group_instance_variable(declarator, variable, value[6:])
+
+                        else:
+                            self.__symbol_table.add_array_symbol(declaration_type, declarator, size)
+
+                    self.__symbol_table.set_counter(True, declarator)
+
+                else:
+                    self.__symbol_table.add_symbol(declaration_type, declarator)
+                    self.__symbol_table.set_counter(True, declarator)
+            return ""
 
         # defines an expression part of one of the clauses of a for specifier, needed for condition evaluation
         elif node.get_label() == "For Expression":
-            pass
+            return ""
 
         # head node for the for clauses
         elif node.get_label() == "For Condition":
-            pass
+            for child in node.get_children():
+                self.clean(child)
+            return ""
 
         # defines a function, will open its associated scope too
         elif node.get_label() == "Function Definition":
@@ -646,7 +910,8 @@ class ASTCleaner:
 
         # head node for generic specification
         elif node.get_label() == "Generic":
-            pass
+            self.clean(node.get_children()[0])
+            return ""
 
         # specifies one possible generic association
         elif node.get_label() == "Generic Association":
@@ -664,7 +929,9 @@ class ASTCleaner:
         elif node.get_label() == "Initializer":
             label = node.get_children()[0].get_label()
             if label[:6] == "Val = ":
-                return node.get_children()[0].get_label()
+                return label
+            elif label[:5] == "ID = ":
+                return label
             elif label == "Assignment Expression":
                 return self.clean(node.get_children()[0])
             elif label == "Conditional Expression":
@@ -705,18 +972,78 @@ class ASTCleaner:
                         return ""
                 self.clean_node(node, val[:-2] + "}")
                 return val[:-2] + "}"
+            else:
+                original = node.get_parent().get_children()[0].get_children()[0].get_label()
+                for i in range(0, len(node.get_children()), 2):
+                    variable = node.get_children()[i].get_label()
+                    value = self.clean(node.get_children()[i + 1])
+                    if value[:6] == "Val = ":
+                        self.__symbol_table.set_group_instance_variable(original, variable, value[6:])
+                return ""
 
         # head node for loops
         elif node.get_label() == "Iteration Statement":
-            pass
+            iteration_type = node.get_children()[0].get_label()
+            self.__symbol_table.open_scope("for_scope_{}".format(self.__scope_counter))
+            self.__scope_counter += 1
+            if node.get_children()[1].get_label() == "For Condition":
+                self.clean(node.get_children()[1])
+
+            elif node.get_children()[1].get_label() == "Relational Expression":
+                counter = node.get_children()[1].get_children()[0].get_label()
+                if counter[:5] == "ID = ":
+                    self.__symbol_table.set_counter(True, counter[5:])
+                elif counter[:6] == "Val = ":
+                    self.__symbol_table.set_counter(True, counter[6:])
+
+            if iteration_type == "for":
+                for child in node.get_children()[2].get_children():
+                    if child.get_label() == "Jump Statement":
+                        self.clean(child)
+                self.__symbol_table.close_scope()
+                return ""
+
+            elif iteration_type == "while":
+                for child in node.get_children()[2].get_children():
+                    if child.get_label() == "Jump Statement":
+                        self.clean(child)
+                self.__symbol_table.close_scope()
+                return ""
+
+            elif iteration_type == "do":
+                for child in node.get_children()[1].get_children():
+                    if child.get_label() == "Jump Statement":
+                        self.clean(child)
+
+                counter = node.get_children()[3].get_children()[0].get_label()
+                if counter[:5] == "ID = ":
+                    self.__symbol_table.set_counter(True, counter[5:])
+                elif counter[:6] == "Val = ":
+                    self.__symbol_table.set_counter(True, counter[6:])
+
+                self.__symbol_table.close_scope()
+                return ""
 
         # head node for a jump statement
         elif node.get_label() == "Jump Statement":
-            pass
+            index = node.get_parent().find_child(node)
+            size = len(node.get_parent().get_children())
+            for i in reversed(range(index + 1, size)):
+                node.get_parent().pop_child(i)
+
+            function = node.get_children()[0].get_label()
+            if function == "return":
+                value = self.clean(node.get_children()[1])
+                if value[:5] == "ID = " and self.__symbol_table.is_initialized(value[5:]):
+                    value = self.__symbol_table.get_value(value[5:])
+                if value[:6] == "Val = ":
+                    node.get_children()[1].set_label(value)
+            return ""
 
         # head node for a labeled statement
         elif node.get_label() == "Labeled Statement":
-            pass
+            self.clean(node.get_children()[-1])
+            return ""
 
         # head node for a logical and comparison, needed for condition evaluation
         elif node.get_label() == "Logical And Expression":
@@ -797,6 +1124,7 @@ class ASTCleaner:
         # specifies types and names of parameters of a function, needed for symbol table
         elif node.get_label() == "Parameter Type List":
             self.clean_children(node)
+            return ""
 
         # head node for a specification of a specific parameter
         elif node.get_label() == "Parameter Declaration":
@@ -805,6 +1133,9 @@ class ASTCleaner:
                 parameter_name = self.clean(node.get_children()[1])
 
                 self.__symbol_table.add_symbol(parameter_type, parameter_name)
+                return ""
+            else:
+                return ""
 
         # head node for a postfix expression
         elif node.get_label() == "Postfix Expression":
@@ -834,7 +1165,8 @@ class ASTCleaner:
                             self.create_new_assignment(original, value, node)
                         return value_post_op
 
-                elif operand_1 != "" and operand_1[:5] == "ID = " and operator == "[":
+                elif operand_1 != "" and operand_1[:5] == "ID = " and operator == "[" and "." not in operand_1 and \
+                        "->" not in operand_1:
                     index = self.clean(node.get_children()[2])
                     if index != "" and index[:6] == "Val = ":
                         value = self.__symbol_table.get_array_value_at_index(operand_1[5:], index[6:])
@@ -854,12 +1186,52 @@ class ASTCleaner:
                         value = "Val = {}".format(self.perform_cast(val[6:], var_type))
                         self.clean_node(node, value)
                         return value
+                    elif val != "" and val[:5] == "ID = " and not self.__symbol_table.symbol_exists(val[5:]):
+                        value = "Val = {}".format(self.__symbol_table.get_enumerator_val_for_id(var_type, val[5:]))
+                        self.clean_node(node, value)
+                        return value
                     else:
                         return ""
 
                 elif node.get_children()[1].get_label() == "(":
                     self.clean(node.get_children()[2])
                     return ""
+
+                elif node.get_children()[1].get_label() in {".", "->"}:
+                    op = node.get_children()[1].get_label()
+                    val = node.get_children()[2].get_label()
+                    resulting_val = "Val = {}".format(self.__symbol_table.get_group_array_value(original[5:], val))
+                    result = "ID = {}".format(original[5:] + op + val)
+                    if node.get_parent().get_label() != "Assignment Expression":
+                        self.clean_node(node, resulting_val)
+                    return result
+
+                elif "." in operand_1 and node.get_children()[1].get_label() == "[":
+                    index = self.clean(node.get_children()[2])[6:]
+                    group_variable = operand_1.split(".")[0]
+                    variable = operand_1.split(".")[1]
+                    replacement = "Val = {}".format(
+                        self.__symbol_table.get_group_array_value_at_index(group_variable[5:], variable, index))
+                    self.clean_node(node, replacement)
+                    return replacement
+
+                elif "->" in operand_1 and node.get_children()[1].get_label() == "[":
+                    index = self.clean(node.get_children()[2])[6:]
+                    group_variable = operand_1.split("->")[0]
+                    variable = operand_1.split("->")[1]
+                    replacement = "Val = {}".format(
+                        self.__symbol_table.get_group_array_value_at_index(group_variable[5:], variable, index))
+                    self.clean_node(node, replacement)
+                    return replacement
+
+                # constructor call of the format: (type) {var1 = val1, var2 = val2, ...}
+                elif operand_1.split(" ")[0] in {"struct", "union", "enum"}:
+                    output = "{}: ".format(operand_1)
+                    for i in range(1, len(node.get_children()), 2):
+                        var = node.get_children()[i].get_label()
+                        value = self.clean(node.get_children()[i + 1])
+                        output += "{}={}, ".format(var, value)
+                    return output[:-2]
 
         # head node for a primary expression
         elif node.get_label() == "Primary Expression":
@@ -911,7 +1283,9 @@ class ASTCleaner:
 
         # head node for a selection statement
         elif node.get_label() == "Selection Statement":
-            pass
+            self.clean(node.get_children()[1])
+            self.clean(node.get_children()[2])
+            return ""
 
         # head node for a shift expression
         elif node.get_label() == "Shift Expression":
@@ -945,11 +1319,41 @@ class ASTCleaner:
 
         # head for a struct variable declaration
         elif node.get_label() == "Struct Declarator":
-            pass
+            return self.clean(node.get_children()[0])
 
         # head node for a struct declaration plus its name
         elif node.get_label() == "Struct or Union Specifier":
-            pass
+            group_type = node.get_children()[0].get_label()
+            group_name = node.get_children()[1].get_label()
+            variables = list()
+
+            if len(node.get_children()) > 2 and node.get_children()[-1].get_label() == "}":
+                i = 3
+                child = node.get_children()[i]
+
+                while child.get_label() == "Struct Declaration":
+                    children = child.get_children()
+                    var_type = self.clean(children[0])
+                    var_name = self.clean(children[1])
+                    size = None
+
+                    if "[" in var_name and "]" in var_name and var_name.split("[")[1].split("]")[0].isnumeric():
+                        size = var_name.split("[")[1].split("]")[0]
+                        var_name = var_name.split("[")[0]
+                        var_type += " array"
+
+                    group_var = self.__symbol_table.create_group_symbol(var_type, var_name, size)
+                    variables.append(group_var)
+
+                    i += 1
+                    if i < len(node.get_children()):
+                        child = node.get_children()[i]
+                    else:
+                        break
+
+                self.__symbol_table.add_group_definition(group_name, group_type, variables)
+
+            return "{} {}".format(group_type, group_name)
 
         # defines a static assertion, this is possible dead code so this will be checked in dead code elimination
         elif node.get_label() == "Static Assert Declaration":
@@ -957,7 +1361,7 @@ class ASTCleaner:
 
         # defines the name of a type
         elif node.get_label() == "Type Def Name":
-            pass
+            return node.get_children()[0].get_label()
 
         # head node for a type specification
         elif node.get_label() == "Type Name":
@@ -971,6 +1375,10 @@ class ASTCleaner:
                 elif child.get_label() == "Type Qualifier":
                     result += self.clean(child)
                 elif child.get_label() == "pointer":
+                    result += self.clean(child)
+                elif child.get_label() == "Struct or Union Specifier":
+                    result += self.clean(child)
+                elif child.get_label() == "Enum Specifier":
                     result += self.clean(child)
                 else:  # array, ...
                     break
@@ -986,8 +1394,10 @@ class ASTCleaner:
                     result += self.clean(child)
                 elif child.get_label() == "pointer":
                     result += "*"
+                elif child.get_label() == "Struct or Union Specifier":
+                    result += self.clean(child)
                 else:
-                    result += child.get_label()
+                    result = child.get_label()
             return result
 
         # qualification for a type, not needed considering the goal
@@ -997,7 +1407,10 @@ class ASTCleaner:
         # head node for a unary expression
         elif node.get_label() == "Unary Expression":
             operation = node.get_children()[0].get_label()
-            original = self.clean(node.get_children()[1])
+            if node.get_children()[1].get_label() == "(":
+                original = self.clean(node.get_children()[2])
+            else:
+                original = self.clean(node.get_children()[1])
             operand = original
 
             if original != "" and original[:5] == "ID = " and self.__symbol_table.is_initialized(original[5:]):
@@ -1044,6 +1457,13 @@ class ASTCleaner:
                     self.clean_node(node, value)
                     return value
 
+            elif operation != "" and operand[:5] == "ID = ":
+                if operation == "&":
+                    return operand
+
+            if operation == "sizeof" or operation == "_Alignof":
+                return ""
+
         # node specifying a constant value
         elif node.get_label()[:5] == "Val =":
             return node.get_label()
@@ -1052,7 +1472,8 @@ class ASTCleaner:
         elif node.get_label() == "While":
             pass
 
-        print("exited without specific return for node, {}, with children:".format(node.get_label()))
+        print("exited without specific return for node, {}, with parent {} and with children:"
+              .format(node.get_label(), node.get_parent().get_label()))
         for child in node.get_children():
             print("\t{}".format(child.get_label()))
         return result
