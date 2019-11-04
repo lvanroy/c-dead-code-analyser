@@ -5,128 +5,10 @@ Basic AST generation finished.
 Optimized AST generation started.
 Optimization cycle started
 Optimization cycle finished
-================= 0 =================
-Symbol book with type struct Books is used and has the following variables:
-	Symbol title with type char* has value {76, 111, 114, 100, 32, 79, 102, 32, 84, 104, 101, 32, 82, 105, 110, 103, 115}.
-	Symbol author with type char* has value {74, 46, 82, 46, 82, 46, 32, 84, 111, 108, 107, 105, 101, 110}.
-	Symbol subject with type char array and size 100 has value 0.
-	Symbol book_id with type int has value 2.
-
-================= main =================
-symbol day with type week has value 2, this value is used: True, this variable is not a counter.
-symbol day2 with type week has value 1, this value is used: True, this variable is not a counter.
-Symbol book2 with type struct Books is used and has the following variables:
-	Symbol title with type char* has value {84, 104, 101, 32, 68, 97, 118, 105, 110, 99, 105, 32, 67, 111, 100, 101}.
-	Symbol author with type char* has value {68, 97, 110, 32, 66, 114, 111, 119, 110}.
-	Symbol subject with type char array and size 100 has value {108, 111, 110, 103, 32, 115, 116, 111, 114, 121}.
-	Symbol book_id with type int has value 1.
-
-Symbol integer with type union numberRepresentation is used and has the following variables:
-	Symbol option1 with type int has value 5.
-	Symbol option2 with type float has value 0.
-
-Symbol reel with type union numberRepresentation is used and has the following variables:
-	Symbol option1 with type int has value 0.
-	Symbol option2 with type float has value 99.0.
-
-Reference book3 with type struct Books* references book2.
-
-The following symbol definitions where found in the code:
-================= 0 =================
-Group Books with group type struct has the following variables
-	symbol title with type char*.
-	symbol author with type char*.
-	Symbol subject with type char array and size 100.
-	symbol book_id with type int.
-
-Group numberRepresentation with group type union has the following variables
-	symbol option1 with type int.
-	symbol option2 with type float.
-
-Symbol week with type Enumerator has the following value: {Mon, Tue, Wed, Thur, Fri, Sat, Sun}.
-
 Optimization cycle started
 Optimization cycle finished
-================= 0 =================
-Symbol book with type struct Books is used and has the following variables:
-	Symbol title with type char* has value {76, 111, 114, 100, 32, 79, 102, 32, 84, 104, 101, 32, 82, 105, 110, 103, 115}.
-	Symbol author with type char* has value {74, 46, 82, 46, 82, 46, 32, 84, 111, 108, 107, 105, 101, 110}.
-	Symbol subject with type char array and size 100 has value 0.
-	Symbol book_id with type int has value 2.
-
-================= main =================
-symbol day with type week has value 2, this value is used: False, this variable is not a counter.
-symbol day2 with type week has value 1, this value is used: False, this variable is not a counter.
-Symbol book2 with type struct Books is not used and has the following variables:
-	Symbol title with type char* has value {84, 104, 101, 32, 68, 97, 118, 105, 110, 99, 105, 32, 67, 111, 100, 101}.
-	Symbol author with type char* has value {68, 97, 110, 32, 66, 114, 111, 119, 110}.
-	Symbol subject with type char array and size 100 has value {108, 111, 110, 103, 32, 115, 116, 111, 114, 121}.
-	Symbol book_id with type int has value 1.
-
-Symbol integer with type union numberRepresentation is not used and has the following variables:
-	Symbol option1 with type int has value 5.
-	Symbol option2 with type float has value 0.
-
-Symbol reel with type union numberRepresentation is used and has the following variables:
-	Symbol option1 with type int has value 0.
-	Symbol option2 with type float has value 99.0.
-
-Reference book3 with type struct Books* references book2.
-
-The following symbol definitions where found in the code:
-================= 0 =================
-Group Books with group type struct has the following variables
-	symbol title with type char*.
-	symbol author with type char*.
-	Symbol subject with type char array and size 100.
-	symbol book_id with type int.
-
-Group numberRepresentation with group type union has the following variables
-	symbol option1 with type int.
-	symbol option2 with type float.
-
-Symbol week with type Enumerator has the following value: {Mon, Tue, Wed, Thur, Fri, Sat, Sun}.
-
 Optimization cycle started
 Optimization cycle finished
-================= 0 =================
-Symbol book with type struct Books is used and has the following variables:
-	Symbol title with type char* has value {76, 111, 114, 100, 32, 79, 102, 32, 84, 104, 101, 32, 82, 105, 110, 103, 115}.
-	Symbol author with type char* has value {74, 46, 82, 46, 82, 46, 32, 84, 111, 108, 107, 105, 101, 110}.
-	Symbol subject with type char array and size 100 has value 0.
-	Symbol book_id with type int has value 2.
-
-================= main =================
-Symbol book2 with type struct Books is not used and has the following variables:
-	Symbol title with type char* has value {84, 104, 101, 32, 68, 97, 118, 105, 110, 99, 105, 32, 67, 111, 100, 101}.
-	Symbol author with type char* has value {68, 97, 110, 32, 66, 114, 111, 119, 110}.
-	Symbol subject with type char array and size 100 has value {108, 111, 110, 103, 32, 115, 116, 111, 114, 121}.
-	Symbol book_id with type int has value 1.
-
-Symbol integer with type union numberRepresentation is not used and has the following variables:
-	Symbol option1 with type int has value 5.
-	Symbol option2 with type float has value 0.
-
-Symbol reel with type union numberRepresentation is used and has the following variables:
-	Symbol option1 with type int has value 0.
-	Symbol option2 with type float has value 99.0.
-
-Reference book3 with type struct Books* references book2.
-
-The following symbol definitions where found in the code:
-================= 0 =================
-Group Books with group type struct has the following variables
-	symbol title with type char*.
-	symbol author with type char*.
-	Symbol subject with type char array and size 100.
-	symbol book_id with type int.
-
-Group numberRepresentation with group type union has the following variables
-	symbol option1 with type int.
-	symbol option2 with type float.
-
-Symbol week with type Enumerator has the following value: {Mon, Tue, Wed, Thur, Fri, Sat, Sun}.
-
 Optimized AST generation finished.
 The following symbol table was derived from the code:
 ================= 0 =================
@@ -167,4 +49,10 @@ Group numberRepresentation with group type union has the following variables
 
 Symbol week with type Enumerator has the following value: {Mon, Tue, Wed, Thur, Fri, Sat, Sun}.
 
+Counter validation loop started.
+Counter Validation loop finished.
+The following functions where found:
 
+Function main with return type int and no parameters is not OK.
+The function has the following issues: 
+	Incorrect return type, return type must be boolean

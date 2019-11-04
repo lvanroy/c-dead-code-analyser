@@ -221,6 +221,7 @@ typeSpecifier
     |   'double'
     |   'signed'
     |   'unsigned'
+    |   'bool'
     |   '_Bool'
     |   '_Complex'
     |   '__m128'
@@ -512,7 +513,7 @@ jumpStatement
     |   'goto' unaryExpression ';' // GCC extension
     ;
 
-comfpilationUnit
+compilationUnit
     :   translationUnit? EOF
     ;
 

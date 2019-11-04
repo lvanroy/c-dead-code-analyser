@@ -19,6 +19,7 @@ from Antlr_files.CLexer import CLexer
 
 from Tree.ASTConstructor import ASTConstructor
 from Tree.ASTCleaner import ASTCleaner
+from Tree.ASTValidator import ASTValidator
 
 
 class Compiler:
@@ -27,6 +28,7 @@ class Compiler:
     ast = None
     cleaned_ast = None
     cleaner = None
+    validator = None
 
     @staticmethod
     def grammar(grammar_file):
@@ -85,6 +87,7 @@ class Compiler:
 
         self.cleaner = ASTCleaner(self.ast)
         self.cleaner.perform_full_clean(self.trace)
+        self.cleaned_ast = self.cleaner.get_ast()
 
         if self.image_output:
 
@@ -93,8 +96,6 @@ class Compiler:
             for temp in file_names:
                 if temp[-2:] == '.c':
                     file_name = temp[:-2]
-
-            self.cleaned_ast = self.cleaner.get_ast()
 
             f = open("./TreePlots/{}_cleaned_output.dot".format(file_name), "w")
             f.write(self.cleaned_ast.to_dot())
@@ -107,6 +108,15 @@ class Compiler:
             print("Optimized AST generation finished.")
             print("The following symbol table was derived from the code:")
             self.cleaner.print_symbol_table()
+            print("Counter validation loop started.")
+
+        self.validator = ASTValidator(self.cleaned_ast, self.cleaner.get_symbol_table())
+        self.validator.validate()
+
+        if self.trace:
+            print("Counter Validation loop finished.")
+            print("The following functions where found:")
+            self.validator.print_functions()
 
         return 0
 

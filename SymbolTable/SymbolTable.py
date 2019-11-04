@@ -1,7 +1,7 @@
 from math import floor
 
 
-# Symboltable
+# SymbolTable
 # class that tracks all declared variables, has the scope dictionaries to keep track of the different scopes
 # the current_scope will always refer to the scope we are currently in when tracing a segment of code
 # the symbols themselves will be stored in the symbols dict, each scope will have a separate symbols dict
@@ -210,8 +210,12 @@ class SymbolTable:
     def is_counter(self, symbol_name, scope):
         if type(scope) == str:
             scope = self.__scopes[scope]
+        elif scope is None:
+            scope = self.__current_scope
         if symbol_name in self.__symbols[scope]:
             return self.__symbols[scope][symbol_name].get_counter()
+        elif scope.get_parent() is None:
+            return False
         else:
             return self.is_counter(symbol_name, scope.get_parent())
 
@@ -280,7 +284,7 @@ class SymbolTable:
                     (scope in self.__references and self.__references[scope]) or \
                     (scope in self.__enumerators and self.__enumerators[scope]):
                 output += "================= {} =================\n".format(scope.get_label())
-            if (scope in self.__symbols and self.__symbols[scope]):
+            if scope in self.__symbols and self.__symbols[scope]:
                 for symbol in self.__symbols[scope]:
                     output += str(self.__symbols[scope][symbol]) + "\n"
             if scope in self.__group_instances and self.__group_instances[scope]:
@@ -303,7 +307,7 @@ class SymbolTable:
                     output += str(self.__enumerators[scope][enum]) + "\n"
         if output != "":
             print("The following symbol definitions where found in the code:")
-        print(output)
+            print(output)
 
 
 class Scope:
@@ -562,6 +566,8 @@ def cast(variable_value, variable_type):
             return ord(variable_value.replace("\\", "").replace("'", ""))
     elif variable_type == 'float':
         return float(variable_value)
+    elif variable_type == 'bool':
+        return bool(float(variable_value))
     elif variable_type == 'char' and (type(variable_value) == int or variable_value.isnumeric()):
         return int(variable_value)
     elif variable_type == 'char' and (type(variable_value) == float or variable_value.replace(".", "").isnumeric()):

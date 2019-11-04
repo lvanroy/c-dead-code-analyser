@@ -93,8 +93,10 @@ class TestCleanerLoop(unittest.TestCase):
         sys.stdout = output
         self.compiler.analysis("./C_code/declarations_int.c")
         sys.stdout = sys.__stdout__
+        # with open("ExpectedTestOutput/declarations_int_trace.txt", 'w') as text_file:
+        #     text_file.write(output.getvalue())
         with open("ExpectedTestOutput/declarations_int_trace.txt", 'r') as text_file:
-            self.assertEqual(text_file.read(), output.getvalue() + "\n")
+            self.assertEqual(text_file.read(), output.getvalue())
         with open('./TreePlots/declarations_int_output.dot', 'r') as myFile:
             actual_output = myFile.read()
         with open('ExpectedTestOutput/declarations_int_output.dot', 'r') as myFile:
@@ -111,8 +113,10 @@ class TestCleanerLoop(unittest.TestCase):
         sys.stdout = output
         self.compiler.analysis("./C_code/declarations_float.c")
         sys.stdout = sys.__stdout__
+        # with open("ExpectedTestOutput/declarations_float_trace.txt", 'w') as text_file:
+        #     text_file.write(output.getvalue())
         with open("ExpectedTestOutput/declarations_float_trace.txt", 'r') as text_file:
-            self.assertEqual(text_file.read(), output.getvalue() + "\n")
+            self.assertEqual(text_file.read(), output.getvalue())
         with open('./TreePlots/declarations_float_output.dot', 'r') as myFile:
             actual_output = myFile.read()
         with open('ExpectedTestOutput/declarations_float_output.dot', 'r') as myFile:
@@ -129,8 +133,10 @@ class TestCleanerLoop(unittest.TestCase):
         sys.stdout = output
         self.compiler.analysis("./C_code/declarations_char.c")
         sys.stdout = sys.__stdout__
+        # with open("ExpectedTestOutput/declarations_char_trace.txt", 'w') as text_file:
+        #     text_file.write(output.getvalue())
         with open("ExpectedTestOutput/declarations_char_trace.txt", 'r') as text_file:
-            self.assertEqual(text_file.read(), output.getvalue() + "\n")
+            self.assertEqual(text_file.read(), output.getvalue())
         with open('./TreePlots/declarations_char_output.dot', 'r') as myFile:
             actual_output = myFile.read()
         with open('ExpectedTestOutput/declarations_char_output.dot', 'r') as myFile:
@@ -147,8 +153,10 @@ class TestCleanerLoop(unittest.TestCase):
         sys.stdout = output
         self.compiler.analysis("./C_code/declarations_array.c")
         sys.stdout = sys.__stdout__
+        # with open("ExpectedTestOutput/array_trace.txt", 'w') as text_file:
+        #     text_file.write(output.getvalue())
         with open("ExpectedTestOutput/array_trace.txt", 'r') as text_file:
-            self.assertEqual(text_file.read(), output.getvalue() + "\n")
+            self.assertEqual(text_file.read(), output.getvalue())
         with open('./TreePlots/declarations_array_output.dot', 'r') as myFile:
             actual_output = myFile.read()
         with open('ExpectedTestOutput/declarations_array_output.dot', 'r') as myFile:
@@ -165,8 +173,10 @@ class TestCleanerLoop(unittest.TestCase):
         sys.stdout = output
         self.compiler.analysis("./C_code/assignments_int.c")
         sys.stdout = sys.__stdout__
+        # with open("ExpectedTestOutput/assignments_int_trace.txt", 'w') as text_file:
+        #     text_file.write(output.getvalue())
         with open("ExpectedTestOutput/assignments_int_trace.txt", 'r') as text_file:
-            self.assertEqual(text_file.read(), output.getvalue() + "\n")
+            self.assertEqual(text_file.read(), output.getvalue())
         with open('./TreePlots/assignments_int_output.dot', 'r') as myFile:
             actual_output = myFile.read()
         with open('ExpectedTestOutput/assignments_int_output.dot', 'r') as myFile:
@@ -183,8 +193,10 @@ class TestCleanerLoop(unittest.TestCase):
         sys.stdout = output
         self.compiler.analysis("./C_code/structs_unions_enums.c")
         sys.stdout = sys.__stdout__
+        # with open("ExpectedTestOutput/structs_unions_enums_trace.txt", 'w') as text_file:
+        #     text_file.write(output.getvalue())
         with open("ExpectedTestOutput/structs_unions_enums_trace.txt", 'r') as text_file:
-            self.assertEqual(text_file.read(), output.getvalue() + "\n")
+            self.assertEqual(text_file.read(), output.getvalue())
         with open('./TreePlots/structs_unions_enums_output.dot', 'r') as myFile:
             actual_output = myFile.read()
         with open('ExpectedTestOutput/structs_unions_enums_output.dot', 'r') as myFile:
@@ -201,8 +213,10 @@ class TestCleanerLoop(unittest.TestCase):
         sys.stdout = output
         self.compiler.analysis("./C_code/folding.c")
         sys.stdout = sys.__stdout__
+        # with open("ExpectedTestOutput/folding_trace.txt", 'w') as text_file:
+        #     text_file.write(output.getvalue())
         with open("ExpectedTestOutput/folding_trace.txt", 'r') as text_file:
-            self.assertEqual(text_file.read(), output.getvalue() + "\n")
+            self.assertEqual(text_file.read(), output.getvalue())
         with open('./TreePlots/folding_output.dot', 'r') as myFile:
             actual_output = myFile.read()
         with open('ExpectedTestOutput/folding_output.dot', 'r') as myFile:
@@ -219,8 +233,10 @@ class TestCleanerLoop(unittest.TestCase):
         sys.stdout = output
         self.compiler.analysis("./C_code/auto.c")
         sys.stdout = sys.__stdout__
+        # with open("ExpectedTestOutput/auto_trace.txt", 'w') as text_file:
+        #     text_file.write(output.getvalue())
         with open("ExpectedTestOutput/auto_trace.txt", 'r') as text_file:
-            self.assertEqual(text_file.read(), output.getvalue() + "\n")
+            self.assertEqual(text_file.read(), output.getvalue())
         with open('./TreePlots/auto_output.dot', 'r') as myFile:
             actual_output = myFile.read()
         with open('ExpectedTestOutput/auto_output.dot', 'r') as myFile:
@@ -237,8 +253,10 @@ class TestCleanerLoop(unittest.TestCase):
         sys.stdout = output
         self.compiler.analysis("./C_code/iteration.c")
         sys.stdout = sys.__stdout__
+        # with open("ExpectedTestOutput/iteration_trace.txt", 'w') as text_file:
+        #     text_file.write(output.getvalue())
         with open("ExpectedTestOutput/iteration_trace.txt", 'r') as text_file:
-            self.assertEqual(text_file.read(), output.getvalue() + "\n")
+            self.assertEqual(text_file.read(), output.getvalue())
         with open('./TreePlots/iteration_output.dot', 'r') as myFile:
             actual_output = myFile.read()
         with open('ExpectedTestOutput/iteration_output.dot', 'r') as myFile:

@@ -1,4 +1,4 @@
-bool main(){
+long double main(){
     int x = 0;
     int y = 0;
     for(((x(0))); x < 10; x ++){

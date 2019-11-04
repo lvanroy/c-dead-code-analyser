@@ -25,6 +25,7 @@ class ASTCleaner:
 
             self.__changes_occurred = False
             self.__symbol_table.clear_symbols()
+            self.__scope_counter = 0
 
             self.clean(self.__root)
 
@@ -98,13 +99,15 @@ class ASTCleaner:
 
             if trace:
                 print("Optimization cycle finished")
-                self.__symbol_table.print()
 
     def print_symbol_table(self):
         self.__symbol_table.print()
 
     def get_ast(self):
         return self.__root
+
+    def get_symbol_table(self):
+        return self.__symbol_table
 
     def clean_children(self, node):
         i = 0
@@ -130,6 +133,7 @@ class ASTCleaner:
     @staticmethod
     def perform_cast(value, var_type):
         casts = dict()
+        casts['bool'] = bool
         casts['int'] = int
         casts['float'] = float
 
@@ -145,6 +149,12 @@ class ASTCleaner:
             if value.isalpha():
                 return float(ord(value))
             return float(value)
+        elif var_type == 'bool':
+            if "'" in value:
+                value = value.replace("'", "")
+            if value.isalpha():
+                return bool(ord(value))
+            return bool(value)
         else:
             if var_type == 'char' and value.isnumeric():
                 return chr(int(value))
@@ -1449,6 +1459,7 @@ class ASTCleaner:
                 elif operation == "sizeof":
                     sizes = {
                         'char': 1,
+                        'bool': 1,
                         'short': 2,
                         'int': 4,
                         'float': 4,

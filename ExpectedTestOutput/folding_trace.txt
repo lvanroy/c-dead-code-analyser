@@ -5,13 +5,6 @@ Basic AST generation finished.
 Optimized AST generation started.
 Optimization cycle started
 Optimization cycle finished
-================= main =================
-symbol j with type int has value 0, this value is used: True, this variable is not a counter.
-================= f =================
-symbol a with type int has value 0, this value is used: True, this variable is not a counter.
-symbol b with type float has value 0, this value is used: True, this variable is not a counter.
-
-
 Optimized AST generation finished.
 The following symbol table was derived from the code:
 ================= main =================
@@ -20,5 +13,14 @@ symbol j with type int has value 0, this value is used: True, this variable is n
 symbol a with type int has value 0, this value is used: True, this variable is not a counter.
 symbol b with type float has value 0, this value is used: True, this variable is not a counter.
 
+Counter validation loop started.
+Counter Validation loop finished.
+The following functions where found:
 
+Function main with return type int and no parameters is not OK.
+The function has the following issues: 
+	Incorrect return type, return type must be boolean
 
+Function f with return type int and parameter types ['int', 'float'] is not OK.
+The function has the following issues: 
+	Incorrect return type, return type must be boolean
