@@ -99,6 +99,7 @@ class ASTCleaner:
 
             if trace:
                 print("Optimization cycle finished")
+                self.__symbol_table.print()
 
     def print_symbol_table(self):
         self.__symbol_table.print()

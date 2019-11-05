@@ -268,6 +268,26 @@ class TestCleanerLoop(unittest.TestCase):
             expected_output = myFile.read()
         self.assertEqual(expected_output, actual_output)
 
+    def test_bool(self):
+        output = io.StringIO()
+        sys.stdout = output
+        self.compiler.analysis("./C_code/bool_type.c")
+        sys.stdout = sys.__stdout__
+        # with open("ExpectedTestOutput/bool_type_trace.txt", 'w') as text_file:
+        #     text_file.write(output.getvalue())
+        with open("ExpectedTestOutput/bool_type_trace.txt", 'r') as text_file:
+            self.assertEqual(text_file.read(), output.getvalue())
+        with open('./TreePlots/bool_type_output.dot', 'r') as myFile:
+            actual_output = myFile.read()
+        with open('ExpectedTestOutput/bool_type_output.dot', 'r') as myFile:
+            expected_output = myFile.read()
+        self.assertEqual(expected_output, actual_output)
+        with open('./TreePlots/bool_type_cleaned_output.dot', 'r') as myFile:
+            actual_output = myFile.read()
+        with open('ExpectedTestOutput/bool_type_cleaned_output.dot', 'r') as myFile:
+            expected_output = myFile.read()
+        self.assertEqual(expected_output, actual_output)
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

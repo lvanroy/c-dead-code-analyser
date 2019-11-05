@@ -5,8 +5,39 @@ Basic AST generation finished.
 Optimized AST generation started.
 Optimization cycle started
 Optimization cycle finished
+================= main =================
+symbol j with type int has value 0, this value is used: False, this variable is a counter.
+symbol k with type int has value 0, this value is used: False, this variable is a counter.
+================= for_scope_0 =================
+symbol i with type int has value 5, this value is used: False, this variable is a counter.
+================= t =================
+symbol j with type int has value 0, this value is used: False, this variable is a counter.
+symbol k with type int has value 0, this value is used: False, this variable is a counter.
+================= for_scope_3 =================
+symbol i with type int has value 5, this value is used: False, this variable is a counter.
+================= f =================
+symbol j with type int has value 0, this value is used: False, this variable is a counter.
+symbol k with type int has value 0, this value is used: False, this variable is not a counter.
+================= for_scope_7 =================
+symbol i with type int has value 5, this value is used: False, this variable is a counter.
+
 Optimization cycle started
 Optimization cycle finished
+================= main =================
+symbol j with type int has value 0, this value is used: False, this variable is a counter.
+symbol k with type int has value 0, this value is used: False, this variable is a counter.
+================= for_scope_0 =================
+symbol i with type int has value 5, this value is used: False, this variable is a counter.
+================= t =================
+symbol j with type int has value 0, this value is used: False, this variable is a counter.
+symbol k with type int has value 0, this value is used: False, this variable is a counter.
+================= for_scope_3 =================
+symbol i with type int has value 5, this value is used: False, this variable is a counter.
+================= f =================
+symbol j with type int has value 0, this value is used: False, this variable is a counter.
+================= for_scope_7 =================
+symbol i with type int has value 5, this value is used: False, this variable is a counter.
+
 Optimized AST generation finished.
 The following symbol table was derived from the code:
 ================= main =================

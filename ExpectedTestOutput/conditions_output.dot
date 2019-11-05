@@ -285,7 +285,7 @@ digraph G {
 		Q141 -> Q142
 		Q142[label="return"];
 		Q141 -> Q143
-		Q143[label="ID = false"];
+		Q143[label="Val = false"];
 		Q9 -> Q144
 		Q144[label="Selection Statement"];
 		Q144 -> Q145
@@ -321,7 +321,7 @@ digraph G {
 		Q159 -> Q160
 		Q160[label="return"];
 		Q159 -> Q161
-		Q161[label="ID = true"];
+		Q161[label="Val = true"];
 		Q9 -> Q162
 		Q162[label="Selection Statement"];
 		Q162 -> Q163
@@ -365,7 +365,7 @@ digraph G {
 		Q181 -> Q182
 		Q182[label="return"];
 		Q181 -> Q183
-		Q183[label="ID = true"];
+		Q183[label="Val = true"];
 		Q162 -> Q184
 		Q184[label="Compound Statement"];
 		Q184 -> Q185
@@ -373,13 +373,13 @@ digraph G {
 		Q185 -> Q186
 		Q186[label="return"];
 		Q185 -> Q187
-		Q187[label="ID = false"];
+		Q187[label="Val = false"];
 		Q9 -> Q188
 		Q188[label="Iteration Statement"];
 		Q188 -> Q189
 		Q189[label="while"];
 		Q188 -> Q190
-		Q190[label="ID = true"];
+		Q190[label="Val = true"];
 		Q188 -> Q191
 		Q191[label="Compound Statement"];
 		Q191 -> Q192
@@ -403,7 +403,7 @@ digraph G {
 		Q200 -> Q201
 		Q201[label="Conditional Expression"];
 		Q201 -> Q202
-		Q202[label="ID = true"];
+		Q202[label="Val = true"];
 		Q201 -> Q203
 		Q203[label="?"];
 		Q201 -> Q204
@@ -455,6 +455,6 @@ digraph G {
 		Q226 -> Q227
 		Q227[label="return"];
 		Q226 -> Q228
-		Q228[label="ID = true"];
+		Q228[label="Val = true"];
 		
 }

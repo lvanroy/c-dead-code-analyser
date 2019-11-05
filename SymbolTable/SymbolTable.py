@@ -567,7 +567,15 @@ def cast(variable_value, variable_type):
     elif variable_type == 'float':
         return float(variable_value)
     elif variable_type == 'bool':
-        return bool(float(variable_value))
+        if type(variable_value) == str:
+            variable_value = variable_value.replace("\"", "").replace("'", "")
+        if type(variable_value) == str and variable_value.isalpha() and variable_value not in {'true', 'false'}:
+            variable_value = ord(variable_value.replace("\"", "").replace("'", ""))
+        if variable_value == 'true':
+            variable_value = 1
+        if variable_value == 'false':
+            variable_value = 0
+        return bool(variable_value)
     elif variable_type == 'char' and (type(variable_value) == int or variable_value.isnumeric()):
         return int(variable_value)
     elif variable_type == 'char' and (type(variable_value) == float or variable_value.replace(".", "").isnumeric()):
@@ -604,5 +612,11 @@ def cast_array(variable_value, variable_type):
                 result += "{}, ".format(int(float(val)))
             else:
                 result += "{}, ".format(ord(val[int((len(val) - 1) / 2)]))
+        elif variable_type == "bool":
+            if val == 'true':
+                val = 1
+            if val == 'false':
+                val = 0
+            result += "{}, ".format(bool(val))
     result = result[:-2] + "}"
     return result

@@ -5,8 +5,14 @@ Basic AST generation finished.
 Optimized AST generation started.
 Optimization cycle started
 Optimization cycle finished
+================= main =================
+symbol a with type int has value 5, this value is used: False, this variable is not a counter.
+symbol b with type int has value 5, this value is used: False, this variable is not a counter.
+symbol c with type int has value 99, this value is used: False, this variable is not a counter.
+
 Optimization cycle started
 Optimization cycle finished
+No symbols were found/remained after the cleaning, the symbol table is empty.
 Optimized AST generation finished.
 The following symbol table was derived from the code:
 No symbols were found/remained after the cleaning, the symbol table is empty.

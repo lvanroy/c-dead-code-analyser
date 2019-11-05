@@ -84,6 +84,9 @@ class ASTConstructor(CListener):
         elif ctx.Constant():
             new_node = self.grow_tree("Val = {}".format(ctx.Constant()), ctx)
             self.__node_stack.insert(0, new_node)
+        elif ctx.BoolConstant():
+            new_node = self.grow_tree("Val = {}".format(ctx.BoolConstant()), ctx)
+            self.__node_stack.insert(0, new_node)
         elif ctx.StringLiteral():
             result = "Val = "
             for token in ctx.StringLiteral():
@@ -99,7 +102,8 @@ class ASTConstructor(CListener):
         top_node = self.__node_stack[0]
         if type(top_node.get_ctx()) == CParser.PrimaryExpressionContext and (ctx.Identifier() or ctx.Constant()
                                                                              or ctx.StringLiteral() or
-                                                                             (ctx.LeftParen() and ctx.expression())):
+                                                                             (ctx.LeftParen() and ctx.expression())
+                                                                             or ctx.BoolConstant()):
             if ctx.LeftParen() and ctx.expression():
                 self.grow_on_index("(", ctx, 0)
                 self.grow_on_index(")", ctx, -1)

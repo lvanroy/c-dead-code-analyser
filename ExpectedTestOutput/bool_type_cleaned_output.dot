@@ -1,0 +1,18 @@
+digraph G {
+		Q0[label="CompilationUnit"];
+		Q0 -> Q1
+		Q1[label="Function Definition"];
+		Q1 -> Q2
+		Q2[label="Type Specifier"];
+		Q2 -> Q3
+		Q3[label="int"];
+		Q1 -> Q4
+		Q4[label="Declarator"];
+		Q4 -> Q5
+		Q5[label="Direct Declarator"];
+		Q5 -> Q6
+		Q6[label="main"];
+		Q1 -> Q7
+		Q7[label="Compound Statement"];
+		
+}

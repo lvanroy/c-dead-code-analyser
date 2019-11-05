@@ -31,7 +31,8 @@ grammar C;
 
 
 primaryExpression
-    :   Identifier
+    :   BoolConstant
+    |   Identifier
     |   Constant
     |   StringLiteral+
     |   '(' expression ')'
@@ -637,6 +638,9 @@ NotEqual : '!=';
 Arrow : '->';
 Dot : '.';
 Ellipsis : '...';
+
+BoolConstant: 'true'
+            | 'false';
 
 Identifier
     :   IdentifierNondigit

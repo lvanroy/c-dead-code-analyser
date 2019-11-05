@@ -6,14 +6,9 @@ Optimized AST generation started.
 Optimization cycle started
 Optimization cycle finished
 ================= main =================
-symbol a with type int has value 5, this value is used: True, this variable is not a counter.
-symbol b with type int has value 20, this value is used: True, this variable is not a counter.
-
-Optimization cycle started
-Optimization cycle finished
-================= main =================
-symbol b with type int has value 20, this value is used: False, this variable is not a counter.
-symbol a with type int has value 5, this value is used: False, this variable is not a counter.
+symbol a with type bool has value True, this value is used: False, this variable is not a counter.
+symbol b with type bool has value False, this value is used: False, this variable is not a counter.
+symbol arr with type bool array has size 2 and value {True, False}, this value is used: False, this variable is not a counter.
 
 Optimization cycle started
 Optimization cycle finished
