@@ -10,11 +10,15 @@ class ASTCleaner:
 
         self.__scope_counter = 0  # this value is used to give scopes unique names
 
-        self.__declarations = dict()  # this dict keeps track of the node that declared a variable
+        self.__declarations = dict()  # this dict keeps tra²ck of the node that declared a variable
 
         self.__changes_occurred = True  # this value tracks whether or not something changes in a cycle
 
         self.__queued_for_pop = list()  # list that keeps track of which nodes are ready to get popped
+
+        self.__entered_branch = False  # this value checks if inside branch statement, if so, condition => counter
+
+        self.__assigning_to_counter = False  # track whether or not we are assigning to a counter
 
         AbstractSyntaxTree.node_count = 0
 
@@ -50,11 +54,11 @@ class ASTCleaner:
                             for temp in staged_for_pop:
                                 self.__declarations.pop(temp)
 
-                    for instance in self.__symbol_table.get_group_instances(scope):
-                        if not self.__symbol_table.is_instance_used(instance, scope) and instance in self.__declarations \
-                                and self.__declarations[instance] not in self.__queued_for_pop:
-                            self.remove_node(self.__declarations[instance])
-                            removed_node = self.__declarations[instance]
+                    for inst in self.__symbol_table.get_group_instances(scope):
+                        if not self.__symbol_table.is_instance_used(inst, scope) and inst in self.__declarations\
+                                and self.__declarations[inst] not in self.__queued_for_pop:
+                            self.remove_node(self.__declarations[inst])
+                            removed_node = self.__declarations[inst]
 
                             staged_for_pop = list()
                             for temp in self.__declarations:
@@ -182,6 +186,13 @@ class ASTCleaner:
     def update_assigned_value(self, variable_name, assignment_node, value):
         # set the assignment node equal to the desired value, and move the declaration to be the next statement
         # in the current scope
+        if self.__symbol_table.is_counter(variable_name, self.__symbol_table.get_current_scope()):
+            if assignment_node.get_label() == "Assignment Expression" and assignment_node.get_children()[1] != "=":
+                assignment_node.get_children()[2].set_label(value)
+                assignment_node.get_children()[1].set_label("=")
+
+                self.__symbol_table.set_value(variable_name, value[6:])
+            return
         self.__changes_occurred = True
         child = assignment_node
         parent = assignment_node.get_parent()
@@ -283,13 +294,56 @@ class ASTCleaner:
             operator = node.get_children()[1].get_label()
             operand_2 = self.clean(node.get_children()[2])
 
+            # check if this is a counter addition, in which case we can fold with the second operand
+            if operand_1 != "" and self.__symbol_table.is_counter(operand_1[5:]) and self.__assigning_to_counter:
+                if operand_2 != "" and operand_2[:5] == "ID = " and self.__symbol_table.is_initialized(operand_2[5:]):
+                    operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
+
+                # in order to do so, we need to be adding a variable or constant to the counter
+                if (operand_2[:5] == "ID = " or operand_2[:6] == "Val = ") and node.is_parent("Assignment Expression"):
+                    assignment_expression = node.get_parent()
+                    # in order to do so, the assignment operations needs to be a plain assignment
+                    if assignment_expression.get_children()[1].get_label() == "=":
+                        # if the operator is an addition, switch the assignment operation to +=
+                        if operator == "+":
+                            assignment_expression.get_children()[1].set_label("+=")
+                        # else, the operator is a subtraction, switch the assignment to -=
+                        else:
+                            assignment_expression.get_children()[1].set_label("-=")
+                        node.set_label(operand_2)
+                        for _ in range(len(node.get_children())):
+                            node.pop_child(0)
+                        self.__changes_occurred = True
+
+            # check if this is a counter addition, in which case we can fold with the second operand
+            elif operand_2 != "" and self.__symbol_table.is_counter(operand_2[5:]) and self.__assigning_to_counter:
+                if operand_1 != "" and operand_1[:5] == "ID = " and self.__symbol_table.is_initialized(operand_1[5:]):
+                    operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
+
+                # in order to do so, we need to be adding a variable or constant to the counter
+                if (operand_1[:5] == "ID = " or operand_1[:6] == "Val = ") and node.is_parent("Assignment Expression"):
+                    assignment_expression = node.get_parent()
+                    # in order to do so, the assignment operations needs to be a plain assignment
+                    if assignment_expression.get_children()[1].get_label() == "=":
+                        # if the operator is an addition, switch the assignment operation to +=
+                        if operator == "+":
+                            assignment_expression.get_children()[1].set_label("+=")
+                        # else, the operator is a subtraction, switch the assignment to -=
+                        else:
+                            assignment_expression.get_children()[1].set_label("-=")
+                        node.set_label(operand_1)
+                        for _ in range(len(node.get_children())):
+                            node.pop_child(0)
+                        self.__changes_occurred = True
+
             if operand_1 != "" and operand_1[:5] == "ID = " and self.__symbol_table.is_initialized(operand_1[5:]):
                 operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
 
             if operand_2 != "" and operand_2[:5] == "ID = " and self.__symbol_table.is_initialized(operand_2[5:]):
                 operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
 
-            if operand_1 != "" and operand_2 != "" and operand_1[:6] == "Val = " and operand_2[:6] == "Val = ":
+            if operand_1 != "" and operand_2 != "" and operand_1[:6] == "Val = " and operand_2[:6] == "Val = " \
+                    and not self.__entered_branch:
                 casted_operand_1 = self.perform_optimal_cast(operand_1[6:])
                 casted_operand_2 = self.perform_optimal_cast(operand_2[6:])
                 if operator == "+":
@@ -300,6 +354,7 @@ class ASTCleaner:
                     value = "Val = {}".format(casted_operand_1 - casted_operand_2)
                     self.clean_node(node, value)
                     return value
+
             else:
                 return ""
 
@@ -309,7 +364,7 @@ class ASTCleaner:
             return result
 
         # these are the values passed in a function call, needed for folding
-        elif node.get_label() == "Arguments":
+        elif node.get_label() == "Arguments" and not self.__entered_branch:
             for child in node.get_children():
                 val = self.clean(child)
                 if val != "" and val[:5] == "ID = " and self.__symbol_table.is_initialized(val[5:]):
@@ -331,8 +386,13 @@ class ASTCleaner:
                 return value
 
             operand_1 = self.clean(node.get_children()[0])
+            if operand_1[:5] == "ID = " and self.__symbol_table.is_counter(operand_1[5:]):
+                self.__assigning_to_counter = True
+            if self.__assigning_to_counter and self.__entered_branch:
+                self.__symbol_table.set_initialized(operand_1[5:], False)
             operator = node.get_children()[1].get_label()
             operand_2 = self.clean(node.get_children()[2])
+            self.__assigning_to_counter = False
 
             operand_1_val = None
 
@@ -347,11 +407,11 @@ class ASTCleaner:
 
             if operand_1 != "" and operand_2 != "" and operand_1[:5] == "ID = " and operand_2[:6] == "Val = " \
                     and "." not in operand_1 and "->" not in operand_1:
-                if operator == "=":
+                if operator == "=" and not self.__entered_branch:
                     value = self.perform_optimal_cast(operand_2[6:])
                     self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
                     return "Val = {}".format(value)
-                elif operand_1_val is not None:
+                elif operand_1_val is not None and not self.__entered_branch:
                     if operator == "*=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) * self.perform_optimal_cast(operand_2[6:])
                         self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
@@ -471,7 +531,7 @@ class ASTCleaner:
                     return ""
 
             elif operand_1[:5] == "ID = " and operand_2[:5] == "ID = " and \
-                    not self.__symbol_table.symbol_exists(operand_2[5:]):
+                    not self.__symbol_table.symbol_exists(operand_2[5:]) and not self.__entered_branch:
                 enum_type = self.__symbol_table.get_type(operand_1[5:])
                 value = self.__symbol_table.get_enumerator_val_for_id(enum_type, operand_2[5:])
                 self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
@@ -489,13 +549,29 @@ class ASTCleaner:
             operand_1 = self.clean(node.get_children()[0])
             operand_2 = self.clean(node.get_children()[2])
 
-            if operand_1 != "" and operand_1[:5] == "ID = " and self.__symbol_table.is_initialized(operand_1[5:]):
-                operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
+            if self.__symbol_table.is_parameter(operand_1[5:]) and self.__symbol_table.is_parameter(operand_2[5:]):
+                self.__symbol_table.set_counter(True, operand_1[5:])
 
-            if operand_2 != "" and operand_2[:5] == "ID = " and self.__symbol_table.is_initialized(operand_2[5:]):
-                operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
+            if self.__symbol_table.is_parameter(operand_1[5:]) and operand_2[:6] == "Val = ":
+                self.__symbol_table.set_counter(True, operand_1[5:])
 
-            if operand_1 != "" and operand_2 != "" and operand_1[:6] == "Val = " and operand_2[:6] == "Val = ":
+            if self.__symbol_table.is_parameter(operand_2[5:]) and operand_1[:6] == "Val = ":
+                self.__symbol_table.set_counter(True, operand_2[5:])
+
+            if operand_1 != "" and operand_1[:5] == "ID = ":
+                if not self.__symbol_table.is_parameter(operand_1[5:]):
+                    self.__symbol_table.set_counter(True, operand_1[5:])
+                if self.__symbol_table.is_initialized(operand_1[5:]):
+                    operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
+
+            if operand_2 != "" and operand_2[:5] == "ID = ":
+                if not self.__symbol_table.is_parameter(operand_2[5:]):
+                    self.__symbol_table.set_counter(True, operand_2[5:])
+                if self.__symbol_table.is_initialized(operand_2[5:]):
+                    operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
+
+            if operand_1 != "" and operand_2 != "" and operand_1[:6] == "Val = " and operand_2[:6] == "Val = "\
+                    and not self.__entered_branch:
                 casted_operand_1 = self.perform_optimal_cast(operand_1[6:])
                 casted_operand_2 = self.perform_optimal_cast(operand_2[6:])
                 value = "Val = {}".format(casted_operand_1 & casted_operand_2)
@@ -509,13 +585,29 @@ class ASTCleaner:
             operand_1 = self.clean(node.get_children()[0])
             operand_2 = self.clean(node.get_children()[2])
 
-            if operand_1 != "" and operand_1[:5] == "ID = " and self.__symbol_table.is_initialized(operand_1[5:]):
-                operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
+            if self.__symbol_table.is_parameter(operand_1[5:]) and self.__symbol_table.is_parameter(operand_2[5:]):
+                self.__symbol_table.set_counter(True, operand_1[5:])
 
-            if operand_2 != "" and operand_2[:5] == "ID = " and self.__symbol_table.is_initialized(operand_2[5:]):
-                operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
+            if self.__symbol_table.is_parameter(operand_1[5:]) and operand_2[:6] == "Val = ":
+                self.__symbol_table.set_counter(True, operand_1[5:])
 
-            if operand_1 != "" and operand_2 != "" and operand_1[:6] == "Val = " and operand_2[:6] == "Val = ":
+            if self.__symbol_table.is_parameter(operand_2[5:]) and operand_1[:6] == "Val = ":
+                self.__symbol_table.set_counter(True, operand_2[5:])
+
+            if operand_1 != "" and operand_1[:5] == "ID = ":
+                if not self.__symbol_table.is_parameter(operand_1[5:]):
+                    self.__symbol_table.set_counter(True, operand_1[5:])
+                if self.__symbol_table.is_initialized(operand_1[5:]):
+                    operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
+
+            if operand_2 != "" and operand_2[:5] == "ID = ":
+                if not self.__symbol_table.is_parameter(operand_2[5:]):
+                    self.__symbol_table.set_counter(True, operand_2[5:])
+                if self.__symbol_table.is_initialized(operand_2[5:]):
+                    operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
+
+            if operand_1 != "" and operand_2 != "" and operand_1[:6] == "Val = " and operand_2[:6] == "Val = " \
+                    and not self.__entered_branch:
                 casted_operand_1 = self.perform_optimal_cast(operand_1[6:])
                 casted_operand_2 = self.perform_optimal_cast(operand_2[6:])
                 value = "Val = {}".format(casted_operand_1 | casted_operand_2)
@@ -529,13 +621,29 @@ class ASTCleaner:
             operand_1 = self.clean(node.get_children()[0])
             operand_2 = self.clean(node.get_children()[2])
 
-            if operand_1 != "" and operand_1[:5] == "ID = " and self.__symbol_table.is_initialized(operand_1[5:]):
-                operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
+            if self.__symbol_table.is_parameter(operand_1[5:]) and self.__symbol_table.is_parameter(operand_2[5:]):
+                self.__symbol_table.set_counter(True, operand_1[5:])
 
-            if operand_2 != "" and operand_2[:5] == "ID = " and self.__symbol_table.is_initialized(operand_2[5:]):
-                operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
+            if self.__symbol_table.is_parameter(operand_1[5:]) and operand_2[:6] == "Val = ":
+                self.__symbol_table.set_counter(True, operand_1[5:])
 
-            if operand_1 != "" and operand_2 != "" and operand_1[:6] == "Val = " and operand_2[:6] == "Val = ":
+            if self.__symbol_table.is_parameter(operand_2[5:]) and operand_1[:6] == "Val = ":
+                self.__symbol_table.set_counter(True, operand_2[5:])
+
+            if operand_1 != "" and operand_1[:5] == "ID = ":
+                if not self.__symbol_table.is_parameter(operand_1[5:]):
+                    self.__symbol_table.set_counter(True, operand_1[5:])
+                if self.__symbol_table.is_initialized(operand_1[5:]):
+                    operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
+
+            if operand_2 != "" and operand_2[:5] == "ID = ":
+                if not self.__symbol_table.is_parameter(operand_2[5:]):
+                    self.__symbol_table.set_counter(True, operand_2[5:])
+                if self.__symbol_table.is_initialized(operand_2[5:]):
+                    operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
+
+            if operand_1 != "" and operand_2 != "" and operand_1[:6] == "Val = " and operand_2[:6] == "Val = " \
+                    and not self.__entered_branch:
                 casted_operand_1 = self.perform_optimal_cast(operand_1[6:])
                 casted_operand_2 = self.perform_optimal_cast(operand_2[6:])
                 value = "Val = {}".format(casted_operand_1 ^ casted_operand_2)
@@ -546,8 +654,63 @@ class ASTCleaner:
 
         # this defines a cast expression
         # its parameters are the type, and the value to cast
+        # a Multiplication expression, can be casted to a cast expression, in case there are brackets around it
+        # in this case we would like to revert it to a Multiplication expression
         # this is needed for folding
         elif node.get_label() == "Cast Expression":
+            # check if this was meant to be a Multiplication expression
+            if (node.get_children()[0].get_label() == "Type Name" and
+                    node.get_children()[0].get_children()[0].get_label() == "Type Specifier" and
+                    node.get_children()[0].get_children()[0].get_children()[0].get_label() == "Type Def Name"):
+                value = node.get_children()[0].get_children()[0].get_children()[0].get_children()[0].get_label()
+                # if the expected type is a variable, we know that it was actually a Multiplication expression
+                if self.__symbol_table.symbol_exists(value):
+                    operation = node.get_children()[1].get_children()[0].get_label()
+                    if operation in ['+', '-']:
+                        node.set_label("Additive Expression")
+                    else:
+                        node.set_label("Multiplication Expression")
+
+                    prim_op = AbstractSyntaxTree("Primary Expression", node.get_ctx())
+                    prim_op.set_parent(node)
+                    node.add_child_at_index(prim_op, 0)
+
+                    left_bracket = AbstractSyntaxTree("(", node.get_ctx())
+                    left_bracket.set_parent(prim_op)
+                    prim_op.add_child(left_bracket)
+
+                    left_op = AbstractSyntaxTree("Multiplicative Expression", node.get_ctx())
+                    left_op.set_parent(prim_op)
+                    prim_op.add_child(left_op)
+
+                    right_bracket = AbstractSyntaxTree(")", node.get_ctx())
+                    right_bracket.set_parent(prim_op)
+                    prim_op.add_child(right_bracket)
+
+                    left_op_op1 = AbstractSyntaxTree("ID = {}".format(value), node.get_ctx())
+                    left_op_op1.set_parent(left_op)
+                    left_op.add_child(left_op_op1)
+
+                    left_op_operator = AbstractSyntaxTree("*", node.get_ctx())
+                    left_op_operator.set_parent(left_op)
+                    left_op.add_child(left_op_operator)
+
+                    op2_value = node.get_children()[-2].get_children()[1].get_children()[0].get_label()
+                    left_op_op2 = AbstractSyntaxTree("ID = {}".format(op2_value), node.get_ctx())
+                    left_op_op2.set_parent(left_op)
+                    left_op.add_child(left_op_op2)
+
+                    node_operator = AbstractSyntaxTree(operation, node.get_ctx())
+                    node_operator.set_parent(node)
+                    node.add_child_at_index(node_operator, 1)
+
+                    node_right_op = node.get_children()[-1].get_children()[1]
+                    node_right_op.set_parent(node)
+                    node.add_child_at_index(node_right_op, 2)
+
+                    for _ in range(3, len(node.get_children())):
+                        node.pop_child(3)
+
             var_type = self.clean(node.get_children()[0])
             value = self.clean(node.get_children()[1])
 
@@ -588,12 +751,14 @@ class ASTCleaner:
             if condition != "" and condition[:6] == "Val = ":
                 if condition[6:] == "1":
                     value_1 = self.clean(node.get_children()[2])
-                    self.clean_node(node, value_1)
-                    return value_1
+                    if not self.__entered_branch:
+                        self.clean_node(node, value_1)
+                        return value_1
                 elif condition[6:] == "0":
                     value_2 = self.clean(node.get_children()[4])
-                    self.clean_node(node, value_2)
-                    return value_2
+                    if not self.__entered_branch:
+                        self.clean_node(node, value_2)
+                        return value_2
             return ""
 
         # this defines a new identifier, this is needed for the symbol table
@@ -603,6 +768,7 @@ class ASTCleaner:
             declaration_type = ""
 
             i = 0
+            child = None
             for i in range(len(children)):
                 child = children[i]
                 if child.get_label() == "Type Specifier":
@@ -620,7 +786,7 @@ class ASTCleaner:
                 elif child.get_label() == "Init Declarator":
                     break
 
-            if i == len(children) - 1 and child.get_label() != "Init Declarator":
+            if i == len(children) - 1 and child is not None and child.get_label() != "Init Declarator":
                 return ""
 
             for i in range(i, len(children)):
@@ -657,12 +823,21 @@ class ASTCleaner:
                         initializer = result[:-2] + "}"
                         size = len(initializer.replace("{", "").replace("}", "").replace(" ", "").split(","))
 
+                    if initializer[:5] == "ID = " and self.__symbol_table.is_initialized(initializer[5:]):
+                        initializer = "Val = {}".format(self.__symbol_table.get_value(initializer[5:]))
+
                     if initializer[:6] == "Val = ":
                         if declaration_type[-5:] != "array" and \
                                 not (declaration_type == "char*" or initializer[-1] == "}"):
+                            if initializer_child.get_children()[0].get_label() != initializer:
+                                for _ in range(1, len(initializer_child.get_children())):
+                                    initializer_child.pop_child(-1)
+                                initializer_child.get_children()[0].set_label(initializer)
                             self.__symbol_table.add_symbol(declaration_type, declarator, initializer[6:])
+                            self.__symbol_table.set_initial_value(declarator, initializer[6:])
                         elif size is not None:
                             self.__symbol_table.add_array_symbol(declaration_type, declarator, size, initializer[6:])
+
                         else:
                             size = len(initializer.replace("{", "").replace("}", "").replace(" ", "").split(","))
                             declaration_type += " array"
@@ -674,19 +849,21 @@ class ASTCleaner:
                                 self.__symbol_table.set_referenced_object(declarator, initializer[5:])
                             elif declaration_type.split(" ")[0] in {"struct", "union"} and initializer != "":
                                 init_list = initializer.split(":")[1].split(",")
-                                for i in range(len(init_list)):
-                                    variable = init_list[i].split("=", 1)[0].replace(" ", "")
-                                    value = init_list[i].split("=", 1)[1]
+                                for ind in range(len(init_list)):
+                                    variable = init_list[ind].split("=", 1)[0].replace(" ", "")
+                                    value = init_list[ind].split("=", 1)[1]
                                     if value[:6] == "Val = ":
                                         self.__symbol_table.set_group_instance_variable(declarator, variable, value[6:])
                             else:
                                 self.__symbol_table.add_symbol(declaration_type, declarator)
+                                self.__symbol_table.set_initial_value(declarator, initializer[5:])
 
                         else:
                             self.__symbol_table.add_array_symbol(declaration_type, declarator, size)
-
+                # no initial value/variable given
                 else:
                     self.__symbol_table.add_symbol(declaration_type, declarator)
+                    self.__symbol_table.set_initial_value(declarator, '0')
             return ""
 
         # this node occurs when declaring a variable with another variable or an expression
@@ -746,11 +923,29 @@ class ASTCleaner:
             operator = node.get_children()[1].get_label()
             operand_2 = self.clean(node.get_children()[2])
 
-            if operand_1 != "" and operand_1[:5] == "ID = " and self.__symbol_table.is_initialized(operand_1[5:]):
-                operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
+            if self.__symbol_table.is_parameter(operand_1[5:]) and self.__symbol_table.is_parameter(operand_2[5:]):
+                self.__symbol_table.set_counter(True, operand_1[5:])
 
-            if operand_2 != "" and operand_2[:5] == "ID = " and self.__symbol_table.is_initialized(operand_2[5:]):
-                operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
+            if self.__symbol_table.is_parameter(operand_1[5:]) and operand_2[:6] == "Val = ":
+                self.__symbol_table.set_counter(True, operand_1[5:])
+
+            if self.__symbol_table.is_parameter(operand_2[5:]) and operand_1[:6] == "Val = ":
+                self.__symbol_table.set_counter(True, operand_2[5:])
+
+            if operand_1 != "" and operand_1[:5] == "ID = ":
+                if not self.__symbol_table.is_parameter(operand_1[5:]):
+                    self.__symbol_table.set_counter(True, operand_1[5:])
+                if self.__symbol_table.is_initialized(operand_1[5:]):
+                    operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
+
+            if operand_2 != "" and operand_2[:5] == "ID = ":
+                if not self.__symbol_table.is_parameter(operand_2[5:]):
+                    self.__symbol_table.set_counter(True, operand_2[5:])
+                if self.__symbol_table.is_initialized(operand_2[5:]):
+                    operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
+
+            if self.__entered_branch:
+                return ""
 
             if operand_1 != "" and operand_2 != "" and operand_1[:6] == "Val = " and operand_2[:6] == "Val = ":
                 if operator == "==":
@@ -781,6 +976,7 @@ class ASTCleaner:
             declaration_type = ""
 
             i = 0
+            child = None
             for i in range(len(children)):
                 child = children[i]
                 if child.get_label() == "Type Specifier":
@@ -798,7 +994,7 @@ class ASTCleaner:
                 elif child.get_label() == "Init Declarator":
                     break
 
-            if i == len(children) - 1 and child.get_label() != "Init Declarator":
+            if i == len(children) - 1 and child is not None and child.get_label() != "Init Declarator":
                 return ""
 
             for i in range(i, len(children)):
@@ -830,10 +1026,14 @@ class ASTCleaner:
                         initializer = result[:-2] + "}"
                         size = len(initializer.replace("{", "").replace("}", "").replace(" ", "").split(","))
 
+                    if initializer[:5] == "ID = " and self.__symbol_table.is_initialized(initializer[5:]):
+                        initializer = "Val = {}".format(self.__symbol_table.get_value(initializer[5:]))
+
                     if initializer[:6] == "Val = ":
                         if declaration_type[-5:] != "array" and \
                                 not (declaration_type != "char*" and initializer[-1] == "}"):
                             self.__symbol_table.add_symbol(declaration_type, declarator, initializer[6:])
+                            self.__symbol_table.set_initial_value(declarator, initializer[6:])
                         elif size is not None:
                             self.__symbol_table.add_array_symbol(declaration_type, declarator, size, initializer[6:])
                         else:
@@ -844,28 +1044,29 @@ class ASTCleaner:
                     else:
                         if size is None:
                             self.__symbol_table.add_symbol(declaration_type, declarator)
+                            self.__symbol_table.set_initial_value(declarator, initializer[5:])
                             if "*" in declaration_type:
                                 self.__symbol_table.set_referenced_object(declarator, initializer[5:])
                             elif declaration_type.split(" ")[0] in {"struct", "union"} and initializer != "":
                                 init_list = initializer.split(":")[1].split(",")
-                                for i in range(len(init_list)):
-                                    variable = init_list[i].split("=", 1)[0].replace(" ", "")
-                                    value = init_list[i].split("=", 1)[1]
+                                for ind in range(len(init_list)):
+                                    variable = init_list[ind].split("=", 1)[0].replace(" ", "")
+                                    value = init_list[ind].split("=", 1)[1]
                                     if value[:6] == "Val = ":
                                         self.__symbol_table.set_group_instance_variable(declarator, variable, value[6:])
 
                         else:
                             self.__symbol_table.add_array_symbol(declaration_type, declarator, size)
 
-                    self.__symbol_table.set_counter(True, declarator)
-
                 else:
                     self.__symbol_table.add_symbol(declaration_type, declarator)
-                    self.__symbol_table.set_counter(True, declarator)
+                    self.__symbol_table.set_initial_value(declarator, '0')
             return ""
 
         # defines an expression part of one of the clauses of a for specifier, needed for condition evaluation
         elif node.get_label() == "For Expression":
+            for child in node.get_children():
+                self.clean(child)
             return ""
 
         # head node for the for clauses
@@ -975,7 +1176,7 @@ class ASTCleaner:
                 return self.clean(node.get_children()[0])
             elif label == "Postfix Expression":
                 return self.clean(node.get_children()[0])
-            elif label == "Initializer":
+            elif label == "Initializer" and not self.__entered_branch:
                 val = "Val = {"
                 for child in node.get_children():
                     child_val = self.clean(child)
@@ -1000,42 +1201,88 @@ class ASTCleaner:
             self.__symbol_table.open_scope("for_scope_{}".format(self.__scope_counter))
             self.__scope_counter += 1
             if node.get_children()[1].get_label() == "For Condition":
-                self.clean(node.get_children()[1])
+                # nested loop, self.__entered_loop will remain true even post evaluation
+                if self.__entered_branch:
+                    self.clean(node.get_children()[1])
+                # no nested conditional branch, self.__entered_branch needs to be reset post evaluation
+                else:
+                    self.__entered_branch = True
+                    self.clean(node.get_children()[1])
+                    self.__entered_branch = False
 
             elif node.get_children()[1].get_label() == "Relational Expression":
                 counter = node.get_children()[1].get_children()[0].get_label()
-                if counter[:5] == "ID = ":
+                if counter[:5] == "ID = " and not self.__symbol_table.is_parameter(counter[5:]):
                     self.__symbol_table.set_counter(True, counter[5:])
-                elif counter[:6] == "Val = ":
-                    self.__symbol_table.set_counter(True, counter[6:])
+
+                counter2 = node.get_children()[1].get_children()[2].get_label()
+                if counter2[:5] == "ID = " and not self.__symbol_table.is_parameter(counter2[5:]):
+                    self.__symbol_table.set_counter(True, counter2[5:])
+
+                if self.__symbol_table.is_parameter(counter[5:]) and self.__symbol_table.is_parameter(counter2[5:]):
+                    self.__symbol_table.set_counter(True, counter[5:])
+
+                if self.__symbol_table.is_parameter(counter[5:]) and counter2[:6] == "Val = ":
+                    self.__symbol_table.set_counter(True, counter[5:])
+
+                if self.__symbol_table.is_parameter(counter2[5:]) and counter[:6] == "Val = ":
+                    self.__symbol_table.set_counter(True, counter2[5:])
 
             if iteration_type == "for":
                 for child in node.get_children()[2].get_children():
                     if child.get_label() == "Jump Statement":
                         self.clean(child)
                 self.__symbol_table.close_scope()
-                return ""
 
             elif iteration_type == "while":
                 for child in node.get_children()[2].get_children():
                     if child.get_label() == "Jump Statement":
                         self.clean(child)
                 self.__symbol_table.close_scope()
-                return ""
 
             elif iteration_type == "do":
                 for child in node.get_children()[1].get_children():
                     if child.get_label() == "Jump Statement":
                         self.clean(child)
+                if node.get_children()[3].get_label() != "Expression":
+                    counter = node.get_children()[3].get_children()[0].get_label()
+                    if counter[:5] == "ID = " and not self.__symbol_table.is_parameter(counter[5:]):
+                        self.__symbol_table.set_counter(True, counter[5:])
 
-                counter = node.get_children()[3].get_children()[0].get_label()
-                if counter[:5] == "ID = ":
-                    self.__symbol_table.set_counter(True, counter[5:])
-                elif counter[:6] == "Val = ":
-                    self.__symbol_table.set_counter(True, counter[6:])
+                    counter2 = node.get_children()[3].get_children()[2].get_label()
+                    if counter2[:5] == "ID = " and not self.__symbol_table.is_parameter(counter2[5:]):
+                        self.__symbol_table.set_counter(True, counter2[5:])
+
+                    if self.__symbol_table.is_parameter(counter[5:]) and self.__symbol_table.is_parameter(counter2[5:]):
+                        self.__symbol_table.set_counter(True, counter[5:])
+
+                    if self.__symbol_table.is_parameter(counter[5:]) and counter2[:6] == "Val = ":
+                        self.__symbol_table.set_counter(True, counter[5:])
+
+                    if self.__symbol_table.is_parameter(counter2[5:]) and counter[:6] == "Val = ":
+                        self.__symbol_table.set_counter(True, counter2[5:])
+
+                else:
+                    for subexpression in node.get_children()[3].get_children():
+                        counter = subexpression.get_children()[0].get_label()
+                        if counter[:5] == "ID = " and not self.__symbol_table.is_parameter(counter[5:]):
+                            self.__symbol_table.set_counter(True, counter[5:])
+
+                        counter2 = subexpression.get_children()[2].get_label()
+                        if counter2[:5] == "ID = " and not self.__symbol_table.is_parameter(counter2[5:]):
+                            self.__symbol_table.set_counter(True, counter2[5:])
+
+                        if self.__symbol_table.is_parameter(counter[5:]) and self.__symbol_table.is_parameter(counter2[5:]):
+                            self.__symbol_table.set_counter(True, counter[5:])
+
+                        if self.__symbol_table.is_parameter(counter[5:]) and counter2[:6] == "Val = ":
+                            self.__symbol_table.set_counter(True, counter[5:])
+
+                        if self.__symbol_table.is_parameter(counter2[5:]) and counter[:6] == "Val = ":
+                            self.__symbol_table.set_counter(True, counter2[5:])
 
                 self.__symbol_table.close_scope()
-                return ""
+            return ""
 
         # head node for a jump statement
         elif node.get_label() == "Jump Statement":
@@ -1044,8 +1291,8 @@ class ASTCleaner:
             for i in reversed(range(index + 1, size)):
                 node.get_parent().pop_child(i)
 
-            function = node.get_children()[0].get_label()
-            if function == "return":
+            func = node.get_children()[0].get_label()
+            if func == "return":
                 value = self.clean(node.get_children()[1])
                 if value[:5] == "ID = " and self.__symbol_table.is_initialized(value[5:]):
                     value = self.__symbol_table.get_value(value[5:])
@@ -1083,6 +1330,9 @@ class ASTCleaner:
 
         # head node for a logical or comparison, needed for condition evaluation
         elif node.get_label() == "Logical Or Expression":
+            if self.__entered_branch:
+                return ""
+
             operand_1 = self.clean(node.get_children()[0])
             operand_2 = self.clean(node.get_children()[2])
 
@@ -1106,6 +1356,9 @@ class ASTCleaner:
 
         # head node for a multiplication expression, needed for folding
         elif node.get_label() == "Multiplication Expression":
+            if self.__entered_branch:
+                return ""
+
             operand_1 = self.clean(node.get_children()[0])
             operator = node.get_children()[1].get_label()
             operand_2 = self.clean(node.get_children()[2])
@@ -1144,8 +1397,9 @@ class ASTCleaner:
             if len(node.get_children()) > 1:
                 parameter_type = self.clean(node.get_children()[0])
                 parameter_name = self.clean(node.get_children()[1])
-
                 self.__symbol_table.add_symbol(parameter_type, parameter_name)
+                self.__symbol_table.set_initial_value(parameter_name, parameter_name)
+                self.__symbol_table.set_parameter(True, parameter_name)
                 return ""
             else:
                 return ""
@@ -1153,11 +1407,42 @@ class ASTCleaner:
         # head node for a postfix expression
         elif node.get_label() == "Postfix Expression":
             operand_1 = self.clean(node.get_children()[0])
+            if len(node.get_children()) > 1:
+                operator = node.get_children()[1].get_label()
+                if self.__symbol_table.is_counter(operand_1[5:]) and operator in {"++", "--"} and self.__entered_branch:
+                    self.__symbol_table.set_initialized(operand_1[5:], False)
+
             original = operand_1
 
-            if operand_1 != "" and operand_1[:5] == "ID = " and node.get_children()[1].get_label() in {"++", "--"} \
+            op = node.get_children()[1].get_label()
+
+            if self.__entered_branch:
+                if self.__symbol_table.is_counter(original[5:]) and op in {"++", "--"}:
+                    node.set_label("Assignment Expression")
+                    if op == "++":
+                        node.get_children()[1].set_label("+=")
+                    else:
+                        node.get_children()[1].set_label("-=")
+                    value_node = AbstractSyntaxTree("Val = 1", node.get_ctx())
+                    node.add_child(value_node)
+                    value_node.set_parent(node)
+                return ""
+
+            if operand_1 != "" and operand_1[:5] == "ID = " and op in {"++", "--"} \
                     and self.__symbol_table.is_initialized(operand_1[5:]):
                 operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
+
+            if self.__symbol_table.is_counter(original[5:]) and op in {"++", "--"} and operand_1[6:] != "Val = ":
+                node.set_label("Assignment Expression")
+                if op == "++":
+                    node.get_children()[1].set_label("+=")
+                else:
+                    node.get_children()[1].set_label("-=")
+                value_node = AbstractSyntaxTree("Val = 1", node.get_ctx())
+                node.add_child(value_node)
+                value_node.set_parent(node)
+
+                return ""
 
             if len(node.get_children()) > 1:
                 operator = node.get_children()[1].get_label()
@@ -1177,6 +1462,9 @@ class ASTCleaner:
                         if original != "" and original[:5] == "ID = ":
                             self.create_new_assignment(original, value, node)
                         return value_post_op
+
+                elif operand_1 != "" and operator in {"++", "--"}:
+                    return ""
 
                 elif operand_1 != "" and operand_1[:5] == "ID = " and operator == "[" and "." not in operand_1 and \
                         "->" not in operand_1:
@@ -1258,11 +1546,29 @@ class ASTCleaner:
             operator = node.get_children()[1].get_label()
             operand_2 = self.clean(node.get_children()[2])
 
-            if operand_1 != "" and operand_1[:5] == "ID = " and self.__symbol_table.is_initialized(operand_1[5:]):
-                operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
+            if self.__symbol_table.is_parameter(operand_1[5:]) and self.__symbol_table.is_parameter(operand_2[5:]):
+                self.__symbol_table.set_counter(True, operand_1[5:])
 
-            if operand_2 != "" and operand_2[:5] == "ID = " and self.__symbol_table.is_initialized(operand_2[5:]):
-                operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
+            if self.__symbol_table.is_parameter(operand_1[5:]) and operand_2[:6] == "Val = ":
+                self.__symbol_table.set_counter(True, operand_1[5:])
+
+            if self.__symbol_table.is_parameter(operand_2[5:]) and operand_1[:6] == "Val = ":
+                self.__symbol_table.set_counter(True, operand_2[5:])
+
+            if operand_1 != "" and operand_1[:5] == "ID = ":
+                if not self.__symbol_table.is_parameter(operand_1[5:]):
+                    self.__symbol_table.set_counter(True, operand_1[5:])
+                if self.__symbol_table.is_initialized(operand_1[5:]):
+                    operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
+
+            if operand_2 != "" and operand_2[:5] == "ID = ":
+                if not self.__symbol_table.is_parameter(operand_2[5:]):
+                    self.__symbol_table.set_counter(True, operand_2[5:])
+                if self.__symbol_table.is_initialized(operand_2[5:]):
+                    operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
+
+            if self.__entered_branch:
+                return ""
 
             if operand_1 != "" and operand_2 != "" and operand_1[:6] == "Val = " and operand_2[:6] == "Val = ":
                 casted_operand_1 = self.perform_optimal_cast(operand_1[6:])
@@ -1291,17 +1597,29 @@ class ASTCleaner:
                 if value is not None:
                     self.clean_node(node, value)
                     return value
-            else:
-                return ""
+            return ""
 
         # head node for a selection statement
         elif node.get_label() == "Selection Statement":
-            self.clean(node.get_children()[1])
-            self.clean(node.get_children()[2])
+            if self.__entered_branch:
+                self.clean(node.get_children()[1])
+                self.clean(node.get_children()[2])
+                if len(node.get_children()) > 3:
+                    self.clean(node.get_children()[3])
+            else:
+                self.__entered_branch = True
+                self.clean(node.get_children()[1])
+                self.clean(node.get_children()[2])
+                if len(node.get_children()) > 3:
+                    self.clean(node.get_children()[3])
+                self.__entered_branch = False
             return ""
 
         # head node for a shift expression
         elif node.get_label() == "Shift Expression":
+            if self.__entered_branch:
+                return ""
+
             operand_1 = self.clean(node.get_children()[0])
             operator = node.get_children()[1].get_label()
             operand_2 = self.clean(node.get_children()[2])
@@ -1420,6 +1738,15 @@ class ASTCleaner:
         # head node for a unary expression
         elif node.get_label() == "Unary Expression":
             operation = node.get_children()[0].get_label()
+            var = node.get_children()[1].get_label()
+            if var != "(":
+                var = self.clean(node.get_children()[1])
+            if operation in {"++", "--"} and self.__entered_branch and self.__symbol_table.is_counter(var[5:]):
+                self.__symbol_table.set_initialized(var[5:], False)
+
+            if self.__entered_branch:
+                return ""
+
             if node.get_children()[1].get_label() == "(":
                 original = self.clean(node.get_children()[2])
             else:
@@ -1474,6 +1801,8 @@ class ASTCleaner:
             elif operation != "" and operand[:5] == "ID = ":
                 if operation == "&":
                     return operand
+                else:
+                    return ""
 
             if operation == "sizeof" or operation == "_Alignof":
                 return ""

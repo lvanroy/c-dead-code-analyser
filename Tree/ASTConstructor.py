@@ -771,6 +771,23 @@ class ASTConstructor(CListener):
         self.__node_stack.insert(0, new_node)
 
     def exitForCondition(self, ctx: CParser.ForConditionContext):
+        # we have the rule of the form forDeclaration ';' forExpression? ';' forExpression?
+        if ctx.forDeclaration():
+            if not isinstance(list(ctx.getChildren())[2], CParser.ForExpressionContext):
+                self.grow_on_index("For Expression", ctx, 1)
+            if not isinstance(list(ctx.getChildren())[-1], CParser.ForExpressionContext):
+                self.grow_on_index("For Expression", ctx, 2)
+
+        # we have the rule of the form expression? ';' forExpression? ';' forExpression?
+        else:
+            if not ctx.expression():
+                self.grow_on_index("For Expression", ctx, 0)
+            if not ctx.expression() and not isinstance(list(ctx.getChildren())[1], CParser.ForExpressionContext):
+                self.grow_on_index("For Expression", ctx, 1)
+            if ctx.expression() and not isinstance(list(ctx.getChildren())[2], CParser.ForExpressionContext):
+                self.grow_on_index("For Expression", ctx, 1)
+            if not isinstance(list(ctx.getChildren())[-1], CParser.ForExpressionContext):
+                self.grow_on_index("For Expression", ctx, 2)
         self.__node_stack.pop(0)
 
     def enterForDeclaration(self, ctx: CParser.ForDeclarationContext):

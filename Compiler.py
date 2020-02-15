@@ -21,6 +21,8 @@ from Tree.ASTConstructor import ASTConstructor
 from Tree.ASTCleaner import ASTCleaner
 from Tree.ASTValidator import ASTValidator
 
+from Automaton.Generator import Generator
+
 
 class Compiler:
     trace = False
@@ -29,6 +31,7 @@ class Compiler:
     cleaned_ast = None
     cleaner = None
     validator = None
+    generator = None
 
     @staticmethod
     def grammar(grammar_file):
@@ -98,7 +101,8 @@ class Compiler:
                     file_name = temp[:-2]
 
             f = open("./TreePlots/{}_cleaned_output.dot".format(file_name), "w")
-            f.write(self.cleaned_ast.to_dot())
+            temp = self.cleaned_ast.to_dot()
+            f.write(temp)
             f.close()
 
             os.system("dot -Tpng ./TreePlots/{0}_cleaned_output.dot -o ./TreePlots/{0}_cleaned.png"
@@ -111,12 +115,48 @@ class Compiler:
             print("Counter validation loop started.")
 
         self.validator = ASTValidator(self.cleaned_ast, self.cleaner.get_symbol_table())
-        self.validator.validate()
+        validity = self.validator.validate()
 
         if self.trace:
             print("Counter Validation loop finished.")
             print("The following functions where found:")
             self.validator.print_functions()
+
+        if not validity and self.trace:
+            print("Since at least one of the functions was found to be invalid, "
+                  "no counter automaton will be generated.")
+            return 0
+
+        if self.trace:
+            print("Automaton generator started.")
+
+        counters = self.validator.get_counters()
+        parameters = self.validator.get_parameters()
+        functions = self.validator.get_functions()
+        self.generator = Generator(code_file, self.cleaned_ast, counters, parameters, functions)
+        self.generator.generate_automaton()
+
+        if self.image_output:
+            file_name = ""
+            file_names = code_file.split("/")
+            for temp in file_names:
+                if temp[-2:] == '.c':
+                    file_name = temp[:-2]
+            function_names = self.generator.get_function_names()
+            dots = self.generator.to_dot()
+            for counter in function_names.keys():
+                function_name = function_names[counter]
+                dot = dots[counter]
+                f = open("./TreePlots/{}_reachability_automaton_{}.dot".format(file_name, function_name), "w")
+                f.write(dot)
+                f.close()
+
+                os.system("dot -Tpng ./TreePlots/{0}_reachability_automaton_{1}.dot -o \
+                          ./TreePlots/{0}_reachability_automaton_{1}.png"
+                          .format(file_name, function_name))
+
+        if self.trace:
+            print("Automaton generator finished.")
 
         return 0
 

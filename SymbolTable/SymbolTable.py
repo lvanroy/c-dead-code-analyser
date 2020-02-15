@@ -58,6 +58,9 @@ class SymbolTable:
     def get_scopes(self):
         return self.__scopes.keys()
 
+    def get_current_scope(self):
+        return self.__current_scope
+
     def clear_symbols(self):
         self.__symbols = dict()
         for scope in self.__scopes:
@@ -157,6 +160,16 @@ class SymbolTable:
         else:
             return self.is_initialized(symbol_name, scope.get_parent())
 
+    def set_initialized(self, symbol_name, initialized, scope=None):
+        if scope is None:
+            scope = self.__current_scope
+        if self.__scopes["0"] == scope:
+            return False
+        if symbol_name in self.__symbols[scope]:
+            return self.__symbols[scope][symbol_name].set_initialized(initialized)
+        else:
+            return self.set_initialized(symbol_name, initialized, scope.get_parent())
+
     def get_value(self, symbol_name, scope=None):
         if scope is None:
             scope = self.__current_scope
@@ -207,7 +220,7 @@ class SymbolTable:
         else:
             return self.is_used(symbol_name, scope.get_parent())
 
-    def is_counter(self, symbol_name, scope):
+    def is_counter(self, symbol_name, scope=None):
         if type(scope) == str:
             scope = self.__scopes[scope]
         elif scope is None:
@@ -225,7 +238,55 @@ class SymbolTable:
         if symbol_name in self.__symbols[scope]:
             return self.__symbols[scope][symbol_name].set_counter(counter_val)
         else:
+            if scope.get_label() == "0":
+                return False
             return self.set_counter(counter_val, symbol_name, scope.get_parent())
+
+    def symbol_has_initial_value(self, symbol_name, scope=None):
+        if scope is None:
+            scope = self.__current_scope
+        if symbol_name in self.__symbols[scope]:
+            return self.__symbols[scope][symbol_name].has_initial_value()
+        else:
+            return self.symbol_has_initial_value(symbol_name, scope.get_parent())
+
+    def set_initial_value(self, symbol_name, initial_value, scope=None):
+        if scope is None:
+            scope = self.__current_scope
+        if symbol_name in self.__symbols[scope]:
+            self.__symbols[scope][symbol_name].set_initial_value(initial_value)
+        else:
+            if scope.get_label() == "0":
+                return False
+            self.set_initial_value(symbol_name, initial_value, scope.get_parent())
+
+    def get_initial_value(self, symbol_name, scope=None):
+        if scope is None:
+            scope = self.__current_scope
+        if symbol_name in self.__symbols[scope]:
+            return self.__symbols[scope][symbol_name].get_initial_value()
+        else:
+            return self.get_initial_value(symbol_name, scope.get_parent())
+
+    def is_parameter(self, symbol_name, scope=None):
+        if type(scope) == str:
+            scope = self.__scopes[scope]
+        elif scope is None:
+            scope = self.__current_scope
+        if symbol_name in self.__symbols[scope]:
+            return self.__symbols[scope][symbol_name].get_parameter()
+        elif scope.get_parent() is None:
+            return False
+        else:
+            return self.is_parameter(symbol_name, scope.get_parent())
+
+    def set_parameter(self, parameter_val, symbol_name, scope=None):
+        if scope is None:
+            scope = self.__current_scope
+        if symbol_name in self.__symbols[scope]:
+            return self.__symbols[scope][symbol_name].set_parameter(parameter_val)
+        else:
+            return self.set_parameter(parameter_val, symbol_name, scope.get_parent())
 
     def is_instance_used(self, instance_name, scope):
         if type(scope) == str:
@@ -340,11 +401,16 @@ class Symbol:
             self.__value = '0'
         self.__used = False  # this is used to track whether or not an assignment had effect
         self.__counter = False
+        self.__parameter = False
         self.__size = symbol_size
+        self.__initial_value = None
 
     def is_initialised(self):
         self.__used = True
         return self.__initialized
+
+    def set_initialized(self, initialized):
+        self.__initialized = initialized
 
     def get_value(self):
         return self.__value
@@ -368,24 +434,46 @@ class Symbol:
     def set_counter(self, counter_val):
         self.__counter = counter_val
 
+    def get_parameter(self):
+        return self.__parameter
+
+    def set_parameter(self, parameter_val):
+        self.__parameter = parameter_val
+
     def get_array_value_at_index(self, index):
         value = self.__value.replace("{", "").replace("}", "").replace(" ", "")
         values = value.split(",")
         return values[int(index)]
 
+    def has_initial_value(self):
+        return self.__initial_value is not None
+
+    def set_initial_value(self, initial_value):
+        self.__initial_value = initial_value
+
+    def get_initial_value(self):
+        return self.__initial_value
+
     def __str__(self):
-        if self.__size is None:
-            output = "symbol {} with type {} has value {}".format(self.__name, self.__type, self.__value)
+        if self.__size is None and self.__initial_value is not None:
+            output = "symbol {} with type {} has initial value {} and final value {}"\
+                .format(self.__name, self.__type, self.__initial_value, self.__value)
+        elif self.__initialized:
+            output = "symbol {} with type {} has size {}, initial value {} and final value {}"\
+                .format(self.__name, self.__type, self.__size, self.__initial_value, self.__value)
         else:
-            output = "symbol {} with type {} has size {} and value {}".format(self.__name, self.__type,
-                                                                              self.__size, self.__value)
+            output = "symbol {} with type {} has no initial value".format(self.__name, self.__type)
         if self.__type == 'char' and self.__value is not None:
             output += ", or {} in ascii".format(chr(int(self.__value)))
         output += ", this value is used: {}".format(self.__used)
         if self.__counter:
-            output += ", this variable is a counter."
+            output += ", this variable is a counter"
         else:
-            output += ", this variable is not a counter."
+            output += ", this variable is not a counter"
+        if self.__parameter:
+            output += " and is a parameter."
+        else:
+            output += " and is not a parameter."
         return output
 
 

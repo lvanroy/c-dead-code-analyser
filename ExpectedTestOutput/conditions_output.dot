@@ -15,7 +15,7 @@ digraph G {
 		Q6 -> Q7
 		Q7[label="Direct Declarator"];
 		Q7 -> Q8
-		Q8[label="main"];
+		Q8[label="test"];
 		Q1 -> Q9
 		Q9[label="Compound Statement"];
 		Q9 -> Q10
@@ -67,11 +67,11 @@ digraph G {
 		Q31 -> Q33
 		Q33[label="Postfix Expression"];
 		Q33 -> Q34
-		Q34[label="ID = x"];
+		Q34[label="ID = func"];
 		Q33 -> Q35
 		Q35[label="("];
 		Q33 -> Q36
-		Q36[label="Val = 0"];
+		Q36[label="Val = 5"];
 		Q33 -> Q37
 		Q37[label=")"];
 		Q31 -> Q38
@@ -131,98 +131,98 @@ digraph G {
 		Q55 -> Q65
 		Q65[label="For Expression"];
 		Q65 -> Q66
-		Q66[label="Relational Expression"];
+		Q66[label="For Expression"];
 		Q66 -> Q67
-		Q67[label="ID = x"];
-		Q66 -> Q68
-		Q68[label="<"];
-		Q66 -> Q69
-		Q69[label="Val = 20"];
-		Q55 -> Q70
-		Q70[label="For Expression"];
-		Q70 -> Q71
-		Q71[label="Unary Expression"];
+		Q67[label="Relational Expression"];
+		Q67 -> Q68
+		Q68[label="ID = x"];
+		Q67 -> Q69
+		Q69[label="<"];
+		Q67 -> Q70
+		Q70[label="Val = 20"];
+		Q65 -> Q71
+		Q71[label="Relational Expression"];
 		Q71 -> Q72
-		Q72[label="++"];
+		Q72[label="ID = y"];
 		Q71 -> Q73
-		Q73[label="ID = x"];
-		Q53 -> Q74
-		Q74[label="Compound Statement"];
-		Q74 -> Q75
-		Q75[label="Unary Expression"];
+		Q73[label=">"];
+		Q71 -> Q74
+		Q74[label="Val = 10"];
+		Q55 -> Q75
+		Q75[label="For Expression"];
 		Q75 -> Q76
-		Q76[label="--"];
-		Q75 -> Q77
-		Q77[label="ID = y"];
-		Q9 -> Q78
-		Q78[label="Labeled Statement"];
-		Q78 -> Q79
-		Q79[label="LOOP"];
-		Q78 -> Q80
-		Q80[label="Iteration Statement"];
+		Q76[label="Unary Expression"];
+		Q76 -> Q77
+		Q77[label="++"];
+		Q76 -> Q78
+		Q78[label="ID = x"];
+		Q53 -> Q79
+		Q79[label="Compound Statement"];
+		Q79 -> Q80
+		Q80[label="Unary Expression"];
 		Q80 -> Q81
-		Q81[label="for"];
+		Q81[label="--"];
 		Q80 -> Q82
-		Q82[label="For Condition"];
-		Q82 -> Q83
-		Q83[label="For Declaration"];
+		Q82[label="ID = y"];
+		Q9 -> Q83
+		Q83[label="Labeled Statement"];
 		Q83 -> Q84
-		Q84[label="Type Specifier"];
-		Q84 -> Q85
-		Q85[label="void"];
-		Q83 -> Q86
-		Q86[label="Init Declarator"];
-		Q86 -> Q87
-		Q87[label="Declarator"];
+		Q84[label="LOOP"];
+		Q83 -> Q85
+		Q85[label="Iteration Statement"];
+		Q85 -> Q86
+		Q86[label="for"];
+		Q85 -> Q87
+		Q87[label="For Condition"];
 		Q87 -> Q88
-		Q88[label="Direct Declarator"];
+		Q88[label="For Declaration"];
 		Q88 -> Q89
-		Q89[label="x"];
-		Q82 -> Q90
-		Q90[label="For Expression"];
-		Q90 -> Q91
-		Q91[label="Relational Expression"];
+		Q89[label="Type Specifier"];
+		Q89 -> Q90
+		Q90[label="void"];
+		Q88 -> Q91
+		Q91[label="Init Declarator"];
 		Q91 -> Q92
-		Q92[label="ID = x"];
-		Q91 -> Q93
-		Q93[label="<"];
-		Q91 -> Q94
-		Q94[label="Val = 5"];
-		Q82 -> Q95
+		Q92[label="Declarator"];
+		Q92 -> Q93
+		Q93[label="Direct Declarator"];
+		Q93 -> Q94
+		Q94[label="x"];
+		Q87 -> Q95
 		Q95[label="For Expression"];
 		Q95 -> Q96
-		Q96[label="Postfix Expression"];
+		Q96[label="Relational Expression"];
 		Q96 -> Q97
-		Q97[label="ID = x"];
+		Q97[label="ID = y"];
 		Q96 -> Q98
-		Q98[label="++"];
-		Q80 -> Q99
-		Q99[label="Compound Statement"];
-		Q99 -> Q100
-		Q100[label="Jump Statement"];
+		Q98[label="<"];
+		Q96 -> Q99
+		Q99[label="Val = 5"];
+		Q87 -> Q100
+		Q100[label="For Expression"];
 		Q100 -> Q101
-		Q101[label="goto"];
-		Q100 -> Q102
-		Q102[label="Loop"];
-		Q9 -> Q103
-		Q103[label="Iteration Statement"];
-		Q103 -> Q104
-		Q104[label="for"];
-		Q103 -> Q105
-		Q105[label="For Condition"];
+		Q101[label="Postfix Expression"];
+		Q101 -> Q102
+		Q102[label="ID = y"];
+		Q101 -> Q103
+		Q103[label="++"];
+		Q85 -> Q104
+		Q104[label="Compound Statement"];
+		Q104 -> Q105
+		Q105[label="Jump Statement"];
 		Q105 -> Q106
-		Q106[label="For Declaration"];
-		Q106 -> Q107
-		Q107[label="Type Specifier"];
-		Q107 -> Q108
-		Q108[label="int"];
-		Q106 -> Q109
-		Q109[label="Init Declarator"];
-		Q109 -> Q110
-		Q110[label="Declarator"];
+		Q106[label="goto"];
+		Q105 -> Q107
+		Q107[label="LOOP"];
+		Q9 -> Q108
+		Q108[label="Iteration Statement"];
+		Q108 -> Q109
+		Q109[label="for"];
+		Q108 -> Q110
+		Q110[label="For Condition"];
 		Q110 -> Q111
-		Q111[label="q"];
-		Q105 -> Q112
+		Q111[label="For Expression"];
+		Q110 -> Q112
 		Q112[label="For Expression"];
 		Q112 -> Q113
 		Q113[label="Relational Expression"];
@@ -232,7 +232,7 @@ digraph G {
 		Q115[label="<"];
 		Q113 -> Q116
 		Q116[label="Val = 10"];
-		Q105 -> Q117
+		Q110 -> Q117
 		Q117[label="For Expression"];
 		Q117 -> Q118
 		Q118[label="Postfix Expression"];
@@ -240,7 +240,7 @@ digraph G {
 		Q119[label="ID = q"];
 		Q118 -> Q120
 		Q120[label="++"];
-		Q103 -> Q121
+		Q108 -> Q121
 		Q121[label="Compound Statement"];
 		Q9 -> Q122
 		Q122[label="Selection Statement"];
@@ -366,95 +366,111 @@ digraph G {
 		Q182[label="return"];
 		Q181 -> Q183
 		Q183[label="Val = true"];
-		Q162 -> Q184
-		Q184[label="Compound Statement"];
+		Q9 -> Q184
+		Q184[label="Iteration Statement"];
 		Q184 -> Q185
-		Q185[label="Jump Statement"];
-		Q185 -> Q186
-		Q186[label="return"];
-		Q185 -> Q187
-		Q187[label="Val = false"];
-		Q9 -> Q188
-		Q188[label="Iteration Statement"];
-		Q188 -> Q189
-		Q189[label="while"];
-		Q188 -> Q190
-		Q190[label="Val = true"];
-		Q188 -> Q191
-		Q191[label="Compound Statement"];
+		Q185[label="while"];
+		Q184 -> Q186
+		Q186[label="Expression"];
+		Q186 -> Q187
+		Q187[label="Relational Expression"];
+		Q187 -> Q188
+		Q188[label="ID = x"];
+		Q187 -> Q189
+		Q189[label=">"];
+		Q187 -> Q190
+		Q190[label="Val = 5"];
+		Q186 -> Q191
+		Q191[label="Postfix Expression"];
 		Q191 -> Q192
-		Q192[label="Jump Statement"];
-		Q192 -> Q193
-		Q193[label="break"];
-		Q9 -> Q194
-		Q194[label="Declaration"];
+		Q192[label="ID = x"];
+		Q191 -> Q193
+		Q193[label="++"];
+		Q184 -> Q194
+		Q194[label="Compound Statement"];
 		Q194 -> Q195
-		Q195[label="Type Specifier"];
+		Q195[label="Jump Statement"];
 		Q195 -> Q196
-		Q196[label="int"];
-		Q194 -> Q197
-		Q197[label="Init Declarator"];
+		Q196[label="break"];
+		Q9 -> Q197
+		Q197[label="Declaration"];
 		Q197 -> Q198
-		Q198[label="Declarator"];
+		Q198[label="Type Specifier"];
 		Q198 -> Q199
-		Q199[label="a"];
+		Q199[label="int"];
 		Q197 -> Q200
-		Q200[label="Initializer"];
+		Q200[label="Init Declarator"];
 		Q200 -> Q201
-		Q201[label="Conditional Expression"];
+		Q201[label="Declarator"];
 		Q201 -> Q202
-		Q202[label="Val = true"];
-		Q201 -> Q203
-		Q203[label="?"];
-		Q201 -> Q204
-		Q204[label="ID = x"];
-		Q201 -> Q205
-		Q205[label=":"];
-		Q201 -> Q206
-		Q206[label="ID = y"];
-		Q9 -> Q207
-		Q207[label="Assignment Expression"];
-		Q207 -> Q208
-		Q208[label="ID = a"];
-		Q207 -> Q209
-		Q209[label="*="];
-		Q207 -> Q210
-		Q210[label="Val = 5"];
-		Q9 -> Q211
-		Q211[label="Declaration"];
-		Q211 -> Q212
-		Q212[label="Static Assert Declaration"];
-		Q212 -> Q213
-		Q213[label="Val = 0"];
-		Q212 -> Q214
-		Q214[label="\"test\""];
-		Q9 -> Q215
-		Q215[label="Iteration Statement"];
+		Q202[label="a"];
+		Q200 -> Q203
+		Q203[label="Initializer"];
+		Q203 -> Q204
+		Q204[label="Conditional Expression"];
+		Q204 -> Q205
+		Q205[label="Val = true"];
+		Q204 -> Q206
+		Q206[label="?"];
+		Q204 -> Q207
+		Q207[label="ID = x"];
+		Q204 -> Q208
+		Q208[label=":"];
+		Q204 -> Q209
+		Q209[label="ID = y"];
+		Q9 -> Q210
+		Q210[label="Assignment Expression"];
+		Q210 -> Q211
+		Q211[label="ID = a"];
+		Q210 -> Q212
+		Q212[label="*="];
+		Q210 -> Q213
+		Q213[label="Val = 5"];
+		Q9 -> Q214
+		Q214[label="Declaration"];
+		Q214 -> Q215
+		Q215[label="Static Assert Declaration"];
 		Q215 -> Q216
-		Q216[label="do"];
+		Q216[label="Val = 0"];
 		Q215 -> Q217
-		Q217[label="Compound Statement"];
-		Q217 -> Q218
-		Q218[label="Postfix Expression"];
+		Q217[label="\"test\""];
+		Q9 -> Q218
+		Q218[label="Iteration Statement"];
 		Q218 -> Q219
-		Q219[label="ID = a"];
+		Q219[label="do"];
 		Q218 -> Q220
-		Q220[label="++"];
-		Q215 -> Q221
-		Q221[label="While"];
-		Q215 -> Q222
-		Q222[label="Relational Expression"];
-		Q222 -> Q223
-		Q223[label="ID = a"];
-		Q222 -> Q224
-		Q224[label="<"];
-		Q222 -> Q225
-		Q225[label="Val = 300"];
-		Q9 -> Q226
-		Q226[label="Jump Statement"];
+		Q220[label="Compound Statement"];
+		Q220 -> Q221
+		Q221[label="Postfix Expression"];
+		Q221 -> Q222
+		Q222[label="ID = a"];
+		Q221 -> Q223
+		Q223[label="++"];
+		Q218 -> Q224
+		Q224[label="While"];
+		Q218 -> Q225
+		Q225[label="Expression"];
+		Q225 -> Q226
+		Q226[label="Relational Expression"];
 		Q226 -> Q227
-		Q227[label="return"];
+		Q227[label="ID = a"];
 		Q226 -> Q228
-		Q228[label="Val = true"];
+		Q228[label="<"];
+		Q226 -> Q229
+		Q229[label="Val = 300"];
+		Q225 -> Q230
+		Q230[label="Relational Expression"];
+		Q230 -> Q231
+		Q231[label="ID = b"];
+		Q230 -> Q232
+		Q232[label="<"];
+		Q230 -> Q233
+		Q233[label="Val = 200"];
+		Q9 -> Q234
+		Q234[label="Jump Statement"];
+		Q234 -> Q235
+		Q235[label="return"];
+		Q234 -> Q236
+		Q236[label="Val = true"];
 		
 }

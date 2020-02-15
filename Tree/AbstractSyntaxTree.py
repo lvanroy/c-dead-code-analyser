@@ -8,6 +8,7 @@ class AbstractSyntaxTree:
         self.__parent = None
         self.__children = list()
         self.__ctx = ctx
+        self.__line = ctx.start.line
 
     def set_parent(self, node):
         self.__parent = node
@@ -44,11 +45,14 @@ class AbstractSyntaxTree:
     def is_parent(self, label):
         return self.__parent.get_label() == label
 
+    def get_line(self):
+        return self.__line
+
     def to_dot(self):
         result = ""
         node_id = AbstractSyntaxTree.node_count
 
-        if not self.__parent:
+        if not self.__parent and self.__label == "CompilationUnit":
             result += "digraph G {\n\t\t"
 
         label = self.__label
@@ -88,7 +92,7 @@ class AbstractSyntaxTree:
             result += "Q{0} -> Q{1}\n\t\t".format(node_id, AbstractSyntaxTree.node_count)
             result += child.to_dot()
 
-        if not self.__parent:
+        if not self.__parent and self.__label == "CompilationUnit":
             result += "\n}"
 
         return result

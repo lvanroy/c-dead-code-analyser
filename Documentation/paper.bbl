@@ -1,0 +1,110 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.1 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global}
+    \entry{higherdimensionaltimedautomata}{article}{}
+      \name{author}{1}{}{%
+        {{hash=6dcc1ff1dee2597ea206d2d8fed057cc}{%
+           family={Fahrenberg},
+           familyi={F\bibinitperiod},
+           given={Uli},
+           giveni={U\bibinitperiod}}}%
+      }
+      \strng{namehash}{6dcc1ff1dee2597ea206d2d8fed057cc}
+      \strng{fullhash}{6dcc1ff1dee2597ea206d2d8fed057cc}
+      \strng{bibnamehash}{6dcc1ff1dee2597ea206d2d8fed057cc}
+      \strng{authorbibnamehash}{6dcc1ff1dee2597ea206d2d8fed057cc}
+      \strng{authornamehash}{6dcc1ff1dee2597ea206d2d8fed057cc}
+      \strng{authorfullhash}{6dcc1ff1dee2597ea206d2d8fed057cc}
+      \field{sortinit}{F}
+      \field{sortinithash}{fb0c0faa89eb6abae8213bf60e6799ea}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IFAC-PapersOnLine}
+      \field{title}{Higher-Dimensional Timed Automata}
+      \field{volume}{51}
+      \field{year}{2018}
+      \field{pages}{109\bibrangedash 114}
+      \range{pages}{6}
+      \verb{doi}
+      \verb https://doi.org/10.1016/j.ifacol.2018.08.019
+      \endverb
+      \keyw{timed automatahigher-dimensional automatareal timenon-interleaving concurrencyhybrid automatastate-space explosion}
+    \endentry
+    \entry{danialandjoel}{article}{}
+      \name{author}{1}{}{%
+        {{hash=aff418536b5c47012d009e881d918b46}{%
+           family={Ouaknine},
+           familyi={O\bibinitperiod},
+           given={Daniel\bibnamedelimb Bundala;\bibnamedelima Joel},
+           giveni={D\bibinitperiod\bibinitdelim B\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{aff418536b5c47012d009e881d918b46}
+      \strng{fullhash}{aff418536b5c47012d009e881d918b46}
+      \strng{bibnamehash}{aff418536b5c47012d009e881d918b46}
+      \strng{authorbibnamehash}{aff418536b5c47012d009e881d918b46}
+      \strng{authornamehash}{aff418536b5c47012d009e881d918b46}
+      \strng{authorfullhash}{aff418536b5c47012d009e881d918b46}
+      \field{sortinit}{O}
+      \field{sortinithash}{ff8d4eeb5101e3cf3809959b3592d942}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Information and Computation}
+      \field{title}{On parametric timed automata and one-counter machines}
+      \field{volume}{253, part 2}
+      \field{year}{2017}
+      \field{pages}{273\bibrangedash 303}
+      \range{pages}{31}
+      \verb{doi}
+      \verb http://doi.org/10.1016/j.ic.2016.07.011
+      \endverb
+      \keyw{Mathematics; Computer Science}
+    \endentry
+    \entry{informationprocessingletters}{article}{}
+      \name{author}{1}{}{%
+        {{hash=2f321ae9316601aac1058b3720695413}{%
+           family={Worrell},
+           familyi={W\bibinitperiod},
+           given={Martin\bibnamedelimb Fränzle;\bibnamedelimb Karin\bibnamedelimb Quaas;\bibnamedelimb Mahsa\bibnamedelimb Shirmohammadi;\bibnamedelima James},
+           giveni={M\bibinitperiod\bibinitdelim F\bibinitperiod\bibinitdelim K\bibinitperiod\bibinitdelim Q\bibinitperiod\bibinitdelim M\bibinitperiod\bibinitdelim S\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{2f321ae9316601aac1058b3720695413}
+      \strng{fullhash}{2f321ae9316601aac1058b3720695413}
+      \strng{bibnamehash}{2f321ae9316601aac1058b3720695413}
+      \strng{authorbibnamehash}{2f321ae9316601aac1058b3720695413}
+      \strng{authornamehash}{2f321ae9316601aac1058b3720695413}
+      \strng{authorfullhash}{2f321ae9316601aac1058b3720695413}
+      \field{sortinit}{W}
+      \field{sortinithash}{1af34bd8c148ffb32de1494636b49713}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Information Processing Letters}
+      \field{title}{Effective definability of the reachability relation in timed automata}
+      \field{volume}{153}
+      \field{year}{2020}
+      \verb{doi}
+      \verb https://doi.org/10.1016/j.ipl.2019.105871
+      \endverb
+      \keyw{Mathematics; Computer Science}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

@@ -6,62 +6,67 @@ Optimized AST generation started.
 Optimization cycle started
 Optimization cycle finished
 ================= main =================
-symbol a with type float has value 5.2, this value is used: True, this variable is not a counter.
-symbol b with type float has value 5.2, this value is used: True, this variable is not a counter.
-symbol c with type float has value 4.5, this value is used: True, this variable is not a counter.
-symbol d with type float has value 1.0, this value is used: True, this variable is not a counter.
-symbol e with type float has value 1.0, this value is used: True, this variable is not a counter.
-symbol f with type float has value 2.0, this value is used: True, this variable is not a counter.
-symbol g with type float has value 2.0, this value is used: True, this variable is not a counter.
-symbol h with type float has value 1.0, this value is used: True, this variable is not a counter.
-symbol i with type float has value 0.0, this value is used: True, this variable is not a counter.
-symbol j with type float has value 1.0, this value is used: True, this variable is not a counter.
-symbol k with type float has value 8.0, this value is used: True, this variable is not a counter.
-symbol l with type float has value 10.9, this value is used: True, this variable is not a counter.
-symbol m with type float has value 0.0, this value is used: True, this variable is not a counter.
-symbol n with type float has value 10.4, this value is used: True, this variable is not a counter.
-symbol o with type float has value 0.9629629629629629, this value is used: True, this variable is not a counter.
-symbol p with type float has value 2.0, this value is used: True, this variable is not a counter.
-symbol q with type float has value 5.0, this value is used: True, this variable is not a counter.
-symbol r with type float has value 6.2, this value is used: True, this variable is not a counter.
-symbol s with type float has value 5.2, this value is used: True, this variable is not a counter.
-symbol t with type float has value -5.2, this value is used: True, this variable is not a counter.
-symbol u with type float has value -6.0, this value is used: True, this variable is not a counter.
-symbol v with type float has value 0.0, this value is used: True, this variable is not a counter.
-symbol w with type float has value 4.0, this value is used: True, this variable is not a counter.
-symbol x with type float has value 5.2, this value is used: True, this variable is not a counter.
-symbol y with type float has value 6.2, this value is used: True, this variable is not a counter.
-symbol z with type float has value 5.1, this value is used: True, this variable is not a counter.
+symbol a with type float has initial value 5.2 and final value 5.2, this value is used: True, this variable is a counter and is not a parameter.
+symbol b with type float has initial value 5.2 and final value 5.2, this value is used: True, this variable is not a counter and is not a parameter.
+symbol c with type float has initial value 4.5 and final value 4.5, this value is used: True, this variable is not a counter and is not a parameter.
+symbol d with type float has initial value 1 and final value 1.0, this value is used: True, this variable is not a counter and is not a parameter.
+symbol e with type float has initial value 1 and final value 1.0, this value is used: True, this variable is not a counter and is not a parameter.
+symbol f with type float has initial value 2 and final value 2.0, this value is used: True, this variable is not a counter and is not a parameter.
+symbol g with type float has initial value 2 and final value 2.0, this value is used: True, this variable is not a counter and is not a parameter.
+symbol h with type float has initial value 1 and final value 1.0, this value is used: True, this variable is not a counter and is not a parameter.
+symbol i with type float has initial value 0 and final value 0.0, this value is used: True, this variable is not a counter and is not a parameter.
+symbol j with type float has initial value 1 and final value 1.0, this value is used: True, this variable is not a counter and is not a parameter.
+symbol k with type float has initial value 8 and final value 8.0, this value is used: True, this variable is not a counter and is not a parameter.
+symbol l with type float has initial value 10.9 and final value 10.9, this value is used: True, this variable is not a counter and is not a parameter.
+symbol m with type float has initial value 0.0 and final value 0.0, this value is used: True, this variable is not a counter and is not a parameter.
+symbol n with type float has initial value 10.4 and final value 10.4, this value is used: True, this variable is not a counter and is not a parameter.
+symbol o with type float has initial value 0.9629629629629629 and final value 0.9629629629629629, this value is used: True, this variable is not a counter and is not a parameter.
+symbol p with type float has initial value 2 and final value 2.0, this value is used: True, this variable is not a counter and is not a parameter.
+symbol q with type float has initial value 5.0 and final value 5.0, this value is used: True, this variable is not a counter and is not a parameter.
+symbol r with type float has initial value 6.2 and final value 6.2, this value is used: True, this variable is not a counter and is not a parameter.
+symbol s with type float has initial value 5.2 and final value 5.2, this value is used: True, this variable is not a counter and is not a parameter.
+symbol t with type float has initial value -5.2 and final value -5.2, this value is used: True, this variable is not a counter and is not a parameter.
+symbol u with type float has initial value -6 and final value -6.0, this value is used: True, this variable is not a counter and is not a parameter.
+symbol v with type float has initial value 0 and final value 0.0, this value is used: True, this variable is not a counter and is not a parameter.
+symbol w with type float has initial value 4 and final value 4.0, this value is used: True, this variable is not a counter and is not a parameter.
+symbol x with type float has initial value 5.2 and final value 5.2, this value is used: True, this variable is not a counter and is not a parameter.
+symbol y with type float has initial value 6.2 and final value 6.2, this value is used: True, this variable is not a counter and is not a parameter.
+symbol z with type float has initial value 5.1 and final value 5.1, this value is used: True, this variable is not a counter and is not a parameter.
 
 Optimization cycle started
 Optimization cycle finished
 ================= main =================
-symbol b with type float has value 5.2, this value is used: False, this variable is not a counter.
-symbol c with type float has value 4.5, this value is used: False, this variable is not a counter.
-symbol d with type float has value 1.0, this value is used: False, this variable is not a counter.
-symbol e with type float has value 1.0, this value is used: False, this variable is not a counter.
-symbol f with type float has value 2.0, this value is used: False, this variable is not a counter.
-symbol g with type float has value 2.0, this value is used: False, this variable is not a counter.
-symbol h with type float has value 1.0, this value is used: False, this variable is not a counter.
-symbol i with type float has value 0.0, this value is used: False, this variable is not a counter.
-symbol j with type float has value 1.0, this value is used: False, this variable is not a counter.
-symbol k with type float has value 8.0, this value is used: False, this variable is not a counter.
-symbol l with type float has value 10.9, this value is used: False, this variable is not a counter.
-symbol m with type float has value 0.0, this value is used: False, this variable is not a counter.
-symbol n with type float has value 10.4, this value is used: False, this variable is not a counter.
-symbol o with type float has value 0.9629629629629629, this value is used: False, this variable is not a counter.
-symbol p with type float has value 2.0, this value is used: False, this variable is not a counter.
-symbol q with type float has value 5.0, this value is used: False, this variable is not a counter.
-symbol r with type float has value 6.2, this value is used: False, this variable is not a counter.
-symbol s with type float has value 5.2, this value is used: False, this variable is not a counter.
-symbol t with type float has value -5.2, this value is used: False, this variable is not a counter.
-symbol u with type float has value -6.0, this value is used: False, this variable is not a counter.
-symbol v with type float has value 0.0, this value is used: False, this variable is not a counter.
-symbol w with type float has value 4.0, this value is used: False, this variable is not a counter.
-symbol x with type float has value 5.2, this value is used: False, this variable is not a counter.
-symbol y with type float has value 6.2, this value is used: False, this variable is not a counter.
-symbol a with type float has value 5.2, this value is used: False, this variable is not a counter.
-symbol z with type float has value 5.1, this value is used: False, this variable is not a counter.
+symbol b with type float has initial value 5.2 and final value 5.2, this value is used: False, this variable is not a counter and is not a parameter.
+symbol a with type float has initial value 5.2 and final value 5.2, this value is used: True, this variable is not a counter and is not a parameter.
+symbol c with type float has initial value 4.5 and final value 4.5, this value is used: False, this variable is not a counter and is not a parameter.
+symbol d with type float has initial value 1 and final value 1.0, this value is used: False, this variable is not a counter and is not a parameter.
+symbol e with type float has initial value 1 and final value 1.0, this value is used: False, this variable is not a counter and is not a parameter.
+symbol f with type float has initial value 2 and final value 2.0, this value is used: False, this variable is not a counter and is not a parameter.
+symbol g with type float has initial value 2 and final value 2.0, this value is used: False, this variable is not a counter and is not a parameter.
+symbol h with type float has initial value 1 and final value 1.0, this value is used: False, this variable is not a counter and is not a parameter.
+symbol i with type float has initial value 0 and final value 0.0, this value is used: False, this variable is not a counter and is not a parameter.
+symbol j with type float has initial value 1 and final value 1.0, this value is used: False, this variable is not a counter and is not a parameter.
+symbol k with type float has initial value 8 and final value 8.0, this value is used: False, this variable is not a counter and is not a parameter.
+symbol l with type float has initial value 10.9 and final value 10.9, this value is used: False, this variable is not a counter and is not a parameter.
+symbol m with type float has initial value 0.0 and final value 0.0, this value is used: False, this variable is not a counter and is not a parameter.
+symbol n with type float has initial value 10.4 and final value 10.4, this value is used: False, this variable is not a counter and is not a parameter.
+symbol o with type float has initial value 0.9629629629629629 and final value 0.9629629629629629, this value is used: False, this variable is not a counter and is not a parameter.
+symbol p with type float has initial value 2 and final value 2.0, this value is used: False, this variable is not a counter and is not a parameter.
+symbol q with type float has initial value 5.0 and final value 5.0, this value is used: False, this variable is not a counter and is not a parameter.
+symbol r with type float has initial value 6.2 and final value 6.2, this value is used: False, this variable is not a counter and is not a parameter.
+symbol s with type float has initial value 5.2 and final value 5.2, this value is used: False, this variable is not a counter and is not a parameter.
+symbol t with type float has initial value -5.2 and final value -5.2, this value is used: False, this variable is not a counter and is not a parameter.
+symbol u with type float has initial value -6 and final value -6.0, this value is used: False, this variable is not a counter and is not a parameter.
+symbol v with type float has initial value 0 and final value 0.0, this value is used: False, this variable is not a counter and is not a parameter.
+symbol w with type float has initial value 4 and final value 4.0, this value is used: False, this variable is not a counter and is not a parameter.
+symbol x with type float has initial value 5.2 and final value 5.2, this value is used: False, this variable is not a counter and is not a parameter.
+symbol y with type float has initial value 6.2 and final value 6.2, this value is used: False, this variable is not a counter and is not a parameter.
+symbol z with type float has initial value 5.1 and final value 5.1, this value is used: False, this variable is not a counter and is not a parameter.
+
+Optimization cycle started
+Optimization cycle finished
+================= main =================
+symbol a with type float has initial value 5.2 and final value 5.2, this value is used: False, this variable is not a counter and is not a parameter.
 
 Optimization cycle started
 Optimization cycle finished
@@ -73,6 +78,7 @@ Counter validation loop started.
 Counter Validation loop finished.
 The following functions where found:
 
-Function main with return type int and no parameters is not OK.
+Function main with return type int and no parameters is NOT OK.
 The function has the following issues: 
-	Incorrect return type, return type must be boolean
+	Incorrect return type, return type must be boolean.
+Since at least one of the functions was found to be invalid, no counter automaton will be generated.

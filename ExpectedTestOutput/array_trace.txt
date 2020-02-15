@@ -6,28 +6,28 @@ Optimized AST generation started.
 Optimization cycle started
 Optimization cycle finished
 ================= main =================
-symbol a with type int array has size 5 and value {1, 2, 3, 4, 5}, this value is used: True, this variable is not a counter.
-symbol b with type float array has size 5 and value {1.0, 99.0, 5.0, 5.5, 6.2}, this value is used: True, this variable is not a counter.
-symbol c with type char array has size 5 and value {99, 113, -5, 5, 4}, this value is used: True, this variable is not a counter.
-symbol d with type char array has size 5 and value {119, 111, 114, 108, 100}, this value is used: True, this variable is not a counter.
-symbol e with type char array has size 4 and value {116, 101, 115, 116}, this value is used: True, this variable is not a counter.
-symbol f with type int array has size 5 and value {1, 2, 3, 500, -90}, this value is used: True, this variable is not a counter.
-symbol g with type float array has size 5 and value {2.0, 97.0, -50.0, 3.0, 9.0}, this value is used: True, this variable is not a counter.
-symbol h with type char array has size 5 and value {65, 61, 5, 5, 99}, this value is used: True, this variable is not a counter.
-symbol i with type char array has size 5 and value {72, 101, 108, 108, 111}, this value is used: True, this variable is not a counter.
+symbol a with type int array has size 5, initial value None and final value {1, 2, 3, 4, 5}, this value is used: True, this variable is not a counter and is not a parameter.
+symbol b with type float array has size 5, initial value None and final value {1.0, 99.0, 5.0, 5.5, 6.2}, this value is used: True, this variable is not a counter and is not a parameter.
+symbol c with type char array has size 5, initial value None and final value {99, 113, -5, 5, 4}, this value is used: True, this variable is not a counter and is not a parameter.
+symbol d with type char array has size 5, initial value None and final value {119, 111, 114, 108, 100}, this value is used: True, this variable is not a counter and is not a parameter.
+symbol e with type char array has size 4, initial value None and final value {116, 101, 115, 116}, this value is used: True, this variable is not a counter and is not a parameter.
+symbol f with type int array has size 5, initial value None and final value {1, 2, 3, 500, -90}, this value is used: True, this variable is not a counter and is not a parameter.
+symbol g with type float array has size 5, initial value None and final value {2.0, 97.0, -50.0, 3.0, 9.0}, this value is used: True, this variable is not a counter and is not a parameter.
+symbol h with type char array has size 5, initial value None and final value {65, 61, 5, 5, 99}, this value is used: True, this variable is not a counter and is not a parameter.
+symbol i with type char array has size 5, initial value None and final value {72, 101, 108, 108, 111}, this value is used: True, this variable is not a counter and is not a parameter.
 
 Optimization cycle started
 Optimization cycle finished
 ================= main =================
-symbol a with type int array has size 5 and value {1, 2, 3, 4, 5}, this value is used: False, this variable is not a counter.
-symbol b with type float array has size 5 and value {1.0, 99.0, 5.0, 5.5, 6.2}, this value is used: False, this variable is not a counter.
-symbol c with type char array has size 5 and value {99, 113, -5, 5, 4}, this value is used: False, this variable is not a counter.
-symbol d with type char array has size 5 and value {119, 111, 114, 108, 100}, this value is used: False, this variable is not a counter.
-symbol e with type char array has size 4 and value {116, 101, 115, 116}, this value is used: False, this variable is not a counter.
-symbol f with type int array has size 5 and value {1, 2, 3, 500, -90}, this value is used: False, this variable is not a counter.
-symbol g with type float array has size 5 and value {2.0, 97.0, -50.0, 3.0, 9.0}, this value is used: False, this variable is not a counter.
-symbol h with type char array has size 5 and value {65, 61, 5, 5, 99}, this value is used: False, this variable is not a counter.
-symbol i with type char array has size 5 and value {72, 101, 108, 108, 111}, this value is used: False, this variable is not a counter.
+symbol a with type int array has size 5, initial value None and final value {1, 2, 3, 4, 5}, this value is used: False, this variable is not a counter and is not a parameter.
+symbol b with type float array has size 5, initial value None and final value {1.0, 99.0, 5.0, 5.5, 6.2}, this value is used: False, this variable is not a counter and is not a parameter.
+symbol c with type char array has size 5, initial value None and final value {99, 113, -5, 5, 4}, this value is used: False, this variable is not a counter and is not a parameter.
+symbol d with type char array has size 5, initial value None and final value {119, 111, 114, 108, 100}, this value is used: False, this variable is not a counter and is not a parameter.
+symbol e with type char array has size 4, initial value None and final value {116, 101, 115, 116}, this value is used: False, this variable is not a counter and is not a parameter.
+symbol f with type int array has size 5, initial value None and final value {1, 2, 3, 500, -90}, this value is used: False, this variable is not a counter and is not a parameter.
+symbol g with type float array has size 5, initial value None and final value {2.0, 97.0, -50.0, 3.0, 9.0}, this value is used: False, this variable is not a counter and is not a parameter.
+symbol h with type char array has size 5, initial value None and final value {65, 61, 5, 5, 99}, this value is used: False, this variable is not a counter and is not a parameter.
+symbol i with type char array has size 5, initial value None and final value {72, 101, 108, 108, 111}, this value is used: False, this variable is not a counter and is not a parameter.
 
 Optimization cycle started
 Optimization cycle finished
@@ -39,6 +39,7 @@ Counter validation loop started.
 Counter Validation loop finished.
 The following functions where found:
 
-Function main with return type int and no parameters is not OK.
+Function main with return type int and no parameters is NOT OK.
 The function has the following issues: 
-	Incorrect return type, return type must be boolean
+	Incorrect return type, return type must be boolean.
+Since at least one of the functions was found to be invalid, no counter automaton will be generated.

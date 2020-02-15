@@ -6,9 +6,9 @@ Optimized AST generation started.
 Optimization cycle started
 Optimization cycle finished
 ================= main =================
-symbol a with type bool has value True, this value is used: False, this variable is not a counter.
-symbol b with type bool has value False, this value is used: False, this variable is not a counter.
-symbol arr with type bool array has size 2 and value {True, False}, this value is used: False, this variable is not a counter.
+symbol a with type bool has initial value true and final value True, this value is used: False, this variable is not a counter and is not a parameter.
+symbol b with type bool has initial value false and final value False, this value is used: False, this variable is not a counter and is not a parameter.
+symbol arr with type bool array has size 2, initial value None and final value {True, False}, this value is used: False, this variable is not a counter and is not a parameter.
 
 Optimization cycle started
 Optimization cycle finished
@@ -20,6 +20,7 @@ Counter validation loop started.
 Counter Validation loop finished.
 The following functions where found:
 
-Function main with return type int and no parameters is not OK.
+Function main with return type int and no parameters is NOT OK.
 The function has the following issues: 
-	Incorrect return type, return type must be boolean
+	Incorrect return type, return type must be boolean.
+Since at least one of the functions was found to be invalid, no counter automaton will be generated.

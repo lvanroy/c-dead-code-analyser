@@ -13,8 +13,8 @@ Symbol book with type struct Books is used and has the following variables:
 	Symbol book_id with type int has value 2.
 
 ================= main =================
-symbol day with type week has value 2, this value is used: True, this variable is not a counter.
-symbol day2 with type week has value 1, this value is used: True, this variable is not a counter.
+symbol day with type week has initial value 0 and final value 2, this value is used: True, this variable is not a counter and is not a parameter.
+symbol day2 with type week has initial value 1 and final value 1, this value is used: True, this variable is not a counter and is not a parameter.
 Symbol book2 with type struct Books is used and has the following variables:
 	Symbol title with type char* has value {84, 104, 101, 32, 68, 97, 118, 105, 110, 99, 105, 32, 67, 111, 100, 101}.
 	Symbol author with type char* has value {68, 97, 110, 32, 66, 114, 111, 119, 110}.
@@ -55,8 +55,8 @@ Symbol book with type struct Books is used and has the following variables:
 	Symbol book_id with type int has value 2.
 
 ================= main =================
-symbol day with type week has value 2, this value is used: False, this variable is not a counter.
-symbol day2 with type week has value 1, this value is used: False, this variable is not a counter.
+symbol day with type week has initial value 2 and final value 2, this value is used: False, this variable is not a counter and is not a parameter.
+symbol day2 with type week has initial value 1 and final value 1, this value is used: False, this variable is not a counter and is not a parameter.
 Symbol book2 with type struct Books is not used and has the following variables:
 	Symbol title with type char* has value {84, 104, 101, 32, 68, 97, 118, 105, 110, 99, 105, 32, 67, 111, 100, 101}.
 	Symbol author with type char* has value {68, 97, 110, 32, 66, 114, 111, 119, 110}.
@@ -171,6 +171,7 @@ Counter validation loop started.
 Counter Validation loop finished.
 The following functions where found:
 
-Function main with return type int and no parameters is not OK.
+Function main with return type int and no parameters is NOT OK.
 The function has the following issues: 
-	Incorrect return type, return type must be boolean
+	Incorrect return type, return type must be boolean.
+Since at least one of the functions was found to be invalid, no counter automaton will be generated.
