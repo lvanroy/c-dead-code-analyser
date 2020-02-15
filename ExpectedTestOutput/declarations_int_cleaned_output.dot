@@ -347,7 +347,7 @@ digraph G {
 		Q172 -> Q173
 		Q173[label="Val = \"%d \\n\""];
 		Q172 -> Q174
-		Q174[label="Val = 5"];
+		Q174[label="Val = 6"];
 		Q169 -> Q175
 		Q175[label=")"];
 		Q7 -> Q176
@@ -361,7 +361,7 @@ digraph G {
 		Q179 -> Q180
 		Q180[label="Val = \"%d \\n\""];
 		Q179 -> Q181
-		Q181[label="Val = 6"];
+		Q181[label="Val = 5"];
 		Q176 -> Q182
 		Q182[label=")"];
 		Q7 -> Q183

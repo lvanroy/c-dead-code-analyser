@@ -651,7 +651,7 @@ digraph G {
 		Q324 -> Q325
 		Q325[label="char"];
 		Q322 -> Q326
-		Q326[label="Val = 92"];
+		Q326[label="Val = 72"];
 		Q7 -> Q327
 		Q327[label="Postfix Expression"];
 		Q327 -> Q328

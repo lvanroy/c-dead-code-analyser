@@ -60,7 +60,7 @@ int main(){
     printf("%d \n", p);
 
     // cast initializer
-    char q = (char) 92;
+    char q = (char) 72;
     printf("%d \n", q);
 
     // unary initializer

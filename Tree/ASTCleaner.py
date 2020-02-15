@@ -2,6 +2,8 @@ from Tree.AbstractSyntaxTree import AbstractSyntaxTree
 
 from SymbolTable.SymbolTable import SymbolTable
 
+import os
+
 
 class ASTCleaner:
     def __init__(self, root):
@@ -10,7 +12,7 @@ class ASTCleaner:
 
         self.__scope_counter = 0  # this value is used to give scopes unique names
 
-        self.__declarations = dict()  # this dict keeps tra²ck of the node that declared a variable
+        self.__declarations = dict()  # this dict keeps track of the node that declared a variable
 
         self.__changes_occurred = True  # this value tracks whether or not something changes in a cycle
 
@@ -402,7 +404,7 @@ class ASTCleaner:
             if operand_2 != "" and operand_2[:5] == "ID = " and self.__symbol_table.is_initialized(operand_2[5:]):
                 operand_2 = "Val = {}".format(self.__symbol_table.get_value(operand_2[5:]))
 
-            if operand_1[5:] == "Val = ":
+            if operand_1[:6] == "Val = ":
                 operand_1_val = operand_1
 
             if operand_1 != "" and operand_2 != "" and operand_1[:5] == "ID = " and operand_2[:6] == "Val = " \
@@ -415,43 +417,43 @@ class ASTCleaner:
                     if operator == "*=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) * self.perform_optimal_cast(operand_2[6:])
                         self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
-                        return value
+                        return "Val = {}".format(value)
                     elif operator == "/=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) / self.perform_optimal_cast(operand_2[6:])
                         self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
-                        return value
+                        return "Val = {}".format(value)
                     elif operator == "%=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) % self.perform_optimal_cast(operand_2[6:])
                         self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
-                        return value
+                        return "Val = {}".format(value)
                     elif operator == "+=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) + self.perform_optimal_cast(operand_2[6:])
                         self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
-                        return value
+                        return "Val = {}".format(value)
                     elif operator == "-=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) - self.perform_optimal_cast(operand_2[6:])
                         self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
-                        return value
+                        return "Val = {}".format(value)
                     elif operator == "<<=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) << self.perform_optimal_cast(operand_2[6:])
                         self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
-                        return value
+                        return "Val = {}".format(value)
                     elif operator == ">>=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) >> self.perform_optimal_cast(operand_2[6:])
                         self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
-                        return value
+                        return "Val = {}".format(value)
                     elif operator == "&=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) & self.perform_optimal_cast(operand_2[6:])
                         self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
-                        return value
+                        return "Val = {}".format(value)
                     elif operator == "^=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) ^ self.perform_optimal_cast(operand_2[6:])
                         self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
-                        return value
+                        return "Val = {}".format(value)
                     elif operator == "|=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) | self.perform_optimal_cast(operand_2[6:])
                         self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
-                        return value
+                        return "Val = {}".format(value)
                 else:
                     return ""
 
@@ -472,61 +474,61 @@ class ASTCleaner:
                         instance_name = operand_1.split(" = ")[1].split(access_op)[0]
                         variable_name = operand_1.split(" = ")[1].split(access_op)[1]
                         self.__symbol_table.set_group_instance_variable(instance_name, variable_name, value)
-                        return value
+                        return "Val = {}".format(value)
                     elif operator == "/=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) / self.perform_optimal_cast(operand_2[6:])
                         instance_name = operand_1.split(" = ")[1].split(access_op)[0]
                         variable_name = operand_1.split(" = ")[1].split(access_op)[1]
                         self.__symbol_table.set_group_instance_variable(instance_name, variable_name, value)
-                        return value
+                        return "Val = {}".format(value)
                     elif operator == "%=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) % self.perform_optimal_cast(operand_2[6:])
                         instance_name = operand_1.split(" = ")[1].split(access_op)[0]
                         variable_name = operand_1.split(" = ")[1].split(access_op)[1]
                         self.__symbol_table.set_group_instance_variable(instance_name, variable_name, value)
-                        return value
+                        return "Val = {}".format(value)
                     elif operator == "+=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) + self.perform_optimal_cast(operand_2[6:])
                         instance_name = operand_1.split(" = ")[1].split(access_op)[0]
                         variable_name = operand_1.split(" = ")[1].split(access_op)[1]
                         self.__symbol_table.set_group_instance_variable(instance_name, variable_name, value)
-                        return value
+                        return "Val = {}".format(value)
                     elif operator == "-=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) - self.perform_optimal_cast(operand_2[6:])
                         instance_name = operand_1.split(" = ")[1].split(access_op)[0]
                         variable_name = operand_1.split(" = ")[1].split(access_op)[1]
                         self.__symbol_table.set_group_instance_variable(instance_name, variable_name, value)
-                        return value
+                        return "Val = {}".format(value)
                     elif operator == "<<=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) << self.perform_optimal_cast(operand_2[6:])
                         instance_name = operand_1.split(" = ")[1].split(access_op)[0]
                         variable_name = operand_1.split(" = ")[1].split(access_op)[1]
                         self.__symbol_table.set_group_instance_variable(instance_name, variable_name, value)
-                        return value
+                        return "Val = {}".format(value)
                     elif operator == ">>=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) >> self.perform_optimal_cast(operand_2[6:])
                         instance_name = operand_1.split(" = ")[1].split(access_op)[0]
                         variable_name = operand_1.split(" = ")[1].split(access_op)[1]
                         self.__symbol_table.set_group_instance_variable(instance_name, variable_name, value)
-                        return value
+                        return "Val = {}".format(value)
                     elif operator == "&=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) & self.perform_optimal_cast(operand_2[6:])
                         instance_name = operand_1.split(" = ")[1].split(access_op)[0]
                         variable_name = operand_1.split(" = ")[1].split(access_op)[1]
                         self.__symbol_table.set_group_instance_variable(instance_name, variable_name, value)
-                        return value
+                        return "Val = {}".format(value)
                     elif operator == "^=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) ^ self.perform_optimal_cast(operand_2[6:])
                         instance_name = operand_1.split(" = ")[1].split(access_op)[0]
                         variable_name = operand_1.split(" = ")[1].split(access_op)[1]
                         self.__symbol_table.set_group_instance_variable(instance_name, variable_name, value)
-                        return value
+                        return "Val = {}".format(value)
                     elif operator == "|=":
                         value = self.perform_optimal_cast(operand_1_val[6:]) | self.perform_optimal_cast(operand_2[6:])
                         instance_name = operand_1.split(" = ")[1].split(access_op)[0]
                         variable_name = operand_1.split(" = ")[1].split(access_op)[1]
                         self.__symbol_table.set_group_instance_variable(instance_name, variable_name, value)
-                        return value
+                        return "Val = {}".format(value)
                 else:
                     return ""
 
