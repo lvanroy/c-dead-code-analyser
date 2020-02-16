@@ -18,10 +18,10 @@ matrix:
 install:
   - if [ "$TRAVIS_OS_NAME" = "windows" ];
     then python -m pip install --upgrade pip --user;
-         python -m pip install antlr4-python3-runtime == 4.7.2;
+         python -m pip install antlr4-python3-runtime==4.7.2;
          python -m pip install coverage;
          python -m pip install codecov;
-    else pip3 install antlr4-python3-runtime == 4.7.2;
+    else pip3 install antlr4-python3-runtime==4.7.2;
          pip3 install coverage;
          pip3 install codecov;
     fi
