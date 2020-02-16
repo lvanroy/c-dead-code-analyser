@@ -71,17 +71,17 @@ class Compiler:
 
         self.ast = constructor.get_ast()
 
+        file_name = ""
+        file_names = code_file.split("/")
+        for temp in file_names:
+            if temp[-2:] == '.c':
+                file_name = temp[:-2]
+
+        f = open("./TreePlots/{}_output.dot".format(file_name), "w")
+        f.write(self.ast.to_dot())
+        f.close()
+
         if self.image_output:
-            file_name = ""
-            file_names = code_file.split("/")
-            for temp in file_names:
-                if temp[-2:] == '.c':
-                    file_name = temp[:-2]
-
-            f = open("./TreePlots/{}_output.dot".format(file_name), "w")
-            f.write(self.ast.to_dot())
-            f.close()
-
             os.system("dot -Tpng ./TreePlots/{0}_output.dot -o ./TreePlots/{0}.png".format(file_name))
 
         if self.trace:
@@ -92,19 +92,18 @@ class Compiler:
         self.cleaner.perform_full_clean(self.trace)
         self.cleaned_ast = self.cleaner.get_ast()
 
+        file_name = ""
+        file_names = code_file.split("/")
+        for temp in file_names:
+            if temp[-2:] == '.c':
+                file_name = temp[:-2]
+
+        f = open("./TreePlots/{}_cleaned_output.dot".format(file_name), "w")
+        temp = self.cleaned_ast.to_dot()
+        f.write(temp)
+        f.close()
+
         if self.image_output:
-
-            file_name = ""
-            file_names = code_file.split("/")
-            for temp in file_names:
-                if temp[-2:] == '.c':
-                    file_name = temp[:-2]
-
-            f = open("./TreePlots/{}_cleaned_output.dot".format(file_name), "w")
-            temp = self.cleaned_ast.to_dot()
-            f.write(temp)
-            f.close()
-
             os.system("dot -Tpng ./TreePlots/{0}_cleaned_output.dot -o ./TreePlots/{0}_cleaned.png"
                       .format(file_name))
 
@@ -136,21 +135,22 @@ class Compiler:
         self.generator = Generator(code_file, self.cleaned_ast, counters, parameters, functions)
         self.generator.generate_automaton()
 
-        if self.image_output:
-            file_name = ""
-            file_names = code_file.split("/")
-            for temp in file_names:
-                if temp[-2:] == '.c':
-                    file_name = temp[:-2]
-            function_names = self.generator.get_function_names()
-            dots = self.generator.to_dot()
-            for counter in function_names.keys():
-                function_name = function_names[counter]
-                dot = dots[counter]
-                f = open("./TreePlots/{}_reachability_automaton_{}.dot".format(file_name, function_name), "w")
-                f.write(dot)
-                f.close()
+        file_name = ""
+        file_names = code_file.split("/")
+        for temp in file_names:
+            if temp[-2:] == '.c':
+                file_name = temp[:-2]
+        function_names = self.generator.get_function_names()
+        dots = self.generator.to_dot()
+        for counter in function_names.keys():
+            function_name = function_names[counter]
+            dot = dots[counter]
+            f = open("./TreePlots/{}_reachability_automaton_{}.dot".format(file_name, function_name), "w")
+            f.write(dot)
+            f.close()
 
+        if self.image_output:
+            for function_name in function_names:
                 os.system("dot -Tpng ./TreePlots/{0}_reachability_automaton_{1}.dot -o \
                           ./TreePlots/{0}_reachability_automaton_{1}.png"
                           .format(file_name, function_name))

@@ -1,0 +1,154 @@
+digraph G {
+		rankdir=LR
+		Q0[label="4"];
+		Q1[label="5"];
+		Q2[label="8"];
+		Q3[label="7.97"];
+		Q4[label="7.98"];
+		Q5[label="7.99"];
+		Q6[label="8.01"];
+		Q7[label="8.04"];
+		Q8[label="9"];
+		Q9[label="8.05"];
+		Q10[label="8.06"];
+		Q11[label="8.03"];
+		Q12[label="12"];
+		Q13[label="11.97"];
+		Q14[label="11.98"];
+		Q15[label="11.99"];
+		Q16[label="12.01"];
+		Q17[label="12.04"];
+		Q18[label="12.05"];
+		Q19[label="12.06"];
+		Q20[label="13"];
+		Q21[label="12.07"];
+		Q22[label="12.08"];
+		Q23[label="12.09"];
+		Q24[label="12.1"];
+		Q25[label="12.03"];
+		Q26[label="18"];
+		Q27[label="18.01"];
+		Q28[label="18.04"];
+		Q29[label="18.05"];
+		Q30[label="18.06"];
+		Q31[label="19"];
+		Q32[label="18.03"];
+		Q33[label="22"];
+		Q34[label="22.01"];
+		Q35[label="22.04"];
+		Q36[label="22.05"];
+		Q37[label="22.06"];
+		Q38[label="23"];
+		Q39[label="22.03"];
+		Q40[label="26"];
+		Q41[label="26.01"];
+		Q42[label="26.04"];
+		Q43[label="26.05"];
+		Q44[label="26.06"];
+		Q45[label="26.03"];
+		Q46[label="28"];
+		Q47[label="28.01"];
+		Q48[label="28.04"];
+		Q49[label="29"];
+		Q50[label="29.01"];
+		Q51[label="30"];
+		Q52[label="31"];
+		Q53[label="29.03"];
+		Q54[label="33"];
+		Q55[label="34"];
+		Q56[label="29.04"];
+		Q57[label="29.05"];
+		Q58[label="29.06"];
+		Q59[label="29.07"];
+		Q60[label="29.02"];
+		Q61[label="28.02"];
+		Q62[label="28.03"];
+		Q63[label="38"];
+		Qi[style=invis];
+		Qi -> Q0 [label=""]
+		Q0 -> Q1 [label=""]
+		Q3 -> Q4 [label="<= 0"]
+		Q4 -> Q4 [label="+1"]
+		Q4 -> Q2 [label="=0"]
+		Q3 -> Q5 [label=">= 0"]
+		Q5 -> Q5 [label="-1"]
+		Q5 -> Q2 [label="=0"]
+		Q1 -> Q3 [label=""]
+		Q2 -> Q6 [label=""]
+		Q7 -> Q8 [label=""]
+		Q8 -> Q6 [label="+ 1"]
+		Q6 -> Q9 [label="+1"]
+		Q9 -> Q10 [label="<= 3"]
+		Q10 -> Q7 [label="-1"]
+		Q6 -> Q11 [label=">= 3"]
+		Q13 -> Q14 [label="<= 0"]
+		Q14 -> Q14 [label="+1"]
+		Q14 -> Q12 [label="=0"]
+		Q13 -> Q15 [label=">= 0"]
+		Q15 -> Q15 [label="-1"]
+		Q15 -> Q12 [label="=0"]
+		Q11 -> Q13 [label=""]
+		Q12 -> Q17 [label="<=  2"]
+		Q17 -> Q17 [label="+1"]
+		Q17 -> Q16 [label="= 2"]
+		Q12 -> Q18 [label=">=  2"]
+		Q18 -> Q18 [label="-1"]
+		Q18 -> Q16 [label="= 2"]
+		Q19 -> Q20 [label=""]
+		Q20 -> Q16 [label=""]
+		Q16 -> Q21 [label="+1"]
+		Q21 -> Q22 [label="<=  5"]
+		Q22 -> Q19 [label="-1"]
+		Q16 -> Q23 [label="-1"]
+		Q23 -> Q24 [label=">=  5"]
+		Q24 -> Q19 [label="+1"]
+		Q16 -> Q25 [label="= 5"]
+		Q25 -> Q26 [label=""]
+		Q26 -> Q28 [label="<=  5"]
+		Q28 -> Q28 [label="+1"]
+		Q28 -> Q27 [label="= 5"]
+		Q26 -> Q29 [label=">=  5"]
+		Q29 -> Q29 [label="-1"]
+		Q29 -> Q27 [label="= 5"]
+		Q30 -> Q31 [label=""]
+		Q31 -> Q32 [label=""]
+		Q27 -> Q30 [label=""]
+		Q32 -> Q33 [label=""]
+		Q33 -> Q35 [label="<=  a"]
+		Q35 -> Q35 [label="+1"]
+		Q35 -> Q34 [label="= a"]
+		Q33 -> Q36 [label=">=  a"]
+		Q36 -> Q36 [label="-1"]
+		Q36 -> Q34 [label="= a"]
+		Q37 -> Q38 [label=""]
+		Q38 -> Q39 [label=""]
+		Q34 -> Q37 [label=""]
+		Q39 -> Q40 [label=""]
+		Q40 -> Q41 [label=""]
+		Q42 -> Q45 [label=""]
+		Q41 -> Q43 [label="+1"]
+		Q43 -> Q44 [label="<= 500"]
+		Q44 -> Q42 [label="-1"]
+		Q41 -> Q45 [label=">= 500"]
+		Q45 -> Q46 [label=""]
+		Q46 -> Q47 [label=""]
+		Q48 -> Q49 [label=""]
+		Q50 -> Q51 [label=""]
+		Q51 -> Q52 [label="= 9"]
+		Q52 -> Q62 [label=""]
+		Q53 -> Q54 [label=""]
+		Q54 -> Q55 [label=""]
+		Q55 -> Q60 [label="= 10"]
+		Q49 -> Q50 [label="= 10"]
+		Q49 -> Q56 [label="+1"]
+		Q56 -> Q57 [label="<=  10"]
+		Q57 -> Q53 [label="-1"]
+		Q49 -> Q58 [label="-1"]
+		Q58 -> Q59 [label=">=  10"]
+		Q59 -> Q53 [label="+1"]
+		Q60 -> Q61 [label=""]
+		Q61 -> Q47 [label="+ 1"]
+		Q47 -> Q48 [label=""]
+		Q62 -> Q63 [label=""]
+		
+}

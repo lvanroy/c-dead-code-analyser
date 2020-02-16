@@ -1418,33 +1418,9 @@ class ASTCleaner:
 
             op = node.get_children()[1].get_label()
 
-            if self.__entered_branch:
-                if self.__symbol_table.is_counter(original[5:]) and op in {"++", "--"}:
-                    node.set_label("Assignment Expression")
-                    if op == "++":
-                        node.get_children()[1].set_label("+=")
-                    else:
-                        node.get_children()[1].set_label("-=")
-                    value_node = AbstractSyntaxTree("Val = 1", node.get_ctx())
-                    node.add_child(value_node)
-                    value_node.set_parent(node)
-                return ""
-
             if operand_1 != "" and operand_1[:5] == "ID = " and op in {"++", "--"} \
                     and self.__symbol_table.is_initialized(operand_1[5:]):
                 operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
-
-            if self.__symbol_table.is_counter(original[5:]) and op in {"++", "--"} and operand_1[6:] != "Val = ":
-                node.set_label("Assignment Expression")
-                if op == "++":
-                    node.get_children()[1].set_label("+=")
-                else:
-                    node.get_children()[1].set_label("-=")
-                value_node = AbstractSyntaxTree("Val = 1", node.get_ctx())
-                node.add_child(value_node)
-                value_node.set_parent(node)
-
-                return ""
 
             if len(node.get_children()) > 1:
                 operator = node.get_children()[1].get_label()

@@ -1,0 +1,90 @@
+digraph G {
+		rankdir=LR
+		Q0[label="41"];
+		Q1[label="42"];
+		Q2[label="46"];
+		Q3[label="45.97"];
+		Q4[label="45.98"];
+		Q5[label="45.99"];
+		Q6[label="46.01"];
+		Q7[label="46.04"];
+		Q8[label="47"];
+		Q9[label="46.05"];
+		Q10[label="46.06"];
+		Q11[label="46.03"];
+		Q12[label="51"];
+		Q13[label="51.01"];
+		Q14[label="51.04"];
+		Q15[label="53"];
+		Q16[label="54"];
+		Q17[label="51.05"];
+		Q18[label="51.06"];
+		Q19[label="51.07"];
+		Q20[label="51.08"];
+		Q21[label="51.03"];
+		Q22[label="57"];
+		Q23[label="57.01"];
+		Q24[label="57.04"];
+		Q25[label="59"];
+		Q26[label="57.05"];
+		Q27[label="57.06"];
+		Q28[label="57.07"];
+		Q29[label="57.08"];
+		Q30[label="57.03"];
+		Q31[label="62"];
+		Q32[label="62.01"];
+		Q33[label="62.04"];
+		Q34[label="62.05"];
+		Q35[label="62.06"];
+		Q36[label="62.03"];
+		Q37[label="64"];
+		Qi[style=invis];
+		Qi -> Q0 [label=""]
+		Q0 -> Q1 [label=""]
+		Q3 -> Q4 [label="<= 0"]
+		Q4 -> Q4 [label="+1"]
+		Q4 -> Q2 [label="=0"]
+		Q3 -> Q5 [label=">= 0"]
+		Q5 -> Q5 [label="-1"]
+		Q5 -> Q2 [label="=0"]
+		Q1 -> Q3 [label=""]
+		Q2 -> Q6 [label=""]
+		Q7 -> Q8 [label=""]
+		Q8 -> Q6 [label="+ 1"]
+		Q6 -> Q7 [label="<= b"]
+		Q6 -> Q9 [label="-1"]
+		Q9 -> Q10 [label=">= b"]
+		Q10 -> Q11 [label="+1"]
+		Q11 -> Q12 [label=""]
+		Q12 -> Q13 [label=""]
+		Q14 -> Q15 [label=""]
+		Q15 -> Q16 [label="- 1"]
+		Q16 -> Q21 [label=""]
+		Q13 -> Q17 [label="+1"]
+		Q17 -> Q18 [label="<=  b"]
+		Q18 -> Q14 [label="-1"]
+		Q13 -> Q19 [label="-1"]
+		Q19 -> Q20 [label=">=  b"]
+		Q20 -> Q14 [label="+1"]
+		Q13 -> Q21 [label="= b"]
+		Q21 -> Q22 [label=""]
+		Q22 -> Q23 [label=""]
+		Q24 -> Q25 [label=""]
+		Q25 -> Q23 [label="- 1"]
+		Q23 -> Q24 [label="= b"]
+		Q23 -> Q26 [label="+1"]
+		Q26 -> Q27 [label="<=  b"]
+		Q27 -> Q30 [label="-1"]
+		Q23 -> Q28 [label="-1"]
+		Q28 -> Q29 [label=">=  b"]
+		Q29 -> Q30 [label="+1"]
+		Q30 -> Q31 [label=""]
+		Q31 -> Q32 [label=""]
+		Q33 -> Q32 [label="- 1, - 1"]
+		Q32 -> Q34 [label="-1"]
+		Q34 -> Q35 [label=">= 0"]
+		Q35 -> Q33 [label="+1"]
+		Q32 -> Q36 [label="<= 0"]
+		Q36 -> Q37 [label=""]
+		
+}

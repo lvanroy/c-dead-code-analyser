@@ -1,0 +1,84 @@
+Initial antlr compilation started.
+Initial antlr compilation finished.
+Basic AST generation started.
+Basic AST generation finished.
+Optimized AST generation started.
+Optimization cycle started
+Optimization cycle finished
+================= for_loops =================
+symbol a with type int has initial value a and final value 0, this value is used: True, this variable is not a counter and is a parameter.
+symbol i with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+symbol k with type int has initial value 0 and final value 2, this value is used: True, this variable is not a counter and is not a parameter.
+================= for_scope_0 =================
+symbol j with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+symbol l with type int has initial value 5 and final value 5, this value is used: False, this variable is not a counter and is not a parameter.
+================= while_loops =================
+symbol b with type int has initial value b and final value 0, this value is used: False, this variable is not a counter and is a parameter.
+symbol i with type int has initial value 0 and final value 0, this value is used: False, this variable is a counter and is not a parameter.
+================= do_while_loops =================
+symbol c with type int has initial value c and final value 0, this value is used: False, this variable is not a counter and is a parameter.
+symbol i with type int has initial value 10 and final value 10, this value is used: False, this variable is a counter and is not a parameter.
+================= if_statements =================
+symbol d with type int has initial value d and final value 0, this value is used: True, this variable is not a counter and is a parameter.
+symbol i with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+
+Optimization cycle started
+Optimization cycle finished
+================= for_loops =================
+symbol a with type int has initial value a and final value 0, this value is used: True, this variable is not a counter and is a parameter.
+symbol i with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+symbol k with type int has initial value 2 and final value 2, this value is used: False, this variable is not a counter and is not a parameter.
+================= for_scope_0 =================
+symbol j with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+symbol l with type int has initial value 5 and final value 5, this value is used: False, this variable is not a counter and is not a parameter.
+================= while_loops =================
+symbol b with type int has initial value b and final value 0, this value is used: False, this variable is not a counter and is a parameter.
+symbol i with type int has initial value 0 and final value 0, this value is used: False, this variable is a counter and is not a parameter.
+================= do_while_loops =================
+symbol c with type int has initial value c and final value 0, this value is used: False, this variable is not a counter and is a parameter.
+symbol i with type int has initial value 10 and final value 10, this value is used: False, this variable is a counter and is not a parameter.
+================= if_statements =================
+symbol d with type int has initial value d and final value 0, this value is used: True, this variable is not a counter and is a parameter.
+symbol i with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+
+Optimized AST generation finished.
+The following symbol table was derived from the code:
+================= for_loops =================
+symbol a with type int has initial value a and final value 0, this value is used: True, this variable is not a counter and is a parameter.
+symbol i with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+symbol k with type int has initial value 2 and final value 2, this value is used: False, this variable is not a counter and is not a parameter.
+================= for_scope_0 =================
+symbol j with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+symbol l with type int has initial value 5 and final value 5, this value is used: False, this variable is not a counter and is not a parameter.
+================= while_loops =================
+symbol b with type int has initial value b and final value 0, this value is used: False, this variable is not a counter and is a parameter.
+symbol i with type int has initial value 0 and final value 0, this value is used: False, this variable is a counter and is not a parameter.
+================= do_while_loops =================
+symbol c with type int has initial value c and final value 0, this value is used: False, this variable is not a counter and is a parameter.
+symbol i with type int has initial value 10 and final value 10, this value is used: False, this variable is a counter and is not a parameter.
+================= if_statements =================
+symbol d with type int has initial value d and final value 0, this value is used: True, this variable is not a counter and is a parameter.
+symbol i with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+
+Counter validation loop started.
+Counter Validation loop finished.
+The following functions where found:
+
+Function for_loops with return type bool and parameter types ['int'] is OK for one counter automaton generation.
+The function has the following counter variable(s):
+	Counter with name j is first used at line 8 and last used at line 9
+	Counter with name i is first used at line 12 and last used at line 34
+
+Function while_loops with return type bool and parameter types ['int'] is OK for one counter automaton generation.
+The function has the following counter variable(s):
+	Counter with name i is first used at line 46 and last used at line 62
+
+Function do_while_loops with return type bool and parameter types ['int'] is OK for one counter automaton generation.
+The function has the following counter variable(s):
+	Counter with name i is first used at line 70 and last used at line 86
+
+Function if_statements with return type bool and parameter types ['int'] is OK for one counter automaton generation.
+The function has the following counter variable(s):
+	Counter with name i is first used at line 94 and last used at line 109
+Automaton generator started.
+Automaton generator finished.

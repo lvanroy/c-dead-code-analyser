@@ -29,15 +29,15 @@ symbol t with type float has initial value -5.2 and final value -5.2, this value
 symbol u with type float has initial value -6 and final value -6.0, this value is used: True, this variable is not a counter and is not a parameter.
 symbol v with type float has initial value 0 and final value 0.0, this value is used: True, this variable is not a counter and is not a parameter.
 symbol w with type float has initial value 4 and final value 4.0, this value is used: True, this variable is not a counter and is not a parameter.
-symbol x with type float has initial value  and final value 0, this value is used: True, this variable is not a counter and is not a parameter.
-symbol y with type float has initial value  and final value 0, this value is used: True, this variable is not a counter and is not a parameter.
+symbol x with type float has initial value 5.2 and final value 5.2, this value is used: True, this variable is not a counter and is not a parameter.
+symbol y with type float has initial value 6.2 and final value 6.2, this value is used: True, this variable is not a counter and is not a parameter.
 symbol z with type float has initial value 5.1 and final value 5.1, this value is used: True, this variable is not a counter and is not a parameter.
 
 Optimization cycle started
 Optimization cycle finished
 ================= main =================
 symbol b with type float has initial value 5.2 and final value 5.2, this value is used: False, this variable is not a counter and is not a parameter.
-symbol a with type float has initial value 5.2 and final value 5.2, this value is used: False, this variable is not a counter and is not a parameter.
+symbol a with type float has initial value 5.2 and final value 5.2, this value is used: True, this variable is not a counter and is not a parameter.
 symbol c with type float has initial value 4.5 and final value 4.5, this value is used: False, this variable is not a counter and is not a parameter.
 symbol d with type float has initial value 1 and final value 1.0, this value is used: False, this variable is not a counter and is not a parameter.
 symbol e with type float has initial value 1 and final value 1.0, this value is used: False, this variable is not a counter and is not a parameter.
@@ -59,15 +59,14 @@ symbol t with type float has initial value -5.2 and final value -5.2, this value
 symbol u with type float has initial value -6 and final value -6.0, this value is used: False, this variable is not a counter and is not a parameter.
 symbol v with type float has initial value 0 and final value 0.0, this value is used: False, this variable is not a counter and is not a parameter.
 symbol w with type float has initial value 4 and final value 4.0, this value is used: False, this variable is not a counter and is not a parameter.
-symbol x with type float has initial value 6.2 and final value 6.2, this value is used: True, this variable is not a counter and is not a parameter.
-symbol y with type float has initial value 5.2 and final value 5.2, this value is used: True, this variable is not a counter and is not a parameter.
+symbol x with type float has initial value 5.2 and final value 5.2, this value is used: False, this variable is not a counter and is not a parameter.
+symbol y with type float has initial value 6.2 and final value 6.2, this value is used: False, this variable is not a counter and is not a parameter.
 symbol z with type float has initial value 5.1 and final value 5.1, this value is used: False, this variable is not a counter and is not a parameter.
 
 Optimization cycle started
 Optimization cycle finished
 ================= main =================
-symbol x with type float has initial value 6.2 and final value 6.2, this value is used: False, this variable is not a counter and is not a parameter.
-symbol y with type float has initial value 5.2 and final value 5.2, this value is used: False, this variable is not a counter and is not a parameter.
+symbol a with type float has initial value 5.2 and final value 5.2, this value is used: False, this variable is not a counter and is not a parameter.
 
 Optimization cycle started
 Optimization cycle finished
