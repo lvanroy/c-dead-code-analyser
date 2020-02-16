@@ -9,7 +9,7 @@ from Tree.AbstractSyntaxTree import AbstractSyntaxTree
 class TestFirstLoop(unittest.TestCase):
     instance = AbstractSyntaxTree
     compiler = Compiler()
-    compiler.image_output = False
+    compiler.image_output = True
     compiler.trace = False
     maxDiff = None
 
@@ -84,7 +84,7 @@ class TestFirstLoop(unittest.TestCase):
 class TestCleanerLoop(unittest.TestCase):
     instance = AbstractSyntaxTree
     compiler = Compiler()
-    compiler.image_output = False
+    compiler.image_output = True
     compiler.trace = True
 
     maxDiff = None
@@ -276,7 +276,7 @@ class TestCleanerLoop(unittest.TestCase):
 class FullProgramTest(unittest.TestCase):
     instance = AbstractSyntaxTree
     compiler = Compiler()
-    compiler.image_output = False
+    compiler.image_output = True
     compiler.trace = True
 
     maxDiff = None
@@ -286,8 +286,6 @@ class FullProgramTest(unittest.TestCase):
         sys.stdout = output
         self.compiler.analysis("./C_code/test_1.c")
         sys.stdout = sys.__stdout__
-        with open("ExpectedTestOutput/test_1_trace.txt", 'w') as text_file:
-            text_file.write(output.getvalue())
         with open("ExpectedTestOutput/test_1_trace.txt", 'r') as text_file:
             self.assertEqual(text_file.read(), output.getvalue())
         with open('./TreePlots/test_1_output.dot', 'r') as myFile:

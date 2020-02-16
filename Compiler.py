@@ -150,7 +150,7 @@ class Compiler:
             f.close()
 
         if self.image_output:
-            for function_name in function_names:
+            for function_name in function_names.values():
                 os.system("dot -Tpng ./TreePlots/{0}_reachability_automaton_{1}.dot -o \
                           ./TreePlots/{0}_reachability_automaton_{1}.png"
                           .format(file_name, function_name))
