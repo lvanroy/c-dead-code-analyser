@@ -67,18 +67,18 @@ The following functions where found:
 Function for_loops with return type bool and parameter types ['int'] is OK for one counter automaton generation.
 The function has the following counter variable(s):
 	Counter with name j is first used at line 8 and last used at line 9
-	Counter with name i is first used at line 12 and last used at line 34
+	Counter with name i is first used at line 12 and last used at line 36
 
 Function while_loops with return type bool and parameter types ['int'] is OK for one counter automaton generation.
 The function has the following counter variable(s):
-	Counter with name i is first used at line 46 and last used at line 62
+	Counter with name i is first used at line 48 and last used at line 64
 
 Function do_while_loops with return type bool and parameter types ['int'] is OK for one counter automaton generation.
 The function has the following counter variable(s):
-	Counter with name i is first used at line 70 and last used at line 86
+	Counter with name i is first used at line 72 and last used at line 88
 
 Function if_statements with return type bool and parameter types ['int'] is OK for one counter automaton generation.
 The function has the following counter variable(s):
-	Counter with name i is first used at line 94 and last used at line 109
+	Counter with name i is first used at line 96 and last used at line 111
 Automaton generator started.
 Automaton generator finished.

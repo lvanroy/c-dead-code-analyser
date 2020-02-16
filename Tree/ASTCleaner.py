@@ -318,7 +318,7 @@ class ASTCleaner:
                         self.__changes_occurred = True
 
             # check if this is a counter addition, in which case we can fold with the second operand
-            elif operand_2 != "" and self.__symbol_table.is_counter(operand_2[5:]) and self.__assigning_to_counter:
+            if operand_2 != "" and self.__symbol_table.is_counter(operand_2[5:]) and self.__assigning_to_counter:
                 if operand_1 != "" and operand_1[:5] == "ID = " and self.__symbol_table.is_initialized(operand_1[5:]):
                     operand_1 = "Val = {}".format(self.__symbol_table.get_value(operand_1[5:]))
 

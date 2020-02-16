@@ -9,7 +9,7 @@ from Tree.AbstractSyntaxTree import AbstractSyntaxTree
 class TestFirstLoop(unittest.TestCase):
     instance = AbstractSyntaxTree
     compiler = Compiler()
-    compiler.image_output = True
+    compiler.image_output = False
     compiler.trace = False
     maxDiff = None
 
@@ -84,7 +84,7 @@ class TestFirstLoop(unittest.TestCase):
 class TestCleanerLoop(unittest.TestCase):
     instance = AbstractSyntaxTree
     compiler = Compiler()
-    compiler.image_output = True
+    compiler.image_output = False
     compiler.trace = True
 
     maxDiff = None
@@ -276,7 +276,7 @@ class TestCleanerLoop(unittest.TestCase):
 class FullProgramTest(unittest.TestCase):
     instance = AbstractSyntaxTree
     compiler = Compiler()
-    compiler.image_output = True
+    compiler.image_output = False
     compiler.trace = True
 
     maxDiff = None

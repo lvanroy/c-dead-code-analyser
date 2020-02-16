@@ -6,7 +6,7 @@ bool for_loops(int a){
     int k = 0;
 
     for(int j = 0, l = 5; j < 3; j ++){
-        j += 1;
+        continue;
     }
 
     for(i = 2;i != 5; k++, i++){
@@ -15,12 +15,14 @@ bool for_loops(int a){
         break;
     }
 
+    i = a + i;
+
     for(i=5, k = 10;;){
-    break;
+        break;
     }
 
     for(i = a;;){
-    break;
+        break;
     }
 
     for(;i < 500;){break;}

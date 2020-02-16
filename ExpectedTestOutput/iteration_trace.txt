@@ -63,14 +63,14 @@ Function main with return type int and no parameters is NOT OK.
 The function has the following issues: 
 	Incorrect return type, return type must be boolean.
 The function has the following counter variable(s):
-	Counter with name i is first used at line 7 and last used at line 7
-	Counter with name j is first used at line 13 and last used at line 15
+	Counter with name i is first used at line 7 and last used at line 9
+	Counter with name j is first used at line 13 and last used at line 16
 	Counter with name k is first used at line 20 and last used at line 20
 
 Function t with return type bool and no parameters is OK for one counter automaton generation.
 The function has the following counter variable(s):
-	Counter with name i is first used at line 26 and last used at line 26
-	Counter with name j is first used at line 32 and last used at line 34
+	Counter with name i is first used at line 26 and last used at line 28
+	Counter with name j is first used at line 32 and last used at line 35
 	Counter with name k is first used at line 39 and last used at line 39
 
 Function f with return type bool and no parameters is NOT OK.
@@ -78,5 +78,5 @@ The function has the following issues:
 	Incorrect number of counters, this tool can only handle a maximal number of counters equal to 1.
 The function has the following counter variable(s):
 	Counter with name j is first used at line 45 and last used at line 58
-	Counter with name i is first used at line 51 and last used at line 51
+	Counter with name i is first used at line 51 and last used at line 53
 Since at least one of the functions was found to be invalid, no counter automaton will be generated.

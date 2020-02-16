@@ -50,6 +50,9 @@ class ASTValidator:
         # store the first line in which the most outer conditional statement was opened
         self.__first_outer_line = None
 
+        # keep track of the discovered lines
+        self.__lines = list()
+
     def validate(self, node=None):
         # track the number of nodes we have passed, this is used to properly define the first and last usage
         self.__node_counter += 1
@@ -57,6 +60,9 @@ class ASTValidator:
 
         if node is None:
             node = self.__root
+
+        if node.get_line() not in self.__lines:
+            self.__lines.append(node.get_line())
 
         # register assignments
         if node.get_label() == "Assignment Expression":
@@ -261,14 +267,19 @@ class ASTValidator:
             self.__symbol_table.close_scope()
             function_name = self.__functions[self.__functions_counter - 1].get_function_name()
             if self.__symbol_table.get_current_scope().get_label() == function_name:
+                for counter in self.__counters[self.__functions_counter - 1].values():
+                    if counter.get_first_used_line() == self.__first_outer_line:
+                        counter.set_last_usage_line(max(self.__lines))
                 self.__first_outer_line = None
 
         # register end of selection scope
         elif node.get_label() == "Selection Statement":
             function_name = self.__functions[self.__functions_counter - 1].get_function_name()
             if self.__symbol_table.get_current_scope().get_label() == function_name:
+                for counter in self.__counters[self.__functions_counter - 1].values():
+                    if counter.get_first_used_line() == self.__first_outer_line:
+                        counter.set_last_usage_line(max(self.__lines))
                 self.__first_outer_line = None
-
         # register end of function
         elif node.get_label() == "Function Definition":
             self.__symbol_table.close_scope()
