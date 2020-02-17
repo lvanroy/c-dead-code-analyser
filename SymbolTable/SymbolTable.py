@@ -163,12 +163,22 @@ class SymbolTable:
     def set_initialized(self, symbol_name, initialized, scope=None):
         if scope is None:
             scope = self.__current_scope
-        if self.__scopes["0"] == scope:
-            return False
         if symbol_name in self.__symbols[scope]:
             return self.__symbols[scope][symbol_name].set_initialized(initialized)
+        elif self.__scopes["0"] == scope:
+            return False
         else:
             return self.set_initialized(symbol_name, initialized, scope.get_parent())
+
+    def set_used(self, symbol_name, value, scope=None):
+        if scope is None:
+            scope = self.__current_scope
+        if symbol_name in self.__symbols[scope]:
+            self.__symbols[scope][symbol_name].set_used(value)
+        elif self.__scopes["0"] == scope:
+            return False
+        else:
+            self.set_used(symbol_name, value, scope.get_parent())
 
     def get_value(self, symbol_name, scope=None):
         if scope is None:
@@ -201,6 +211,32 @@ class SymbolTable:
             return
         else:
             return self.set_group_instance_variable(symbol_name, variable, value, scope.get_parent())
+
+    def set_group_instance_variable_initialised(self, symbol_name, variable, value, scope=None):
+        if scope is None:
+            scope = self.__current_scope
+        if symbol_name in self.__group_instances[scope]:
+            self.__group_instances[scope][symbol_name].set_variable_initialised(variable, value)
+        elif symbol_name in self.__references[scope]:
+            symbol = self.__references[scope][symbol_name].get_referenced_object()
+            self.set_group_instance_variable_initialised(symbol, variable, value, scope)
+        elif scope.get_parent() is None:
+            return
+        else:
+            return self.set_group_instance_variable_initialised(symbol_name, variable, value, scope.get_parent())
+
+    def get_group_instance_variable_initialised(self, symbol_name, variable, scope=None):
+        if scope is None:
+            scope = self.__current_scope
+        if symbol_name in self.__group_instances[scope]:
+            return self.__group_instances[scope][symbol_name].get_variable_initialised(variable)
+        elif symbol_name in self.__references[scope]:
+            symbol = self.__references[scope][symbol_name].get_referenced_object()
+            return self.get_group_instance_variable_initialised(symbol, variable, scope)
+        elif scope.get_parent() is None:
+            return
+        else:
+            return self.get_group_instance_variable_initialised(symbol_name, variable, scope.get_parent())
 
     def get_type(self, symbol_name, scope=None):
         if scope is None:
@@ -534,6 +570,12 @@ class GroupInstance:
         else:
             self.__variables[variable].set_value(cast(value, self.__variables[variable].get_type()))
 
+    def set_variable_initialised(self, variable, value):
+        self.__variables[variable].set_initialised(value)
+
+    def get_variable_initialised(self, variable):
+        return self.__variables[variable].get_initialised()
+
     def get_variable_value(self, variable):
         return self.__variables[variable].get_value()
 
@@ -564,6 +606,7 @@ class GroupInstanceVariable:
         self.__type = var_type
         self.__size = size
         self.__value = '0'
+        self.__initialised = False
 
     def get_type(self):
         return self.__type
@@ -573,6 +616,12 @@ class GroupInstanceVariable:
 
     def get_value(self):
         return self.__value
+
+    def set_initialised(self, value):
+        self.__initialised = value
+
+    def get_initialised(self):
+        return self.__initialised
 
     def get_value_at_index(self, index):
         value = self.__value.replace("{", "").replace("}", "").replace(" ", "")
@@ -653,7 +702,10 @@ def cast(variable_value, variable_type):
         else:
             return ord(variable_value.replace("\\", "").replace("'", ""))
     elif variable_type == 'float':
-        return float(variable_value)
+        if variable_value.replace(".", "").replace("-", "").isnumeric():
+            return float(variable_value)
+        else:
+            return float(ord(variable_value.replace("'", "").replace("\\", "")))
     elif variable_type == 'bool':
         if type(variable_value) == str:
             variable_value = variable_value.replace("\"", "").replace("'", "")

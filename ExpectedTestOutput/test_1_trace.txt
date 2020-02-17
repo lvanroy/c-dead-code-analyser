@@ -8,7 +8,7 @@ Optimization cycle finished
 ================= for_loops =================
 symbol a with type int has initial value a and final value 0, this value is used: True, this variable is not a counter and is a parameter.
 symbol i with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
-symbol k with type int has initial value 0 and final value 2, this value is used: True, this variable is not a counter and is not a parameter.
+symbol k with type int has initial value 0 and final value 0, this value is used: True, this variable is not a counter and is not a parameter.
 ================= for_scope_0 =================
 symbol j with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
 symbol l with type int has initial value 5 and final value 5, this value is used: False, this variable is not a counter and is not a parameter.
@@ -27,7 +27,7 @@ Optimization cycle finished
 ================= for_loops =================
 symbol a with type int has initial value a and final value 0, this value is used: True, this variable is not a counter and is a parameter.
 symbol i with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
-symbol k with type int has initial value 2 and final value 2, this value is used: False, this variable is not a counter and is not a parameter.
+symbol k with type int has initial value 0 and final value 0, this value is used: True, this variable is not a counter and is not a parameter.
 ================= for_scope_0 =================
 symbol j with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
 symbol l with type int has initial value 5 and final value 5, this value is used: False, this variable is not a counter and is not a parameter.
@@ -46,7 +46,7 @@ The following symbol table was derived from the code:
 ================= for_loops =================
 symbol a with type int has initial value a and final value 0, this value is used: True, this variable is not a counter and is a parameter.
 symbol i with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
-symbol k with type int has initial value 2 and final value 2, this value is used: False, this variable is not a counter and is not a parameter.
+symbol k with type int has initial value 0 and final value 0, this value is used: True, this variable is not a counter and is not a parameter.
 ================= for_scope_0 =================
 symbol j with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
 symbol l with type int has initial value 5 and final value 5, this value is used: False, this variable is not a counter and is not a parameter.

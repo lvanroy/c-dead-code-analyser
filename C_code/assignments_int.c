@@ -27,6 +27,8 @@ int main(){
     printf("%d \n", a);
     a |= 13;
     printf("%d \n", a);
+    a ^= 4;
+    printf("%d \n", a);
 
     // assignment using assignment expression
     a = b = 20;

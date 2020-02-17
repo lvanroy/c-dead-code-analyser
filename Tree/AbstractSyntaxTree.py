@@ -96,4 +96,3 @@ class AbstractSyntaxTree:
             result += "\n}"
 
         return result
-

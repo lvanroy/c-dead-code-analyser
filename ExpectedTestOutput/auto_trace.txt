@@ -8,7 +8,7 @@ Optimization cycle finished
 ================= main =================
 symbol a with type int has initial value 5 and final value 5, this value is used: False, this variable is not a counter and is not a parameter.
 symbol b with type int has initial value 5.2 and final value 5, this value is used: False, this variable is not a counter and is not a parameter.
-symbol c with type int has initial value 'c' and final value 99, this value is used: False, this variable is not a counter and is not a parameter.
+symbol c with type int has initial value 99 and final value 99, this value is used: False, this variable is not a counter and is not a parameter.
 
 Optimization cycle started
 Optimization cycle finished
