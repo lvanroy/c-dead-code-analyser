@@ -45,7 +45,7 @@ digraph G {
 		Q19 -> Q22
 		Q22[label="Initializer"];
 		Q22 -> Q23
-		Q23[label="Val = 6"];
+		Q23[label="Val = 2"];
 		Q7 -> Q24
 		Q24[label="Assignment Expression"];
 		Q24 -> Q25
@@ -53,7 +53,7 @@ digraph G {
 		Q24 -> Q26
 		Q26[label="="];
 		Q24 -> Q27
-		Q27[label="Val = 7"];
+		Q27[label="Val = 2"];
 		Q7 -> Q28
 		Q28[label="Postfix Expression"];
 		Q28 -> Q29
@@ -73,399 +73,399 @@ digraph G {
 		Q35 -> Q36
 		Q36[label="ID = a"];
 		Q35 -> Q37
-		Q37[label="*="];
+		Q37[label="="];
 		Q35 -> Q38
-		Q38[label="Val = 8"];
-		Q7 -> Q39
-		Q39[label="Postfix Expression"];
+		Q38[label="Cast Expression"];
+		Q38 -> Q39
+		Q39[label="Type Name"];
 		Q39 -> Q40
-		Q40[label="ID = printf"];
-		Q39 -> Q41
-		Q41[label="("];
-		Q39 -> Q42
-		Q42[label="Arguments"];
+		Q40[label="Type Def Name"];
+		Q40 -> Q41
+		Q41[label="a"];
+		Q38 -> Q42
+		Q42[label="Unary Expression"];
 		Q42 -> Q43
-		Q43[label="Val = \"%d \\n\""];
+		Q43[label="*"];
 		Q42 -> Q44
-		Q44[label="ID = a"];
-		Q39 -> Q45
-		Q45[label=")"];
-		Q7 -> Q46
-		Q46[label="Assignment Expression"];
-		Q46 -> Q47
-		Q47[label="ID = a"];
-		Q46 -> Q48
-		Q48[label="/="];
-		Q46 -> Q49
-		Q49[label="Val = 4"];
-		Q7 -> Q50
-		Q50[label="Postfix Expression"];
-		Q50 -> Q51
-		Q51[label="ID = printf"];
-		Q50 -> Q52
-		Q52[label="("];
-		Q50 -> Q53
-		Q53[label="Arguments"];
-		Q53 -> Q54
-		Q54[label="Val = \"%d \\n\""];
-		Q53 -> Q55
-		Q55[label="ID = a"];
-		Q50 -> Q56
-		Q56[label=")"];
-		Q7 -> Q57
-		Q57[label="Assignment Expression"];
+		Q44[label="Val = 2"];
+		Q7 -> Q45
+		Q45[label="Postfix Expression"];
+		Q45 -> Q46
+		Q46[label="ID = printf"];
+		Q45 -> Q47
+		Q47[label="("];
+		Q45 -> Q48
+		Q48[label="Arguments"];
+		Q48 -> Q49
+		Q49[label="Val = \"%d \\n\""];
+		Q48 -> Q50
+		Q50[label="ID = a"];
+		Q45 -> Q51
+		Q51[label=")"];
+		Q7 -> Q52
+		Q52[label="Assignment Expression"];
+		Q52 -> Q53
+		Q53[label="ID = a"];
+		Q52 -> Q54
+		Q54[label="="];
+		Q52 -> Q55
+		Q55[label="Cast Expression"];
+		Q55 -> Q56
+		Q56[label="Type Name"];
+		Q56 -> Q57
+		Q57[label="Type Def Name"];
 		Q57 -> Q58
-		Q58[label="ID = a"];
-		Q57 -> Q59
-		Q59[label="%="];
-		Q57 -> Q60
-		Q60[label="Val = 3"];
-		Q7 -> Q61
-		Q61[label="Postfix Expression"];
-		Q61 -> Q62
-		Q62[label="ID = printf"];
-		Q61 -> Q63
-		Q63[label="("];
-		Q61 -> Q64
-		Q64[label="Arguments"];
-		Q64 -> Q65
-		Q65[label="Val = \"%d \\n\""];
-		Q64 -> Q66
-		Q66[label="ID = a"];
-		Q61 -> Q67
-		Q67[label=")"];
-		Q7 -> Q68
-		Q68[label="Assignment Expression"];
-		Q68 -> Q69
-		Q69[label="ID = a"];
-		Q68 -> Q70
-		Q70[label="+="];
-		Q68 -> Q71
-		Q71[label="Val = 3"];
-		Q7 -> Q72
-		Q72[label="Postfix Expression"];
+		Q58[label="a"];
+		Q55 -> Q59
+		Q59[label="Unary Expression"];
+		Q59 -> Q60
+		Q60[label="+"];
+		Q59 -> Q61
+		Q61[label="Val = 2"];
+		Q7 -> Q62
+		Q62[label="Postfix Expression"];
+		Q62 -> Q63
+		Q63[label="ID = printf"];
+		Q62 -> Q64
+		Q64[label="("];
+		Q62 -> Q65
+		Q65[label="Arguments"];
+		Q65 -> Q66
+		Q66[label="Val = \"%d \\n\""];
+		Q65 -> Q67
+		Q67[label="ID = a"];
+		Q62 -> Q68
+		Q68[label=")"];
+		Q7 -> Q69
+		Q69[label="Assignment Expression"];
+		Q69 -> Q70
+		Q70[label="ID = a"];
+		Q69 -> Q71
+		Q71[label="="];
+		Q69 -> Q72
+		Q72[label="Cast Expression"];
 		Q72 -> Q73
-		Q73[label="ID = printf"];
-		Q72 -> Q74
-		Q74[label="("];
-		Q72 -> Q75
-		Q75[label="Arguments"];
-		Q75 -> Q76
-		Q76[label="Val = \"%d \\n\""];
-		Q75 -> Q77
-		Q77[label="ID = a"];
-		Q72 -> Q78
-		Q78[label=")"];
+		Q73[label="Type Name"];
+		Q73 -> Q74
+		Q74[label="Type Def Name"];
+		Q74 -> Q75
+		Q75[label="a"];
+		Q72 -> Q76
+		Q76[label="Unary Expression"];
+		Q76 -> Q77
+		Q77[label="-"];
+		Q76 -> Q78
+		Q78[label="Val = 2"];
 		Q7 -> Q79
-		Q79[label="Assignment Expression"];
+		Q79[label="Postfix Expression"];
 		Q79 -> Q80
-		Q80[label="ID = a"];
+		Q80[label="ID = printf"];
 		Q79 -> Q81
-		Q81[label="-="];
+		Q81[label="("];
 		Q79 -> Q82
-		Q82[label="Val = 2"];
-		Q7 -> Q83
-		Q83[label="Postfix Expression"];
-		Q83 -> Q84
-		Q84[label="ID = printf"];
-		Q83 -> Q85
-		Q85[label="("];
-		Q83 -> Q86
-		Q86[label="Arguments"];
+		Q82[label="Arguments"];
+		Q82 -> Q83
+		Q83[label="Val = \"%d \\n\""];
+		Q82 -> Q84
+		Q84[label="ID = a"];
+		Q79 -> Q85
+		Q85[label=")"];
+		Q7 -> Q86
+		Q86[label="Assignment Expression"];
 		Q86 -> Q87
-		Q87[label="Val = \"%d \\n\""];
+		Q87[label="ID = a"];
 		Q86 -> Q88
-		Q88[label="ID = a"];
-		Q83 -> Q89
-		Q89[label=")"];
-		Q7 -> Q90
-		Q90[label="Assignment Expression"];
+		Q88[label="="];
+		Q86 -> Q89
+		Q89[label="Cast Expression"];
+		Q89 -> Q90
+		Q90[label="Type Name"];
 		Q90 -> Q91
-		Q91[label="ID = a"];
-		Q90 -> Q92
-		Q92[label="<<="];
-		Q90 -> Q93
-		Q93[label="Val = 2"];
-		Q7 -> Q94
-		Q94[label="Postfix Expression"];
-		Q94 -> Q95
-		Q95[label="ID = printf"];
-		Q94 -> Q96
-		Q96[label="("];
-		Q94 -> Q97
-		Q97[label="Arguments"];
+		Q91[label="Type Specifier"];
+		Q91 -> Q92
+		Q92[label="Type Def Name"];
+		Q92 -> Q93
+		Q93[label="a"];
+		Q91 -> Q94
+		Q94[label="pointer"];
+		Q90 -> Q95
+		Q95[label="Type Def Name"];
+		Q95 -> Q96
+		Q96[label="b"];
+		Q89 -> Q97
+		Q97[label="Unary Expression"];
 		Q97 -> Q98
-		Q98[label="Val = \"%d \\n\""];
+		Q98[label="*"];
 		Q97 -> Q99
-		Q99[label="ID = a"];
-		Q94 -> Q100
-		Q100[label=")"];
-		Q7 -> Q101
-		Q101[label="Assignment Expression"];
-		Q101 -> Q102
-		Q102[label="ID = a"];
-		Q101 -> Q103
-		Q103[label=">>="];
-		Q101 -> Q104
-		Q104[label="Val = 1"];
-		Q7 -> Q105
-		Q105[label="Postfix Expression"];
-		Q105 -> Q106
-		Q106[label="ID = printf"];
-		Q105 -> Q107
-		Q107[label="("];
-		Q105 -> Q108
-		Q108[label="Arguments"];
-		Q108 -> Q109
-		Q109[label="Val = \"%d \\n\""];
-		Q108 -> Q110
-		Q110[label="ID = a"];
-		Q105 -> Q111
-		Q111[label=")"];
-		Q7 -> Q112
-		Q112[label="Assignment Expression"];
+		Q99[label="Val = 2"];
+		Q7 -> Q100
+		Q100[label="Postfix Expression"];
+		Q100 -> Q101
+		Q101[label="ID = printf"];
+		Q100 -> Q102
+		Q102[label="("];
+		Q100 -> Q103
+		Q103[label="Arguments"];
+		Q103 -> Q104
+		Q104[label="Val = \"%d \\n\""];
+		Q103 -> Q105
+		Q105[label="ID = a"];
+		Q100 -> Q106
+		Q106[label=")"];
+		Q7 -> Q107
+		Q107[label="Assignment Expression"];
+		Q107 -> Q108
+		Q108[label="ID = a"];
+		Q107 -> Q109
+		Q109[label="="];
+		Q107 -> Q110
+		Q110[label="Cast Expression"];
+		Q110 -> Q111
+		Q111[label="Type Name"];
+		Q111 -> Q112
+		Q112[label="Type Specifier"];
 		Q112 -> Q113
-		Q113[label="ID = a"];
-		Q112 -> Q114
-		Q114[label="&="];
+		Q113[label="Type Def Name"];
+		Q113 -> Q114
+		Q114[label="a"];
 		Q112 -> Q115
-		Q115[label="Val = 4"];
-		Q7 -> Q116
-		Q116[label="Postfix Expression"];
+		Q115[label="pointer"];
+		Q111 -> Q116
+		Q116[label="Type Def Name"];
 		Q116 -> Q117
-		Q117[label="ID = printf"];
-		Q116 -> Q118
-		Q118[label="("];
-		Q116 -> Q119
-		Q119[label="Arguments"];
-		Q119 -> Q120
-		Q120[label="Val = \"%d \\n\""];
-		Q119 -> Q121
-		Q121[label="ID = a"];
-		Q116 -> Q122
-		Q122[label=")"];
-		Q7 -> Q123
-		Q123[label="Assignment Expression"];
-		Q123 -> Q124
-		Q124[label="ID = a"];
-		Q123 -> Q125
-		Q125[label="|="];
-		Q123 -> Q126
-		Q126[label="Val = 13"];
-		Q7 -> Q127
-		Q127[label="Postfix Expression"];
-		Q127 -> Q128
-		Q128[label="ID = printf"];
-		Q127 -> Q129
-		Q129[label="("];
-		Q127 -> Q130
-		Q130[label="Arguments"];
-		Q130 -> Q131
-		Q131[label="Val = \"%d \\n\""];
-		Q130 -> Q132
-		Q132[label="ID = a"];
-		Q127 -> Q133
-		Q133[label=")"];
-		Q7 -> Q134
-		Q134[label="Assignment Expression"];
+		Q117[label="b"];
+		Q110 -> Q118
+		Q118[label="Unary Expression"];
+		Q118 -> Q119
+		Q119[label="+"];
+		Q118 -> Q120
+		Q120[label="Val = 2"];
+		Q7 -> Q121
+		Q121[label="Postfix Expression"];
+		Q121 -> Q122
+		Q122[label="ID = printf"];
+		Q121 -> Q123
+		Q123[label="("];
+		Q121 -> Q124
+		Q124[label="Arguments"];
+		Q124 -> Q125
+		Q125[label="Val = \"%d \\n\""];
+		Q124 -> Q126
+		Q126[label="ID = a"];
+		Q121 -> Q127
+		Q127[label=")"];
+		Q7 -> Q128
+		Q128[label="Assignment Expression"];
+		Q128 -> Q129
+		Q129[label="ID = a"];
+		Q128 -> Q130
+		Q130[label="="];
+		Q128 -> Q131
+		Q131[label="Cast Expression"];
+		Q131 -> Q132
+		Q132[label="Type Name"];
+		Q132 -> Q133
+		Q133[label="Type Specifier"];
+		Q133 -> Q134
+		Q134[label="Type Def Name"];
 		Q134 -> Q135
-		Q135[label="ID = a"];
-		Q134 -> Q136
-		Q136[label="^="];
-		Q134 -> Q137
-		Q137[label="Val = 4"];
-		Q7 -> Q138
-		Q138[label="Postfix Expression"];
+		Q135[label="a"];
+		Q133 -> Q136
+		Q136[label="pointer"];
+		Q132 -> Q137
+		Q137[label="Type Specifier"];
+		Q137 -> Q138
+		Q138[label="Type Def Name"];
 		Q138 -> Q139
-		Q139[label="ID = printf"];
-		Q138 -> Q140
-		Q140[label="("];
-		Q138 -> Q141
-		Q141[label="Arguments"];
+		Q139[label="b"];
+		Q137 -> Q140
+		Q140[label="pointer"];
+		Q132 -> Q141
+		Q141[label="Type Def Name"];
 		Q141 -> Q142
-		Q142[label="Val = \"%d \\n\""];
-		Q141 -> Q143
-		Q143[label="ID = a"];
-		Q138 -> Q144
-		Q144[label=")"];
-		Q7 -> Q145
-		Q145[label="Assignment Expression"];
-		Q145 -> Q146
-		Q146[label="ID = a"];
-		Q145 -> Q147
-		Q147[label="="];
-		Q145 -> Q148
-		Q148[label="Assignment Expression"];
-		Q148 -> Q149
-		Q149[label="ID = b"];
-		Q148 -> Q150
-		Q150[label="="];
-		Q148 -> Q151
-		Q151[label="Val = 20"];
-		Q7 -> Q152
-		Q152[label="Postfix Expression"];
-		Q152 -> Q153
-		Q153[label="ID = printf"];
-		Q152 -> Q154
-		Q154[label="("];
-		Q152 -> Q155
-		Q155[label="Arguments"];
-		Q155 -> Q156
-		Q156[label="Val = \"%d \\n\""];
-		Q155 -> Q157
-		Q157[label="ID = a"];
-		Q152 -> Q158
-		Q158[label=")"];
-		Q7 -> Q159
-		Q159[label="Postfix Expression"];
-		Q159 -> Q160
-		Q160[label="ID = printf"];
-		Q159 -> Q161
-		Q161[label="("];
-		Q159 -> Q162
-		Q162[label="Arguments"];
-		Q162 -> Q163
-		Q163[label="Val = \"%d \\n\""];
-		Q162 -> Q164
-		Q164[label="ID = b"];
-		Q159 -> Q165
-		Q165[label=")"];
-		Q7 -> Q166
-		Q166[label="Assignment Expression"];
-		Q166 -> Q167
-		Q167[label="ID = a"];
-		Q166 -> Q168
-		Q168[label="="];
-		Q166 -> Q169
-		Q169[label="Conditional Expression"];
-		Q169 -> Q170
-		Q170[label="Equality Expression"];
-		Q170 -> Q171
-		Q171[label="ID = a"];
-		Q170 -> Q172
-		Q172[label="=="];
-		Q170 -> Q173
-		Q173[label="Val = 20"];
-		Q169 -> Q174
-		Q174[label="?"];
-		Q169 -> Q175
-		Q175[label="Val = 3"];
-		Q169 -> Q176
-		Q176[label=":"];
-		Q169 -> Q177
-		Q177[label="Val = 4"];
-		Q7 -> Q178
-		Q178[label="Postfix Expression"];
-		Q178 -> Q179
-		Q179[label="ID = printf"];
-		Q178 -> Q180
-		Q180[label="("];
-		Q178 -> Q181
-		Q181[label="Arguments"];
-		Q181 -> Q182
-		Q182[label="Val = \"%d \\n\""];
-		Q181 -> Q183
-		Q183[label="ID = a"];
-		Q178 -> Q184
-		Q184[label=")"];
-		Q7 -> Q185
-		Q185[label="Assignment Expression"];
-		Q185 -> Q186
-		Q186[label="ID = a"];
-		Q185 -> Q187
-		Q187[label="="];
-		Q185 -> Q188
-		Q188[label="Logical Or Expression"];
-		Q188 -> Q189
-		Q189[label="Val = 5"];
-		Q188 -> Q190
-		Q190[label="||"];
-		Q188 -> Q191
-		Q191[label="Val = 0"];
-		Q7 -> Q192
-		Q192[label="Postfix Expression"];
-		Q192 -> Q193
-		Q193[label="ID = printf"];
-		Q192 -> Q194
-		Q194[label="("];
-		Q192 -> Q195
-		Q195[label="Arguments"];
-		Q195 -> Q196
-		Q196[label="Val = \"%d \\n\""];
-		Q195 -> Q197
-		Q197[label="ID = a"];
-		Q192 -> Q198
-		Q198[label=")"];
-		Q7 -> Q199
-		Q199[label="Assignment Expression"];
-		Q199 -> Q200
-		Q200[label="ID = a"];
-		Q199 -> Q201
-		Q201[label="="];
-		Q199 -> Q202
-		Q202[label="Logical And Expression"];
-		Q202 -> Q203
-		Q203[label="Val = 2"];
-		Q202 -> Q204
-		Q204[label="&&"];
-		Q202 -> Q205
-		Q205[label="Val = 3"];
-		Q7 -> Q206
-		Q206[label="Postfix Expression"];
-		Q206 -> Q207
-		Q207[label="ID = printf"];
-		Q206 -> Q208
-		Q208[label="("];
-		Q206 -> Q209
-		Q209[label="Arguments"];
-		Q209 -> Q210
-		Q210[label="Val = \"%d \\n\""];
-		Q209 -> Q211
-		Q211[label="ID = a"];
-		Q206 -> Q212
-		Q212[label=")"];
-		Q7 -> Q213
-		Q213[label="Assignment Expression"];
-		Q213 -> Q214
-		Q214[label="ID = a"];
-		Q213 -> Q215
-		Q215[label="="];
-		Q213 -> Q216
-		Q216[label="Bitwise Or Expression"];
-		Q216 -> Q217
-		Q217[label="Val = 2"];
-		Q216 -> Q218
-		Q218[label="|"];
-		Q216 -> Q219
-		Q219[label="Val = 0"];
-		Q7 -> Q220
-		Q220[label="Postfix Expression"];
-		Q220 -> Q221
-		Q221[label="ID = printf"];
-		Q220 -> Q222
-		Q222[label="("];
-		Q220 -> Q223
-		Q223[label="Arguments"];
+		Q142[label="b"];
+		Q131 -> Q143
+		Q143[label="Unary Expression"];
+		Q143 -> Q144
+		Q144[label="*"];
+		Q143 -> Q145
+		Q145[label="Val = 2"];
+		Q7 -> Q146
+		Q146[label="Postfix Expression"];
+		Q146 -> Q147
+		Q147[label="ID = printf"];
+		Q146 -> Q148
+		Q148[label="("];
+		Q146 -> Q149
+		Q149[label="Arguments"];
+		Q149 -> Q150
+		Q150[label="Val = \"%d \\n\""];
+		Q149 -> Q151
+		Q151[label="ID = a"];
+		Q146 -> Q152
+		Q152[label=")"];
+		Q7 -> Q153
+		Q153[label="Assignment Expression"];
+		Q153 -> Q154
+		Q154[label="ID = a"];
+		Q153 -> Q155
+		Q155[label="*="];
+		Q153 -> Q156
+		Q156[label="Val = 8"];
+		Q7 -> Q157
+		Q157[label="Postfix Expression"];
+		Q157 -> Q158
+		Q158[label="ID = printf"];
+		Q157 -> Q159
+		Q159[label="("];
+		Q157 -> Q160
+		Q160[label="Arguments"];
+		Q160 -> Q161
+		Q161[label="Val = \"%d \\n\""];
+		Q160 -> Q162
+		Q162[label="ID = a"];
+		Q157 -> Q163
+		Q163[label=")"];
+		Q7 -> Q164
+		Q164[label="Assignment Expression"];
+		Q164 -> Q165
+		Q165[label="ID = a"];
+		Q164 -> Q166
+		Q166[label="/="];
+		Q164 -> Q167
+		Q167[label="Val = 4"];
+		Q7 -> Q168
+		Q168[label="Postfix Expression"];
+		Q168 -> Q169
+		Q169[label="ID = printf"];
+		Q168 -> Q170
+		Q170[label="("];
+		Q168 -> Q171
+		Q171[label="Arguments"];
+		Q171 -> Q172
+		Q172[label="Val = \"%d \\n\""];
+		Q171 -> Q173
+		Q173[label="ID = a"];
+		Q168 -> Q174
+		Q174[label=")"];
+		Q7 -> Q175
+		Q175[label="Assignment Expression"];
+		Q175 -> Q176
+		Q176[label="ID = a"];
+		Q175 -> Q177
+		Q177[label="%="];
+		Q175 -> Q178
+		Q178[label="Val = 3"];
+		Q7 -> Q179
+		Q179[label="Postfix Expression"];
+		Q179 -> Q180
+		Q180[label="ID = printf"];
+		Q179 -> Q181
+		Q181[label="("];
+		Q179 -> Q182
+		Q182[label="Arguments"];
+		Q182 -> Q183
+		Q183[label="Val = \"%d \\n\""];
+		Q182 -> Q184
+		Q184[label="ID = a"];
+		Q179 -> Q185
+		Q185[label=")"];
+		Q7 -> Q186
+		Q186[label="Assignment Expression"];
+		Q186 -> Q187
+		Q187[label="ID = a"];
+		Q186 -> Q188
+		Q188[label="+="];
+		Q186 -> Q189
+		Q189[label="Val = 3"];
+		Q7 -> Q190
+		Q190[label="Postfix Expression"];
+		Q190 -> Q191
+		Q191[label="ID = printf"];
+		Q190 -> Q192
+		Q192[label="("];
+		Q190 -> Q193
+		Q193[label="Arguments"];
+		Q193 -> Q194
+		Q194[label="Val = \"%d \\n\""];
+		Q193 -> Q195
+		Q195[label="ID = a"];
+		Q190 -> Q196
+		Q196[label=")"];
+		Q7 -> Q197
+		Q197[label="Assignment Expression"];
+		Q197 -> Q198
+		Q198[label="ID = a"];
+		Q197 -> Q199
+		Q199[label="-="];
+		Q197 -> Q200
+		Q200[label="Val = 2"];
+		Q7 -> Q201
+		Q201[label="Postfix Expression"];
+		Q201 -> Q202
+		Q202[label="ID = printf"];
+		Q201 -> Q203
+		Q203[label="("];
+		Q201 -> Q204
+		Q204[label="Arguments"];
+		Q204 -> Q205
+		Q205[label="Val = \"%d \\n\""];
+		Q204 -> Q206
+		Q206[label="ID = a"];
+		Q201 -> Q207
+		Q207[label=")"];
+		Q7 -> Q208
+		Q208[label="Assignment Expression"];
+		Q208 -> Q209
+		Q209[label="ID = a"];
+		Q208 -> Q210
+		Q210[label="<<="];
+		Q208 -> Q211
+		Q211[label="Val = 2"];
+		Q7 -> Q212
+		Q212[label="Postfix Expression"];
+		Q212 -> Q213
+		Q213[label="ID = printf"];
+		Q212 -> Q214
+		Q214[label="("];
+		Q212 -> Q215
+		Q215[label="Arguments"];
+		Q215 -> Q216
+		Q216[label="Val = \"%d \\n\""];
+		Q215 -> Q217
+		Q217[label="ID = a"];
+		Q212 -> Q218
+		Q218[label=")"];
+		Q7 -> Q219
+		Q219[label="Assignment Expression"];
+		Q219 -> Q220
+		Q220[label="ID = a"];
+		Q219 -> Q221
+		Q221[label=">>="];
+		Q219 -> Q222
+		Q222[label="Val = 1"];
+		Q7 -> Q223
+		Q223[label="Postfix Expression"];
 		Q223 -> Q224
-		Q224[label="Val = \"%d \\n\""];
+		Q224[label="ID = printf"];
 		Q223 -> Q225
-		Q225[label="ID = a"];
-		Q220 -> Q226
-		Q226[label=")"];
-		Q7 -> Q227
-		Q227[label="Assignment Expression"];
-		Q227 -> Q228
+		Q225[label="("];
+		Q223 -> Q226
+		Q226[label="Arguments"];
+		Q226 -> Q227
+		Q227[label="Val = \"%d \\n\""];
+		Q226 -> Q228
 		Q228[label="ID = a"];
-		Q227 -> Q229
-		Q229[label="="];
-		Q227 -> Q230
-		Q230[label="Bitwise Xor Expression"];
+		Q223 -> Q229
+		Q229[label=")"];
+		Q7 -> Q230
+		Q230[label="Assignment Expression"];
 		Q230 -> Q231
-		Q231[label="Val = 2"];
+		Q231[label="ID = a"];
 		Q230 -> Q232
-		Q232[label="^"];
+		Q232[label="&="];
 		Q230 -> Q233
-		Q233[label="Val = 0"];
+		Q233[label="Val = 4"];
 		Q7 -> Q234
 		Q234[label="Postfix Expression"];
 		Q234 -> Q235
@@ -485,534 +485,770 @@ digraph G {
 		Q241 -> Q242
 		Q242[label="ID = a"];
 		Q241 -> Q243
-		Q243[label="="];
+		Q243[label="|="];
 		Q241 -> Q244
-		Q244[label="Logical And Expression"];
-		Q244 -> Q245
-		Q245[label="Bitwise Xor Expression"];
+		Q244[label="Val = 13"];
+		Q7 -> Q245
+		Q245[label="Postfix Expression"];
 		Q245 -> Q246
-		Q246[label="Val = 2"];
+		Q246[label="ID = printf"];
 		Q245 -> Q247
-		Q247[label="^"];
+		Q247[label="("];
 		Q245 -> Q248
-		Q248[label="Val = 0"];
-		Q244 -> Q249
-		Q249[label="&&"];
-		Q244 -> Q250
-		Q250[label="Val = 5"];
-		Q7 -> Q251
-		Q251[label="Postfix Expression"];
-		Q251 -> Q252
-		Q252[label="ID = printf"];
-		Q251 -> Q253
-		Q253[label="("];
-		Q251 -> Q254
-		Q254[label="Arguments"];
-		Q254 -> Q255
-		Q255[label="Val = \"%d \\n\""];
-		Q254 -> Q256
-		Q256[label="ID = a"];
-		Q251 -> Q257
-		Q257[label=")"];
-		Q7 -> Q258
-		Q258[label="Assignment Expression"];
-		Q258 -> Q259
-		Q259[label="ID = a"];
-		Q258 -> Q260
-		Q260[label="="];
-		Q258 -> Q261
-		Q261[label="Equality Expression"];
-		Q261 -> Q262
-		Q262[label="Val = 2"];
-		Q261 -> Q263
-		Q263[label="=="];
-		Q261 -> Q264
-		Q264[label="Val = 3"];
-		Q7 -> Q265
-		Q265[label="Postfix Expression"];
-		Q265 -> Q266
-		Q266[label="ID = printf"];
-		Q265 -> Q267
-		Q267[label="("];
-		Q265 -> Q268
-		Q268[label="Arguments"];
-		Q268 -> Q269
-		Q269[label="Val = \"%d \\n\""];
-		Q268 -> Q270
-		Q270[label="ID = a"];
-		Q265 -> Q271
-		Q271[label=")"];
-		Q7 -> Q272
-		Q272[label="Assignment Expression"];
-		Q272 -> Q273
-		Q273[label="ID = a"];
-		Q272 -> Q274
-		Q274[label="="];
-		Q272 -> Q275
-		Q275[label="Relational Expression"];
-		Q275 -> Q276
-		Q276[label="Val = 2"];
-		Q275 -> Q277
-		Q277[label="<"];
-		Q275 -> Q278
-		Q278[label="Val = 3"];
-		Q7 -> Q279
-		Q279[label="Postfix Expression"];
-		Q279 -> Q280
-		Q280[label="ID = printf"];
-		Q279 -> Q281
-		Q281[label="("];
-		Q279 -> Q282
-		Q282[label="Arguments"];
-		Q282 -> Q283
-		Q283[label="Val = \"%d \\n\""];
-		Q282 -> Q284
-		Q284[label="ID = a"];
-		Q279 -> Q285
-		Q285[label=")"];
-		Q7 -> Q286
-		Q286[label="Assignment Expression"];
-		Q286 -> Q287
-		Q287[label="ID = a"];
-		Q286 -> Q288
-		Q288[label="="];
-		Q286 -> Q289
-		Q289[label="Shift Expression"];
-		Q289 -> Q290
-		Q290[label="Val = 2"];
-		Q289 -> Q291
-		Q291[label="<<"];
-		Q289 -> Q292
-		Q292[label="Val = 2"];
-		Q7 -> Q293
-		Q293[label="Postfix Expression"];
-		Q293 -> Q294
-		Q294[label="ID = printf"];
-		Q293 -> Q295
-		Q295[label="("];
-		Q293 -> Q296
-		Q296[label="Arguments"];
+		Q248[label="Arguments"];
+		Q248 -> Q249
+		Q249[label="Val = \"%d \\n\""];
+		Q248 -> Q250
+		Q250[label="ID = a"];
+		Q245 -> Q251
+		Q251[label=")"];
+		Q7 -> Q252
+		Q252[label="Assignment Expression"];
+		Q252 -> Q253
+		Q253[label="ID = a"];
+		Q252 -> Q254
+		Q254[label="^="];
+		Q252 -> Q255
+		Q255[label="Val = 4"];
+		Q7 -> Q256
+		Q256[label="Postfix Expression"];
+		Q256 -> Q257
+		Q257[label="ID = printf"];
+		Q256 -> Q258
+		Q258[label="("];
+		Q256 -> Q259
+		Q259[label="Arguments"];
+		Q259 -> Q260
+		Q260[label="Val = \"%d \\n\""];
+		Q259 -> Q261
+		Q261[label="ID = a"];
+		Q256 -> Q262
+		Q262[label=")"];
+		Q7 -> Q263
+		Q263[label="Assignment Expression"];
+		Q263 -> Q264
+		Q264[label="ID = a"];
+		Q263 -> Q265
+		Q265[label="="];
+		Q263 -> Q266
+		Q266[label="Assignment Expression"];
+		Q266 -> Q267
+		Q267[label="ID = b"];
+		Q266 -> Q268
+		Q268[label="="];
+		Q266 -> Q269
+		Q269[label="Val = 20"];
+		Q7 -> Q270
+		Q270[label="Postfix Expression"];
+		Q270 -> Q271
+		Q271[label="ID = printf"];
+		Q270 -> Q272
+		Q272[label="("];
+		Q270 -> Q273
+		Q273[label="Arguments"];
+		Q273 -> Q274
+		Q274[label="Val = \"%d \\n\""];
+		Q273 -> Q275
+		Q275[label="ID = a"];
+		Q270 -> Q276
+		Q276[label=")"];
+		Q7 -> Q277
+		Q277[label="Postfix Expression"];
+		Q277 -> Q278
+		Q278[label="ID = printf"];
+		Q277 -> Q279
+		Q279[label="("];
+		Q277 -> Q280
+		Q280[label="Arguments"];
+		Q280 -> Q281
+		Q281[label="Val = \"%d \\n\""];
+		Q280 -> Q282
+		Q282[label="ID = b"];
+		Q277 -> Q283
+		Q283[label=")"];
+		Q7 -> Q284
+		Q284[label="Assignment Expression"];
+		Q284 -> Q285
+		Q285[label="ID = a"];
+		Q284 -> Q286
+		Q286[label="="];
+		Q284 -> Q287
+		Q287[label="Conditional Expression"];
+		Q287 -> Q288
+		Q288[label="Equality Expression"];
+		Q288 -> Q289
+		Q289[label="ID = a"];
+		Q288 -> Q290
+		Q290[label="=="];
+		Q288 -> Q291
+		Q291[label="Val = 20"];
+		Q287 -> Q292
+		Q292[label="?"];
+		Q287 -> Q293
+		Q293[label="Val = 3"];
+		Q287 -> Q294
+		Q294[label=":"];
+		Q287 -> Q295
+		Q295[label="Val = 4"];
+		Q7 -> Q296
+		Q296[label="Postfix Expression"];
 		Q296 -> Q297
-		Q297[label="Val = \"%d \\n\""];
+		Q297[label="ID = printf"];
 		Q296 -> Q298
-		Q298[label="ID = a"];
-		Q293 -> Q299
-		Q299[label=")"];
-		Q7 -> Q300
-		Q300[label="Assignment Expression"];
-		Q300 -> Q301
+		Q298[label="("];
+		Q296 -> Q299
+		Q299[label="Arguments"];
+		Q299 -> Q300
+		Q300[label="Val = \"%d \\n\""];
+		Q299 -> Q301
 		Q301[label="ID = a"];
-		Q300 -> Q302
-		Q302[label="="];
-		Q300 -> Q303
-		Q303[label="Additive Expression"];
+		Q296 -> Q302
+		Q302[label=")"];
+		Q7 -> Q303
+		Q303[label="Assignment Expression"];
 		Q303 -> Q304
 		Q304[label="ID = a"];
 		Q303 -> Q305
-		Q305[label="+"];
+		Q305[label="="];
 		Q303 -> Q306
-		Q306[label="Val = 5"];
-		Q7 -> Q307
-		Q307[label="Postfix Expression"];
-		Q307 -> Q308
-		Q308[label="ID = printf"];
-		Q307 -> Q309
-		Q309[label="("];
-		Q307 -> Q310
-		Q310[label="Arguments"];
+		Q306[label="Logical Or Expression"];
+		Q306 -> Q307
+		Q307[label="Val = 5"];
+		Q306 -> Q308
+		Q308[label="||"];
+		Q306 -> Q309
+		Q309[label="Val = 0"];
+		Q7 -> Q310
+		Q310[label="Postfix Expression"];
 		Q310 -> Q311
-		Q311[label="Val = \"%d \\n\""];
+		Q311[label="ID = printf"];
 		Q310 -> Q312
-		Q312[label="ID = a"];
-		Q307 -> Q313
-		Q313[label=")"];
-		Q7 -> Q314
-		Q314[label="Assignment Expression"];
-		Q314 -> Q315
+		Q312[label="("];
+		Q310 -> Q313
+		Q313[label="Arguments"];
+		Q313 -> Q314
+		Q314[label="Val = \"%d \\n\""];
+		Q313 -> Q315
 		Q315[label="ID = a"];
-		Q314 -> Q316
-		Q316[label="="];
-		Q314 -> Q317
-		Q317[label="Additive Expression"];
+		Q310 -> Q316
+		Q316[label=")"];
+		Q7 -> Q317
+		Q317[label="Assignment Expression"];
 		Q317 -> Q318
 		Q318[label="ID = a"];
 		Q317 -> Q319
-		Q319[label="-"];
+		Q319[label="="];
 		Q317 -> Q320
-		Q320[label="ID = b"];
-		Q7 -> Q321
-		Q321[label="Postfix Expression"];
-		Q321 -> Q322
-		Q322[label="ID = printf"];
-		Q321 -> Q323
-		Q323[label="("];
-		Q321 -> Q324
-		Q324[label="Arguments"];
+		Q320[label="Logical And Expression"];
+		Q320 -> Q321
+		Q321[label="Val = 2"];
+		Q320 -> Q322
+		Q322[label="&&"];
+		Q320 -> Q323
+		Q323[label="Val = 3"];
+		Q7 -> Q324
+		Q324[label="Postfix Expression"];
 		Q324 -> Q325
-		Q325[label="Val = \"%d \\n\""];
+		Q325[label="ID = printf"];
 		Q324 -> Q326
-		Q326[label="ID = a"];
-		Q321 -> Q327
-		Q327[label=")"];
-		Q7 -> Q328
-		Q328[label="Assignment Expression"];
-		Q328 -> Q329
+		Q326[label="("];
+		Q324 -> Q327
+		Q327[label="Arguments"];
+		Q327 -> Q328
+		Q328[label="Val = \"%d \\n\""];
+		Q327 -> Q329
 		Q329[label="ID = a"];
-		Q328 -> Q330
-		Q330[label="="];
-		Q328 -> Q331
-		Q331[label="Multiplication Expression"];
+		Q324 -> Q330
+		Q330[label=")"];
+		Q7 -> Q331
+		Q331[label="Assignment Expression"];
 		Q331 -> Q332
-		Q332[label="ID = b"];
+		Q332[label="ID = a"];
 		Q331 -> Q333
-		Q333[label="*"];
+		Q333[label="="];
 		Q331 -> Q334
-		Q334[label="Val = 2"];
-		Q7 -> Q335
-		Q335[label="Postfix Expression"];
-		Q335 -> Q336
-		Q336[label="ID = printf"];
-		Q335 -> Q337
-		Q337[label="("];
-		Q335 -> Q338
-		Q338[label="Arguments"];
+		Q334[label="Bitwise Or Expression"];
+		Q334 -> Q335
+		Q335[label="Val = 2"];
+		Q334 -> Q336
+		Q336[label="|"];
+		Q334 -> Q337
+		Q337[label="Val = 0"];
+		Q7 -> Q338
+		Q338[label="Postfix Expression"];
 		Q338 -> Q339
-		Q339[label="Val = \"%d \\n\""];
+		Q339[label="ID = printf"];
 		Q338 -> Q340
-		Q340[label="ID = a"];
-		Q335 -> Q341
-		Q341[label=")"];
-		Q7 -> Q342
-		Q342[label="Assignment Expression"];
-		Q342 -> Q343
+		Q340[label="("];
+		Q338 -> Q341
+		Q341[label="Arguments"];
+		Q341 -> Q342
+		Q342[label="Val = \"%d \\n\""];
+		Q341 -> Q343
 		Q343[label="ID = a"];
-		Q342 -> Q344
-		Q344[label="="];
-		Q342 -> Q345
-		Q345[label="Multiplication Expression"];
+		Q338 -> Q344
+		Q344[label=")"];
+		Q7 -> Q345
+		Q345[label="Assignment Expression"];
 		Q345 -> Q346
-		Q346[label="ID = b"];
+		Q346[label="ID = a"];
 		Q345 -> Q347
-		Q347[label="/"];
+		Q347[label="="];
 		Q345 -> Q348
-		Q348[label="Val = 5"];
-		Q7 -> Q349
-		Q349[label="Postfix Expression"];
-		Q349 -> Q350
-		Q350[label="ID = printf"];
-		Q349 -> Q351
-		Q351[label="("];
-		Q349 -> Q352
-		Q352[label="Arguments"];
+		Q348[label="Bitwise Xor Expression"];
+		Q348 -> Q349
+		Q349[label="Val = 2"];
+		Q348 -> Q350
+		Q350[label="^"];
+		Q348 -> Q351
+		Q351[label="Val = 0"];
+		Q7 -> Q352
+		Q352[label="Postfix Expression"];
 		Q352 -> Q353
-		Q353[label="Val = \"%d \\n\""];
+		Q353[label="ID = printf"];
 		Q352 -> Q354
-		Q354[label="ID = a"];
-		Q349 -> Q355
-		Q355[label=")"];
-		Q7 -> Q356
-		Q356[label="Assignment Expression"];
-		Q356 -> Q357
+		Q354[label="("];
+		Q352 -> Q355
+		Q355[label="Arguments"];
+		Q355 -> Q356
+		Q356[label="Val = \"%d \\n\""];
+		Q355 -> Q357
 		Q357[label="ID = a"];
-		Q356 -> Q358
-		Q358[label="="];
-		Q356 -> Q359
-		Q359[label="Multiplication Expression"];
+		Q352 -> Q358
+		Q358[label=")"];
+		Q7 -> Q359
+		Q359[label="Assignment Expression"];
 		Q359 -> Q360
 		Q360[label="ID = a"];
 		Q359 -> Q361
-		Q361[label="%"];
+		Q361[label="="];
 		Q359 -> Q362
-		Q362[label="Val = 3"];
-		Q7 -> Q363
-		Q363[label="Postfix Expression"];
+		Q362[label="Logical And Expression"];
+		Q362 -> Q363
+		Q363[label="Bitwise Xor Expression"];
 		Q363 -> Q364
-		Q364[label="ID = printf"];
+		Q364[label="Val = 2"];
 		Q363 -> Q365
-		Q365[label="("];
+		Q365[label="^"];
 		Q363 -> Q366
-		Q366[label="Arguments"];
-		Q366 -> Q367
-		Q367[label="Val = \"%d \\n\""];
-		Q366 -> Q368
-		Q368[label="ID = a"];
-		Q363 -> Q369
-		Q369[label=")"];
-		Q7 -> Q370
-		Q370[label="Assignment Expression"];
-		Q370 -> Q371
-		Q371[label="ID = a"];
-		Q370 -> Q372
-		Q372[label="="];
-		Q370 -> Q373
-		Q373[label="Cast Expression"];
-		Q373 -> Q374
-		Q374[label="Type Name"];
-		Q374 -> Q375
-		Q375[label="Type Specifier"];
-		Q375 -> Q376
-		Q376[label="int"];
-		Q373 -> Q377
-		Q377[label="Val = 5.0"];
-		Q7 -> Q378
-		Q378[label="Postfix Expression"];
-		Q378 -> Q379
-		Q379[label="ID = printf"];
-		Q378 -> Q380
-		Q380[label="("];
-		Q378 -> Q381
-		Q381[label="Arguments"];
-		Q381 -> Q382
-		Q382[label="Val = \"%d \\n\""];
-		Q381 -> Q383
-		Q383[label="ID = a"];
-		Q378 -> Q384
-		Q384[label=")"];
-		Q7 -> Q385
-		Q385[label="Assignment Expression"];
-		Q385 -> Q386
-		Q386[label="ID = a"];
-		Q385 -> Q387
-		Q387[label="="];
-		Q385 -> Q388
-		Q388[label="Unary Expression"];
-		Q388 -> Q389
-		Q389[label="++"];
-		Q388 -> Q390
-		Q390[label="ID = a"];
-		Q7 -> Q391
-		Q391[label="Postfix Expression"];
-		Q391 -> Q392
-		Q392[label="ID = printf"];
-		Q391 -> Q393
-		Q393[label="("];
-		Q391 -> Q394
-		Q394[label="Arguments"];
-		Q394 -> Q395
-		Q395[label="Val = \"%d \\n\""];
-		Q394 -> Q396
-		Q396[label="ID = a"];
-		Q391 -> Q397
-		Q397[label=")"];
-		Q7 -> Q398
-		Q398[label="Assignment Expression"];
-		Q398 -> Q399
-		Q399[label="ID = a"];
-		Q398 -> Q400
-		Q400[label="="];
-		Q398 -> Q401
-		Q401[label="Unary Expression"];
-		Q401 -> Q402
-		Q402[label="--"];
-		Q401 -> Q403
-		Q403[label="ID = a"];
+		Q366[label="Val = 0"];
+		Q362 -> Q367
+		Q367[label="&&"];
+		Q362 -> Q368
+		Q368[label="Val = 5"];
+		Q7 -> Q369
+		Q369[label="Postfix Expression"];
+		Q369 -> Q370
+		Q370[label="ID = printf"];
+		Q369 -> Q371
+		Q371[label="("];
+		Q369 -> Q372
+		Q372[label="Arguments"];
+		Q372 -> Q373
+		Q373[label="Val = \"%d \\n\""];
+		Q372 -> Q374
+		Q374[label="ID = a"];
+		Q369 -> Q375
+		Q375[label=")"];
+		Q7 -> Q376
+		Q376[label="Assignment Expression"];
+		Q376 -> Q377
+		Q377[label="ID = a"];
+		Q376 -> Q378
+		Q378[label="="];
+		Q376 -> Q379
+		Q379[label="Equality Expression"];
+		Q379 -> Q380
+		Q380[label="Val = 2"];
+		Q379 -> Q381
+		Q381[label="=="];
+		Q379 -> Q382
+		Q382[label="Val = 3"];
+		Q7 -> Q383
+		Q383[label="Postfix Expression"];
+		Q383 -> Q384
+		Q384[label="ID = printf"];
+		Q383 -> Q385
+		Q385[label="("];
+		Q383 -> Q386
+		Q386[label="Arguments"];
+		Q386 -> Q387
+		Q387[label="Val = \"%d \\n\""];
+		Q386 -> Q388
+		Q388[label="ID = a"];
+		Q383 -> Q389
+		Q389[label=")"];
+		Q7 -> Q390
+		Q390[label="Assignment Expression"];
+		Q390 -> Q391
+		Q391[label="ID = a"];
+		Q390 -> Q392
+		Q392[label="="];
+		Q390 -> Q393
+		Q393[label="Relational Expression"];
+		Q393 -> Q394
+		Q394[label="Val = 2"];
+		Q393 -> Q395
+		Q395[label="<"];
+		Q393 -> Q396
+		Q396[label="Val = 3"];
+		Q7 -> Q397
+		Q397[label="Postfix Expression"];
+		Q397 -> Q398
+		Q398[label="ID = printf"];
+		Q397 -> Q399
+		Q399[label="("];
+		Q397 -> Q400
+		Q400[label="Arguments"];
+		Q400 -> Q401
+		Q401[label="Val = \"%d \\n\""];
+		Q400 -> Q402
+		Q402[label="ID = a"];
+		Q397 -> Q403
+		Q403[label=")"];
 		Q7 -> Q404
-		Q404[label="Postfix Expression"];
+		Q404[label="Assignment Expression"];
 		Q404 -> Q405
-		Q405[label="ID = printf"];
+		Q405[label="ID = a"];
 		Q404 -> Q406
-		Q406[label="("];
+		Q406[label="="];
 		Q404 -> Q407
-		Q407[label="Arguments"];
+		Q407[label="Shift Expression"];
 		Q407 -> Q408
-		Q408[label="Val = \"%d \\n\""];
+		Q408[label="Val = 2"];
 		Q407 -> Q409
-		Q409[label="ID = a"];
-		Q404 -> Q410
-		Q410[label=")"];
+		Q409[label="<<"];
+		Q407 -> Q410
+		Q410[label="Val = 2"];
 		Q7 -> Q411
-		Q411[label="Assignment Expression"];
+		Q411[label="Postfix Expression"];
 		Q411 -> Q412
-		Q412[label="ID = a"];
+		Q412[label="ID = printf"];
 		Q411 -> Q413
-		Q413[label="="];
+		Q413[label="("];
 		Q411 -> Q414
-		Q414[label="Unary Expression"];
+		Q414[label="Arguments"];
 		Q414 -> Q415
-		Q415[label="-"];
+		Q415[label="Val = \"%d \\n\""];
 		Q414 -> Q416
 		Q416[label="ID = a"];
-		Q7 -> Q417
-		Q417[label="Postfix Expression"];
-		Q417 -> Q418
-		Q418[label="ID = printf"];
-		Q417 -> Q419
-		Q419[label="("];
-		Q417 -> Q420
-		Q420[label="Arguments"];
-		Q420 -> Q421
-		Q421[label="Val = \"%d \\n\""];
-		Q420 -> Q422
+		Q411 -> Q417
+		Q417[label=")"];
+		Q7 -> Q418
+		Q418[label="Assignment Expression"];
+		Q418 -> Q419
+		Q419[label="ID = a"];
+		Q418 -> Q420
+		Q420[label="="];
+		Q418 -> Q421
+		Q421[label="Additive Expression"];
+		Q421 -> Q422
 		Q422[label="ID = a"];
-		Q417 -> Q423
-		Q423[label=")"];
-		Q7 -> Q424
-		Q424[label="Assignment Expression"];
-		Q424 -> Q425
-		Q425[label="ID = a"];
-		Q424 -> Q426
-		Q426[label="="];
-		Q424 -> Q427
-		Q427[label="Unary Expression"];
-		Q427 -> Q428
-		Q428[label="~"];
-		Q427 -> Q429
-		Q429[label="ID = a"];
-		Q7 -> Q430
-		Q430[label="Postfix Expression"];
-		Q430 -> Q431
-		Q431[label="ID = printf"];
-		Q430 -> Q432
-		Q432[label="("];
-		Q430 -> Q433
-		Q433[label="Arguments"];
-		Q433 -> Q434
-		Q434[label="Val = \"%d \\n\""];
-		Q433 -> Q435
-		Q435[label="ID = a"];
-		Q430 -> Q436
-		Q436[label=")"];
-		Q7 -> Q437
-		Q437[label="Assignment Expression"];
-		Q437 -> Q438
-		Q438[label="ID = a"];
-		Q437 -> Q439
-		Q439[label="="];
-		Q437 -> Q440
-		Q440[label="Unary Expression"];
-		Q440 -> Q441
-		Q441[label="!"];
-		Q440 -> Q442
-		Q442[label="ID = a"];
-		Q7 -> Q443
-		Q443[label="Postfix Expression"];
-		Q443 -> Q444
-		Q444[label="ID = printf"];
-		Q443 -> Q445
-		Q445[label="("];
-		Q443 -> Q446
-		Q446[label="Arguments"];
+		Q421 -> Q423
+		Q423[label="+"];
+		Q421 -> Q424
+		Q424[label="Val = 5"];
+		Q7 -> Q425
+		Q425[label="Postfix Expression"];
+		Q425 -> Q426
+		Q426[label="ID = printf"];
+		Q425 -> Q427
+		Q427[label="("];
+		Q425 -> Q428
+		Q428[label="Arguments"];
+		Q428 -> Q429
+		Q429[label="Val = \"%d \\n\""];
+		Q428 -> Q430
+		Q430[label="ID = a"];
+		Q425 -> Q431
+		Q431[label=")"];
+		Q7 -> Q432
+		Q432[label="Assignment Expression"];
+		Q432 -> Q433
+		Q433[label="ID = a"];
+		Q432 -> Q434
+		Q434[label="="];
+		Q432 -> Q435
+		Q435[label="Additive Expression"];
+		Q435 -> Q436
+		Q436[label="ID = a"];
+		Q435 -> Q437
+		Q437[label="-"];
+		Q435 -> Q438
+		Q438[label="ID = b"];
+		Q7 -> Q439
+		Q439[label="Postfix Expression"];
+		Q439 -> Q440
+		Q440[label="ID = printf"];
+		Q439 -> Q441
+		Q441[label="("];
+		Q439 -> Q442
+		Q442[label="Arguments"];
+		Q442 -> Q443
+		Q443[label="Val = \"%d \\n\""];
+		Q442 -> Q444
+		Q444[label="ID = a"];
+		Q439 -> Q445
+		Q445[label=")"];
+		Q7 -> Q446
+		Q446[label="Assignment Expression"];
 		Q446 -> Q447
-		Q447[label="Val = \"%d \\n\""];
+		Q447[label="ID = a"];
 		Q446 -> Q448
-		Q448[label="ID = a"];
-		Q443 -> Q449
-		Q449[label=")"];
-		Q7 -> Q450
-		Q450[label="Assignment Expression"];
-		Q450 -> Q451
-		Q451[label="ID = a"];
-		Q450 -> Q452
-		Q452[label="="];
-		Q450 -> Q453
-		Q453[label="Unary Expression"];
+		Q448[label="="];
+		Q446 -> Q449
+		Q449[label="Multiplication Expression"];
+		Q449 -> Q450
+		Q450[label="ID = b"];
+		Q449 -> Q451
+		Q451[label="*"];
+		Q449 -> Q452
+		Q452[label="Val = 2"];
+		Q7 -> Q453
+		Q453[label="Postfix Expression"];
 		Q453 -> Q454
-		Q454[label="sizeof"];
+		Q454[label="ID = printf"];
 		Q453 -> Q455
-		Q455[label="Primary Expression"];
-		Q455 -> Q456
-		Q456[label="("];
-		Q455 -> Q457
-		Q457[label="ID = a"];
-		Q455 -> Q458
-		Q458[label=")"];
-		Q7 -> Q459
-		Q459[label="Postfix Expression"];
-		Q459 -> Q460
-		Q460[label="ID = printf"];
-		Q459 -> Q461
-		Q461[label="("];
-		Q459 -> Q462
-		Q462[label="Arguments"];
-		Q462 -> Q463
-		Q463[label="Val = \"%d \\n\""];
-		Q462 -> Q464
-		Q464[label="ID = a"];
-		Q459 -> Q465
-		Q465[label=")"];
-		Q7 -> Q466
-		Q466[label="Assignment Expression"];
-		Q466 -> Q467
-		Q467[label="ID = a"];
-		Q466 -> Q468
-		Q468[label="="];
-		Q466 -> Q469
-		Q469[label="Postfix Expression"];
-		Q469 -> Q470
-		Q470[label="ID = a"];
-		Q469 -> Q471
-		Q471[label="++"];
-		Q7 -> Q472
-		Q472[label="Postfix Expression"];
-		Q472 -> Q473
-		Q473[label="ID = printf"];
-		Q472 -> Q474
-		Q474[label="("];
-		Q472 -> Q475
-		Q475[label="Arguments"];
-		Q475 -> Q476
-		Q476[label="Val = \"%d \\n\""];
-		Q475 -> Q477
-		Q477[label="ID = a"];
-		Q472 -> Q478
-		Q478[label=")"];
-		Q7 -> Q479
-		Q479[label="Assignment Expression"];
-		Q479 -> Q480
-		Q480[label="ID = a"];
-		Q479 -> Q481
-		Q481[label="="];
-		Q479 -> Q482
-		Q482[label="Postfix Expression"];
-		Q482 -> Q483
-		Q483[label="ID = a"];
-		Q482 -> Q484
-		Q484[label="--"];
-		Q7 -> Q485
-		Q485[label="Postfix Expression"];
-		Q485 -> Q486
-		Q486[label="ID = printf"];
-		Q485 -> Q487
-		Q487[label="("];
-		Q485 -> Q488
-		Q488[label="Arguments"];
+		Q455[label="("];
+		Q453 -> Q456
+		Q456[label="Arguments"];
+		Q456 -> Q457
+		Q457[label="Val = \"%d \\n\""];
+		Q456 -> Q458
+		Q458[label="ID = a"];
+		Q453 -> Q459
+		Q459[label=")"];
+		Q7 -> Q460
+		Q460[label="Assignment Expression"];
+		Q460 -> Q461
+		Q461[label="ID = a"];
+		Q460 -> Q462
+		Q462[label="="];
+		Q460 -> Q463
+		Q463[label="Multiplication Expression"];
+		Q463 -> Q464
+		Q464[label="ID = b"];
+		Q463 -> Q465
+		Q465[label="/"];
+		Q463 -> Q466
+		Q466[label="Val = 5"];
+		Q7 -> Q467
+		Q467[label="Postfix Expression"];
+		Q467 -> Q468
+		Q468[label="ID = printf"];
+		Q467 -> Q469
+		Q469[label="("];
+		Q467 -> Q470
+		Q470[label="Arguments"];
+		Q470 -> Q471
+		Q471[label="Val = \"%d \\n\""];
+		Q470 -> Q472
+		Q472[label="ID = a"];
+		Q467 -> Q473
+		Q473[label=")"];
+		Q7 -> Q474
+		Q474[label="Assignment Expression"];
+		Q474 -> Q475
+		Q475[label="ID = a"];
+		Q474 -> Q476
+		Q476[label="="];
+		Q474 -> Q477
+		Q477[label="Multiplication Expression"];
+		Q477 -> Q478
+		Q478[label="ID = a"];
+		Q477 -> Q479
+		Q479[label="%"];
+		Q477 -> Q480
+		Q480[label="Val = 3"];
+		Q7 -> Q481
+		Q481[label="Postfix Expression"];
+		Q481 -> Q482
+		Q482[label="ID = printf"];
+		Q481 -> Q483
+		Q483[label="("];
+		Q481 -> Q484
+		Q484[label="Arguments"];
+		Q484 -> Q485
+		Q485[label="Val = \"%d \\n\""];
+		Q484 -> Q486
+		Q486[label="ID = a"];
+		Q481 -> Q487
+		Q487[label=")"];
+		Q7 -> Q488
+		Q488[label="Assignment Expression"];
 		Q488 -> Q489
-		Q489[label="Val = \"%d \\n\""];
+		Q489[label="ID = a"];
 		Q488 -> Q490
-		Q490[label="ID = a"];
-		Q485 -> Q491
-		Q491[label=")"];
-		Q7 -> Q492
-		Q492[label="Assignment Expression"];
+		Q490[label="="];
+		Q488 -> Q491
+		Q491[label="Cast Expression"];
+		Q491 -> Q492
+		Q492[label="Type Name"];
 		Q492 -> Q493
-		Q493[label="ID = a"];
-		Q492 -> Q494
-		Q494[label="="];
-		Q492 -> Q495
-		Q495[label="Postfix Expression"];
-		Q495 -> Q496
-		Q496[label="Type Name"];
+		Q493[label="Type Specifier"];
+		Q493 -> Q494
+		Q494[label="int"];
+		Q491 -> Q495
+		Q495[label="Val = 5.0"];
+		Q7 -> Q496
+		Q496[label="Postfix Expression"];
 		Q496 -> Q497
-		Q497[label="Type Specifier"];
-		Q497 -> Q498
-		Q498[label="int"];
-		Q495 -> Q499
-		Q499[label="Initializer"];
+		Q497[label="ID = printf"];
+		Q496 -> Q498
+		Q498[label="("];
+		Q496 -> Q499
+		Q499[label="Arguments"];
 		Q499 -> Q500
-		Q500[label="Val = 5"];
-		Q7 -> Q501
-		Q501[label="Postfix Expression"];
-		Q501 -> Q502
-		Q502[label="ID = printf"];
-		Q501 -> Q503
-		Q503[label="("];
-		Q501 -> Q504
-		Q504[label="Arguments"];
-		Q504 -> Q505
-		Q505[label="Val = \"%d \\n\""];
-		Q504 -> Q506
-		Q506[label="ID = a"];
-		Q501 -> Q507
-		Q507[label=")"];
+		Q500[label="Val = \"%d \\n\""];
+		Q499 -> Q501
+		Q501[label="ID = a"];
+		Q496 -> Q502
+		Q502[label=")"];
+		Q7 -> Q503
+		Q503[label="Assignment Expression"];
+		Q503 -> Q504
+		Q504[label="ID = a"];
+		Q503 -> Q505
+		Q505[label="="];
+		Q503 -> Q506
+		Q506[label="Unary Expression"];
+		Q506 -> Q507
+		Q507[label="++"];
+		Q506 -> Q508
+		Q508[label="ID = a"];
+		Q7 -> Q509
+		Q509[label="Postfix Expression"];
+		Q509 -> Q510
+		Q510[label="ID = printf"];
+		Q509 -> Q511
+		Q511[label="("];
+		Q509 -> Q512
+		Q512[label="Arguments"];
+		Q512 -> Q513
+		Q513[label="Val = \"%d \\n\""];
+		Q512 -> Q514
+		Q514[label="ID = a"];
+		Q509 -> Q515
+		Q515[label=")"];
+		Q7 -> Q516
+		Q516[label="Assignment Expression"];
+		Q516 -> Q517
+		Q517[label="ID = a"];
+		Q516 -> Q518
+		Q518[label="="];
+		Q516 -> Q519
+		Q519[label="Unary Expression"];
+		Q519 -> Q520
+		Q520[label="--"];
+		Q519 -> Q521
+		Q521[label="ID = a"];
+		Q7 -> Q522
+		Q522[label="Postfix Expression"];
+		Q522 -> Q523
+		Q523[label="ID = printf"];
+		Q522 -> Q524
+		Q524[label="("];
+		Q522 -> Q525
+		Q525[label="Arguments"];
+		Q525 -> Q526
+		Q526[label="Val = \"%d \\n\""];
+		Q525 -> Q527
+		Q527[label="ID = a"];
+		Q522 -> Q528
+		Q528[label=")"];
+		Q7 -> Q529
+		Q529[label="Assignment Expression"];
+		Q529 -> Q530
+		Q530[label="ID = a"];
+		Q529 -> Q531
+		Q531[label="="];
+		Q529 -> Q532
+		Q532[label="Unary Expression"];
+		Q532 -> Q533
+		Q533[label="-"];
+		Q532 -> Q534
+		Q534[label="ID = a"];
+		Q7 -> Q535
+		Q535[label="Postfix Expression"];
+		Q535 -> Q536
+		Q536[label="ID = printf"];
+		Q535 -> Q537
+		Q537[label="("];
+		Q535 -> Q538
+		Q538[label="Arguments"];
+		Q538 -> Q539
+		Q539[label="Val = \"%d \\n\""];
+		Q538 -> Q540
+		Q540[label="ID = a"];
+		Q535 -> Q541
+		Q541[label=")"];
+		Q7 -> Q542
+		Q542[label="Assignment Expression"];
+		Q542 -> Q543
+		Q543[label="ID = a"];
+		Q542 -> Q544
+		Q544[label="="];
+		Q542 -> Q545
+		Q545[label="Unary Expression"];
+		Q545 -> Q546
+		Q546[label="~"];
+		Q545 -> Q547
+		Q547[label="ID = a"];
+		Q7 -> Q548
+		Q548[label="Postfix Expression"];
+		Q548 -> Q549
+		Q549[label="ID = printf"];
+		Q548 -> Q550
+		Q550[label="("];
+		Q548 -> Q551
+		Q551[label="Arguments"];
+		Q551 -> Q552
+		Q552[label="Val = \"%d \\n\""];
+		Q551 -> Q553
+		Q553[label="ID = a"];
+		Q548 -> Q554
+		Q554[label=")"];
+		Q7 -> Q555
+		Q555[label="Assignment Expression"];
+		Q555 -> Q556
+		Q556[label="ID = a"];
+		Q555 -> Q557
+		Q557[label="="];
+		Q555 -> Q558
+		Q558[label="Unary Expression"];
+		Q558 -> Q559
+		Q559[label="!"];
+		Q558 -> Q560
+		Q560[label="ID = a"];
+		Q7 -> Q561
+		Q561[label="Postfix Expression"];
+		Q561 -> Q562
+		Q562[label="ID = printf"];
+		Q561 -> Q563
+		Q563[label="("];
+		Q561 -> Q564
+		Q564[label="Arguments"];
+		Q564 -> Q565
+		Q565[label="Val = \"%d \\n\""];
+		Q564 -> Q566
+		Q566[label="ID = a"];
+		Q561 -> Q567
+		Q567[label=")"];
+		Q7 -> Q568
+		Q568[label="Assignment Expression"];
+		Q568 -> Q569
+		Q569[label="ID = a"];
+		Q568 -> Q570
+		Q570[label="="];
+		Q568 -> Q571
+		Q571[label="Unary Expression"];
+		Q571 -> Q572
+		Q572[label="sizeof"];
+		Q571 -> Q573
+		Q573[label="Primary Expression"];
+		Q573 -> Q574
+		Q574[label="("];
+		Q573 -> Q575
+		Q575[label="ID = a"];
+		Q573 -> Q576
+		Q576[label=")"];
+		Q7 -> Q577
+		Q577[label="Postfix Expression"];
+		Q577 -> Q578
+		Q578[label="ID = printf"];
+		Q577 -> Q579
+		Q579[label="("];
+		Q577 -> Q580
+		Q580[label="Arguments"];
+		Q580 -> Q581
+		Q581[label="Val = \"%d \\n\""];
+		Q580 -> Q582
+		Q582[label="ID = a"];
+		Q577 -> Q583
+		Q583[label=")"];
+		Q7 -> Q584
+		Q584[label="Assignment Expression"];
+		Q584 -> Q585
+		Q585[label="ID = a"];
+		Q584 -> Q586
+		Q586[label="="];
+		Q584 -> Q587
+		Q587[label="Postfix Expression"];
+		Q587 -> Q588
+		Q588[label="ID = a"];
+		Q587 -> Q589
+		Q589[label="++"];
+		Q7 -> Q590
+		Q590[label="Postfix Expression"];
+		Q590 -> Q591
+		Q591[label="ID = printf"];
+		Q590 -> Q592
+		Q592[label="("];
+		Q590 -> Q593
+		Q593[label="Arguments"];
+		Q593 -> Q594
+		Q594[label="Val = \"%d \\n\""];
+		Q593 -> Q595
+		Q595[label="ID = a"];
+		Q590 -> Q596
+		Q596[label=")"];
+		Q7 -> Q597
+		Q597[label="Assignment Expression"];
+		Q597 -> Q598
+		Q598[label="ID = a"];
+		Q597 -> Q599
+		Q599[label="="];
+		Q597 -> Q600
+		Q600[label="Postfix Expression"];
+		Q600 -> Q601
+		Q601[label="ID = a"];
+		Q600 -> Q602
+		Q602[label="--"];
+		Q7 -> Q603
+		Q603[label="Postfix Expression"];
+		Q603 -> Q604
+		Q604[label="ID = printf"];
+		Q603 -> Q605
+		Q605[label="("];
+		Q603 -> Q606
+		Q606[label="Arguments"];
+		Q606 -> Q607
+		Q607[label="Val = \"%d \\n\""];
+		Q606 -> Q608
+		Q608[label="ID = a"];
+		Q603 -> Q609
+		Q609[label=")"];
+		Q7 -> Q610
+		Q610[label="Assignment Expression"];
+		Q610 -> Q611
+		Q611[label="ID = a"];
+		Q610 -> Q612
+		Q612[label="="];
+		Q610 -> Q613
+		Q613[label="Postfix Expression"];
+		Q613 -> Q614
+		Q614[label="Type Name"];
+		Q614 -> Q615
+		Q615[label="Type Specifier"];
+		Q615 -> Q616
+		Q616[label="int"];
+		Q613 -> Q617
+		Q617[label="Initializer"];
+		Q617 -> Q618
+		Q618[label="Val = 5"];
+		Q7 -> Q619
+		Q619[label="Postfix Expression"];
+		Q619 -> Q620
+		Q620[label="ID = printf"];
+		Q619 -> Q621
+		Q621[label="("];
+		Q619 -> Q622
+		Q622[label="Arguments"];
+		Q622 -> Q623
+		Q623[label="Val = \"%d \\n\""];
+		Q622 -> Q624
+		Q624[label="ID = a"];
+		Q619 -> Q625
+		Q625[label=")"];
 		
 }

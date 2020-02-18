@@ -360,10 +360,11 @@ class ASTCleaner:
 
             return "Val = {}".format(value)
 
-    # helper function that reverts a cast expression that was intended to be a multiplication expression back
-    # to a multiplication expression
-    @staticmethod
-    def revert_cast_to_multiplication(node, value):
+    # helper function that reverts a cast expression that was intended to be a different expression
+    # it will have two children, being typename and unary expression
+    # the typenames are variables and pointers, the unary expression will be of the form op <val> where op
+    # is either +, - or *
+    def revert_cast(self, node):
         operation = node.get_children()[1].get_children()[0].get_label()
         if operation in ['+', '-']:
             node.set_label("Additive Expression")
@@ -378,26 +379,42 @@ class ASTCleaner:
         left_bracket.set_parent(prim_op)
         prim_op.add_child(left_bracket)
 
-        left_op = AbstractSyntaxTree("Multiplicative Expression", node.get_ctx())
-        left_op.set_parent(prim_op)
-        prim_op.add_child(left_op)
+        if node.get_children()[0].get_children()[0].get_label() == "Type Def Name":
+            value = node.get_children()[0].get_children()[0].get_children()[0].get_label()
+            self.__symbol_table.set_used(value, True)
+            left_op = AbstractSyntaxTree("ID = {}".format(value), node.get_ctx())
+            left_op.set_parent(prim_op)
+            prim_op.add_child(left_op)
+
+        else:
+            last_new_node = prim_op
+            for child in node.get_children()[1].get_children():
+                if child.get_label() == "Type Specifier":
+                    top_op = AbstractSyntaxTree("Multiplication Expression", node.get_ctx())
+                    top_op.set_parent(last_new_node)
+                    last_new_node.add_child(top_op)
+
+                    value = child.get_children()[0].get_children()[0].get_label()
+                    self.__symbol_table.set_used(value, True)
+                    left_op = AbstractSyntaxTree("ID = {}".format(value), node.get_ctx())
+                    left_op.set_parent(top_op)
+                    top_op.add_child(left_op)
+
+                    op = AbstractSyntaxTree("*", node.get_ctx())
+                    op.set_parent(top_op)
+                    top_op.add_child(op)
+
+                    last_new_node = top_op
+                else:
+                    value = child.get_children()[0].get_label()
+                    self.__symbol_table.set_used(value, True)
+                    right_op = AbstractSyntaxTree("ID = {}".format(value), node.get_ctx())
+                    right_op.set_parent(last_new_node)
+                    last_new_node.add_child(right_op)
 
         right_bracket = AbstractSyntaxTree(")", node.get_ctx())
         right_bracket.set_parent(prim_op)
         prim_op.add_child(right_bracket)
-
-        left_op_op1 = AbstractSyntaxTree("ID = {}".format(value), node.get_ctx())
-        left_op_op1.set_parent(left_op)
-        left_op.add_child(left_op_op1)
-
-        left_op_operator = AbstractSyntaxTree("*", node.get_ctx())
-        left_op_operator.set_parent(left_op)
-        left_op.add_child(left_op_operator)
-
-        op2_value = node.get_children()[-2].get_children()[1].get_children()[0].get_label()
-        left_op_op2 = AbstractSyntaxTree("ID = {}".format(op2_value), node.get_ctx())
-        left_op_op2.set_parent(left_op)
-        left_op.add_child(left_op_op2)
 
         node_operator = AbstractSyntaxTree(operation, node.get_ctx())
         node_operator.set_parent(node)
@@ -427,7 +444,7 @@ class ASTCleaner:
         if operand_1[:5] == "ID = " and self.is_initialized(operand_1[5:]):
             operand_1_val = "Val = {}".format(self.get_value(operand_1[5:]))
 
-        if operand_1[6:] == "Val = ":
+        if operand_1[:6] == "Val = ":
             operand_1_val = operand_1
 
         if operand_2[:5] == "ID = " and self.is_initialized(operand_2[5:]):
@@ -574,6 +591,7 @@ class ASTCleaner:
             self.update_assigned_value(operand_1[5:], node, "Val = {}".format(value))
             return "Val = {}".format(value)
 
+        self.__symbol_table.set_initialized(operand_1[5:], False)
         return ""
 
     def clean_arguments(self, node):
@@ -623,14 +641,21 @@ class ASTCleaner:
             return ""
 
     def clean_cast_expression(self, node):
-        # check if this was meant to be a Multiplication expression
-        if (node.get_children()[0].get_label() == "Type Name" and
-                node.get_children()[0].get_children()[0].get_label() == "Type Specifier" and
-                node.get_children()[0].get_children()[0].get_children()[0].get_label() == "Type Def Name"):
-            value = node.get_children()[0].get_children()[0].get_children()[0].get_children()[0].get_label()
-            # if the expected type is a variable, we know that it was actually a Multiplication expression
-            if self.__symbol_table.symbol_exists(value):
-                self.revert_cast_to_multiplication(node, value)
+        # check if this was meant to be a different expression
+        if node.get_children()[0].get_label() == "Type Name":
+            if node.get_children()[0].get_children()[0].get_label() == "Type Def Name":
+                value = node.get_children()[0].get_children()[0].get_children()[0].get_label()
+                if self.__symbol_table.symbol_exists(value):
+                    self.revert_cast(node)
+                    self.__changes_occurred = True
+                    return ""
+            if (node.get_children()[0].get_children()[0].get_label() == "Type Specifier" and
+                    node.get_children()[0].get_children()[0].get_children()[0].get_label() == "Type Def Name"):
+                value = node.get_children()[0].get_children()[0].get_children()[0].get_children()[0].get_label()
+                if self.__symbol_table.symbol_exists(value):
+                    self.revert_cast(node)
+                    self.__changes_occurred = True
+                    return ""
 
         var_type = self.clean(node.get_children()[0])
         value = self.clean(node.get_children()[1])
@@ -841,6 +866,7 @@ class ASTCleaner:
 
         if operand_1[:6] == "Val = " and operand_2[:6] == "Val = ":
             result = self.get_operator(operation)(operand_1[6:], operand_2[6:])
+            self.__changes_occurred = True
             if result:
                 self.clean_node(node, "Val = 1")
                 return "Val = 1"

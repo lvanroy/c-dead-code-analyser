@@ -2,10 +2,24 @@
 
 int main(){
     int a = 5;
-    int b = 6;
+    int b = 2;
 
     // base assignment operation
-    a = 7;
+    a = 2;
+    printf("%d \n", a);
+
+    // to test the revert cast to multiplication function
+    a = (a) * 2;
+    printf("%d \n", a);
+    a = (a) + 2;
+    printf("%d \n", a);
+    a = (a) - 2;
+    printf("%d \n", a);
+    a = (a * b) * 2;
+    printf("%d \n", a);
+    a = (a * b) + 2;
+    printf("%d \n", a);
+    a = (a * b * b) * 2;
     printf("%d \n", a);
 
     // assignments using special assignment operator
