@@ -206,14 +206,6 @@ class ASTValidator:
                     self.__counters[self.__functions_counter - 1][variable_name] = counter
                 self.__counters[self.__functions_counter - 1][variable_name].set_last_usage(self.__node_counter)
                 self.__counters[self.__functions_counter - 1][variable_name].set_last_usage_line(node.get_line())
-
-            if (self.__counter_assignment_operation and
-                    (not self.__symbol_table.is_parameter(variable_name) and
-                     not self.__symbol_table.is_counter(variable_name))):
-                status = "Unsupported operation on counter found on line {}, additions and assignments are supported " \
-                         "but only with parameters and/or constants.".format(node.get_line())
-                self.__functions[self.__functions_counter - 1].add_status(status)
-
             return success
 
         # register parameter definitions
@@ -392,12 +384,6 @@ class Function:
         self.__return_type = ""
         self.__parameter_types = list()
         self.__status_list = list()
-
-    def __int__(self, name, return_type, parameter_types, status_list):
-        self.__name = name
-        self.__return_type = return_type
-        self.__parameter_types = parameter_types
-        self.__status_list = status_list
 
     def set_return_type(self, return_type):
         self.__return_type = return_type

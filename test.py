@@ -307,6 +307,24 @@ class FullProgramTest(unittest.TestCase):
                 expected_output = myFile.read()
             self.assertEqual(expected_output, actual_output)
 
+    def test_invalid_expressions(self):
+        output = io.StringIO()
+        sys.stdout = output
+        self.compiler.analysis("./C_code/test_invalid_expressions.c")
+        sys.stdout = sys.__stdout__
+        with open("ExpectedTestOutput/test_invalid_expressions_trace.txt", 'r') as text_file:
+            self.assertEqual(text_file.read(), output.getvalue())
+        with open('./TreePlots/test_invalid_expressions_output.dot', 'r') as myFile:
+            actual_output = myFile.read()
+        with open('ExpectedTestOutput/test_invalid_expressions_output.dot', 'r') as myFile:
+            expected_output = myFile.read()
+        self.assertEqual(expected_output, actual_output)
+        with open('./TreePlots/test_invalid_expressions_cleaned_output.dot', 'r') as myFile:
+            actual_output = myFile.read()
+        with open('ExpectedTestOutput/test_invalid_expressions_cleaned_output.dot', 'r') as myFile:
+            expected_output = myFile.read()
+        self.assertEqual(expected_output, actual_output)
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

@@ -1,0 +1,64 @@
+Initial antlr compilation started.
+Initial antlr compilation finished.
+Basic AST generation started.
+Basic AST generation finished.
+Optimized AST generation started.
+Optimization cycle started
+Optimization cycle finished
+================= test_invalid_expression =================
+symbol a with type int has initial value a and final value 0, this value is used: True, this variable is not a counter and is a parameter.
+symbol counter with type int has initial value 5 and final value 5, this value is used: True, this variable is a counter and is not a parameter.
+symbol counter2 with type int has initial value 0 and final value 0, this value is used: True, this variable is not a counter and is not a parameter.
+
+Optimization cycle started
+Optimization cycle finished
+================= test_invalid_expression =================
+symbol a with type int has initial value a and final value 0, this value is used: True, this variable is not a counter and is a parameter.
+symbol counter with type int has initial value 5 and final value 5, this value is used: True, this variable is a counter and is not a parameter.
+symbol counter2 with type int has initial value 0 and final value 0, this value is used: True, this variable is not a counter and is not a parameter.
+
+Optimized AST generation finished.
+The following symbol table was derived from the code:
+================= test_invalid_expression =================
+symbol a with type int has initial value a and final value 0, this value is used: True, this variable is not a counter and is a parameter.
+symbol counter with type int has initial value 5 and final value 5, this value is used: True, this variable is a counter and is not a parameter.
+symbol counter2 with type int has initial value 0 and final value 0, this value is used: True, this variable is not a counter and is not a parameter.
+
+Counter validation loop started.
+Counter Validation loop finished.
+The following functions where found:
+
+Function test_invalid_expression with return type bool and parameter types ['int'] is NOT OK.
+The function has the following issues: 
+	Error found on line 21, an assignment can only be done with a constant or parameter, no other variables and/or counters nor can it be the result of an operation.
+	Error found on line 22, an assignment can only be done with a constant or parameter, no other variables and/or counters nor can it be the result of an operation.
+	Error found on line 24, an assignment can only be done with a constant or parameter, no other variables and/or counters nor can it be the result of an operation.
+	Error found on line 25, an assignment can only be done with a constant or parameter, no other variables and/or counters nor can it be the result of an operation.
+	Error found on line 31, an assignment can only be done with a constant or parameter, no other variables and/or counters nor can it be the result of an operation.
+	Error found on line 32, an assignment can only be done with a constant or parameter, no other variables and/or counters nor can it be the result of an operation.
+	Unsupported operation on counter found on line 34, the only supported operations are assignments and additions with constant values or parameter variables.
+	Unsupported operation on counter found on line 35, the only supported operations are assignments and additions with constant values or parameter variables.
+	Unsupported operation on counter found on line 36, the only supported operations are assignments and additions with constant values or parameter variables.
+	Unsupported operation on counter found on line 37, the only supported operations are assignments and additions with constant values or parameter variables.
+	Unsupported operation on counter found on line 38, the only supported operations are assignments and additions with constant values or parameter variables.
+	Unsupported operation on counter found on line 39, the only supported operations are assignments and additions with constant values or parameter variables.
+	Unsupported operation on counter found on line 40, the only supported operations are assignments and additions with constant values or parameter variables.
+	Unsupported operation on counter found on line 41, the only supported operations are assignments and additions with constant values or parameter variables.
+	Error found on line 43, an assignment can only be done with a constant or parameter, no other variables and/or counters nor can it be the result of an operation.
+	Unsupported operation on counter found on line 43, the only supported operations are assignments and additions with constant values or parameter variables.
+	Error found on line 44, an assignment can only be done with a constant or parameter, no other variables and/or counters nor can it be the result of an operation.
+	Unsupported operation on counter found on line 44, the only supported operations are assignments and additions with constant values or parameter variables.
+	Error found on line 45, an assignment can only be done with a constant or parameter, no other variables and/or counters nor can it be the result of an operation.
+	Unsupported operation on counter found on line 45, the only supported operations are assignments and additions with constant values or parameter variables.
+	Error found on line 47, an assignment can only be done with a constant or parameter, no other variables and/or counters nor can it be the result of an operation.
+	Unsupported operation on counter found on line 47, the only supported operations are assignments and additions with constant values or parameter variables.
+	Error found on line 48, an assignment can only be done with a constant or parameter, no other variables and/or counters nor can it be the result of an operation.
+	Unsupported operation on counter found on line 48, the only supported operations are assignments and additions with constant values or parameter variables.
+	Error found on line 50, an assignment can only be done with a constant or parameter, no other variables and/or counters nor can it be the result of an operation.
+	Unsupported operation on counter found on line 50, the only supported operations are assignments and additions with constant values or parameter variables.
+	Error found on line 51, an assignment can only be done with a constant or parameter, no other variables and/or counters nor can it be the result of an operation.
+	Unsupported operation on counter found on line 51, the only supported operations are assignments and additions with constant values or parameter variables.
+The function has the following counter variable(s):
+	Counter with name counter is first used at line 5 and last used at line 51
+Automaton generator started.
+Automaton generator finished.
