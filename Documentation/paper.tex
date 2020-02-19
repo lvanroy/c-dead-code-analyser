@@ -460,6 +460,40 @@ The inner segment itself consists out of one single node, being node 4.
 
 The end of the iteration is denoted by node 3.03, and the first node beyond the iteration statement, being node 6, will follow after this one.
 
+\subsubsection{Switch statements}
+A second conditional expression that exists in c, are \textit{switch statements}. These statements allow a variable to be compared against multiple values. What is special about the switch statements, is that if matched with one case, the code of all consequential cases will also be executed, until the end of the switch, or until a jump occurs.
+
+Consider the following code snippet. In this case, a variable a will be compared with multiple values, and depending on the matched case, a number of prints will occur.
+
+\begin{lstlisting}[style=CStyle]
+bool test(int a){
+	switch(a){
+		case 5:
+			printf("The parameter is greater than 4.");
+		case 3:
+			printf("The parameter is greater than 2.");
+		default:
+			printf("The parameter value is %d", a);
+	}
+	
+	return true;
+}
+\end{lstlisting}
+
+To generate a counter automaton for a switch statement, we will start by generating a chain for the statements in the cases. This is represented by the chain starting from node 4, all the way to node 8, in figure \ref{fig:counter_switch}.
+
+After that we need to add the conditional branches that correspond to the different cases. A first branch originates from node 2, and can either go to node 2.02 in case the counter is equal to 5, or to 2.08 in case the counter is not.
+
+There is a second branch from 2.08 where we can either go to 2.04 in case the counter is equal to 3, or to 2.06 in case the counter is not.
+
+The case starting points are represented by 2.02, 2.04 and 2.06 respectively, and their respective code follows directly beyond these nodes.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{counter_switch}
+	\caption{Example of a switch statement.}
+	\label{fig:counter_switch}
+\end{figure}
 \subsubsection{If statements}
 Another important construct are the if statements. These statements will, just as the loop statements did, require additional nodes to be able to be modeled. If statements require a total of 4 nodes to be modeled.
 
@@ -489,7 +523,7 @@ bool test2(){
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{test2_counter_automaton}
-	\caption{Example of Selection Statements.}
+	\caption{Example of if statements.}
 	\label{fig:test2_counter_automaton}
 \end{figure}
 
