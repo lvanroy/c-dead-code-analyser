@@ -1,0 +1,32 @@
+Initial antlr compilation started.
+Initial antlr compilation finished.
+Basic AST generation started.
+Basic AST generation finished.
+Optimized AST generation started.
+Optimization cycle started
+Optimization cycle finished
+================= test_invalid_conditions =================
+symbol a with type int has initial value a and final value 0, this value is used: True, this variable is not a counter and is a parameter.
+symbol counter with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+
+Optimized AST generation finished.
+The following symbol table was derived from the code:
+================= test_invalid_conditions =================
+symbol a with type int has initial value a and final value 0, this value is used: True, this variable is not a counter and is a parameter.
+symbol counter with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+
+Counter validation loop started.
+Counter Validation loop finished.
+The following functions where found:
+
+Function test_invalid_conditions with return type bool and parameter types ['int'] is NOT OK.
+The function has the following issues: 
+	Unsupported conditional evaluation found on line 28, the only supported conditional evaluations are >=, >, =, !=, <, <= with constants or parameters.
+	Unsupported conditional evaluation found on line 32, the only supported conditional evaluations are >=, >, =, !=, <, <= with constants or parameters.
+	Unsupported conditional evaluation found on line 36, the only supported conditional evaluations are >=, >, =, !=, <, <= with constants or parameters.
+	Unsupported conditional evaluation found on line 40, the only supported conditional evaluations are >=, >, =, !=, <, <= with constants or parameters.
+	Unsupported conditional evaluation found on line 44, the only supported conditional evaluations are >=, >, =, !=, <, <= with constants or parameters.
+The function has the following counter variable(s):
+	Counter with name counter is first used at line 4 and last used at line 24
+Automaton generator started.
+Automaton generator finished.

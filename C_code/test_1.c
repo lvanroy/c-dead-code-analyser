@@ -1,4 +1,4 @@
-#include <stdbool.h>
+ #include <stdbool.h>
 #include <cstdio>
 
 bool for_loops(int a){

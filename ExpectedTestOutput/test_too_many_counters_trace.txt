@@ -1,0 +1,35 @@
+Initial antlr compilation started.
+Initial antlr compilation finished.
+Basic AST generation started.
+Basic AST generation finished.
+Optimized AST generation started.
+Optimization cycle started
+Optimization cycle finished
+================= test_too_many_counters =================
+symbol a with type int has initial value a and final value 0, this value is used: True, this variable is a counter and is a parameter.
+symbol b with type int has initial value b and final value 0, this value is used: True, this variable is not a counter and is a parameter.
+symbol counter1 with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+symbol counter2 with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+
+Optimized AST generation finished.
+The following symbol table was derived from the code:
+================= test_too_many_counters =================
+symbol a with type int has initial value a and final value 0, this value is used: True, this variable is a counter and is a parameter.
+symbol b with type int has initial value b and final value 0, this value is used: True, this variable is not a counter and is a parameter.
+symbol counter1 with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+symbol counter2 with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+
+Counter validation loop started.
+Counter Validation loop finished.
+The following functions where found:
+
+Function test_too_many_counters with return type int and parameter types ['int', 'int'] is NOT OK.
+The function has the following issues: 
+	Error found on line 5, relational expressions must be evaluations of a counter with a parameter or constant, these expressions can not be between counters.
+	Incorrect return type, return type must be boolean.
+	Incorrect number of counters, this tool can only handle a maximal number of counters equal to 1.
+The function has the following counter variable(s):
+	Counter with name a is first used at line 2 and last used at line 9
+	Counter with name counter1 is first used at line 5 and last used at line 6
+	Counter with name counter2 is first used at line 5 and last used at line 6
+Since at least one of the functions was found to be invalid, no counter automaton will be generated.

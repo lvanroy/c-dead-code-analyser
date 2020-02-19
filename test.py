@@ -312,6 +312,8 @@ class FullProgramTest(unittest.TestCase):
         sys.stdout = output
         self.compiler.analysis("./C_code/test_invalid_expressions.c")
         sys.stdout = sys.__stdout__
+        with open("ExpectedTestOutput/test_invalid_expressions_trace.txt", 'w') as text_file:
+            text_file.write(output.getvalue())
         with open("ExpectedTestOutput/test_invalid_expressions_trace.txt", 'r') as text_file:
             self.assertEqual(text_file.read(), output.getvalue())
         with open('./TreePlots/test_invalid_expressions_output.dot', 'r') as myFile:
@@ -322,6 +324,46 @@ class FullProgramTest(unittest.TestCase):
         with open('./TreePlots/test_invalid_expressions_cleaned_output.dot', 'r') as myFile:
             actual_output = myFile.read()
         with open('ExpectedTestOutput/test_invalid_expressions_cleaned_output.dot', 'r') as myFile:
+            expected_output = myFile.read()
+        self.assertEqual(expected_output, actual_output)
+
+    def test_invalid_conditions(self):
+        output = io.StringIO()
+        sys.stdout = output
+        self.compiler.analysis("./C_code/test_invalid_conditions.c")
+        sys.stdout = sys.__stdout__
+        with open("ExpectedTestOutput/test_invalid_conditions_trace.txt", 'w') as text_file:
+            text_file.write(output.getvalue())
+        with open("ExpectedTestOutput/test_invalid_conditions_trace.txt", 'r') as text_file:
+            self.assertEqual(text_file.read(), output.getvalue())
+        with open('./TreePlots/test_invalid_conditions_output.dot', 'r') as myFile:
+            actual_output = myFile.read()
+        with open('ExpectedTestOutput/test_invalid_conditions_output.dot', 'r') as myFile:
+            expected_output = myFile.read()
+        self.assertEqual(expected_output, actual_output)
+        with open('./TreePlots/test_invalid_conditions_cleaned_output.dot', 'r') as myFile:
+            actual_output = myFile.read()
+        with open('ExpectedTestOutput/test_invalid_conditions_cleaned_output.dot', 'r') as myFile:
+            expected_output = myFile.read()
+        self.assertEqual(expected_output, actual_output)
+
+    def test_too_many_counters(self):
+        output = io.StringIO()
+        sys.stdout = output
+        self.compiler.analysis("./C_code/test_too_many_counters.c")
+        sys.stdout = sys.__stdout__
+        with open("ExpectedTestOutput/test_too_many_counters_trace.txt", 'w') as text_file:
+            text_file.write(output.getvalue())
+        with open("ExpectedTestOutput/test_too_many_counters_trace.txt", 'r') as text_file:
+            self.assertEqual(text_file.read(), output.getvalue())
+        with open('./TreePlots/test_too_many_counters_output.dot', 'r') as myFile:
+            actual_output = myFile.read()
+        with open('ExpectedTestOutput/test_too_many_counters_output.dot', 'r') as myFile:
+            expected_output = myFile.read()
+        self.assertEqual(expected_output, actual_output)
+        with open('./TreePlots/test_too_many_counters_cleaned_output.dot', 'r') as myFile:
+            actual_output = myFile.read()
+        with open('ExpectedTestOutput/test_too_many_counters_cleaned_output.dot', 'r') as myFile:
             expected_output = myFile.read()
         self.assertEqual(expected_output, actual_output)
 
