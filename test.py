@@ -304,8 +304,6 @@ class FullProgramTest(unittest.TestCase):
         sys.stdout = output
         self.compiler.analysis("./C_code/switch.c")
         sys.stdout = sys.__stdout__
-        with open("ExpectedTestOutput/switch_trace.txt", 'w') as text_file:
-            text_file.write(output.getvalue())
         with open("ExpectedTestOutput/switch_trace.txt", 'r') as text_file:
             self.assertEqual(text_file.read(), output.getvalue())
         with open('./TreePlots/switch_output.dot', 'r') as myFile:

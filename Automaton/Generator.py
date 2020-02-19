@@ -205,18 +205,62 @@ class Generator:
                 else:
                     start_of_condition = "{}".format(variable[6:])
 
+                start_node = self.__lines[-1]
+
                 end_node = self.get_new_node(node.get_line())
                 all_return = True
 
-                for child in node.get_children()[2].get_children():
+                branch_nodes = list()
+                last_node = None
+
+                compound = node.get_children()[2].get_children()
+
+                # generate the linked chain of inner statements
+                for child in compound:
+                    new_node = self.get_new_node(node.get_line())
+                    self.__lines.append(new_node)
+                    automaton.add_node(new_node)
+
+                    if last_node is not None:
+                        automaton.add_transition(last_node, new_node, "", "")
+
+                    branch_nodes.append(new_node)
+
                     if child.get_children()[0].get_label() == "case":
-                        condition = child.get_children()[1].get_label()
+                        for i in range(2, len(child.get_children())):
+                            self.generate_automaton(child.get_children()[i])
+                    else:
+                        for i in range(1, len(child.get_children())):
+                            self.generate_automaton(child.get_children()[i])
 
-                        start = self.__lines[-1]
+                    if self.__next_label != "return" and self.__next_label != "break":
+                        new_node = self.get_new_node(node.get_line())
 
-                        if_node = self.get_new_node(node.get_line())
-                        self.__lines.append(if_node)
-                        automaton.add_node(if_node)
+                        automaton.add_transition(self.__lines[-1], new_node, self.__next_label, "")
+
+                        self.__lines.append(new_node)
+                        automaton.add_node(new_node)
+
+                        self.__next_label = ""
+                        last_node = new_node
+
+                    elif self.__next_label == "break":
+                        all_return = False
+                        automaton.add_transition(self.__lines[-1], end_node, "", "")
+                        self.__next_label = ""
+                        last_node = None
+
+                    elif self.__next_label == "return":
+                        self.__next_label = ""
+                        last_node = None
+
+                    automaton.enable()
+
+                # link the conditional branches to the proper part of the chain
+                for i in range(len(compound)):
+                    labeled_statement = compound[i]
+                    if labeled_statement.get_children()[0].get_label() == "case":
+                        condition = labeled_statement.get_children()[1].get_label()
 
                         if condition[:6] == "Val = ":
                             condition_statement = "{} = {}".format(start_of_condition, condition[6:])
@@ -225,62 +269,31 @@ class Generator:
                             condition_statement = "{} = {}".format(start_of_condition, condition[5:])
                             opposite_condition = "{} != {}".format(start_of_condition, condition[5:])
 
-                        automaton.add_transition(start, if_node, "", condition_statement)
-
-                        for i in range(2, len(child.get_children())):
-                            self.generate_automaton(child.get_children()[i])
-
-                            if self.__next_label in {"return", "break"}:
-                                break
-
-                        automaton.enable()
+                        automaton.add_transition(start_node, branch_nodes[i], "", condition_statement)
 
                         else_node = self.get_new_node(node.get_line())
-
-                        if self.__next_label != "return" and self.__next_label != "break":
-                            all_return = False
-                            automaton.add_transition(self.__lines[-1], else_node, self.__next_label, "")
-                            self.__next_label = ""
-
-                        elif self.__next_label == "break":
-                            all_return = False
-                            automaton.add_transition(self.__lines[-1], end_node, "", "")
-                            self.__next_label = ""
-
-                        elif self.__next_label == "return":
-                            self.__next_label = ""
-
-                        self.generate_inequality_transition(opposite_condition, start, else_node)
-
                         self.__lines.append(else_node)
                         automaton.add_node(else_node)
 
-                    # default statement
+                        self.generate_inequality_transition(opposite_condition, start_node, else_node)
+
+                        start_node = else_node
                     else:
-                        for i in range(1, len(child.get_children())):
-                            self.generate_automaton(child.get_children()[i])
+                        automaton.add_transition(start_node, branch_nodes[i], "", "")
 
-                            if self.__next_label in {"return", "break"}:
-                                break
+                if last_node is not None:
+                    automaton.add_transition(last_node, end_node, "", "")
 
-                        automaton.enable()
-
-                        if self.__next_label != "return":
-                            all_return = False
-                            start = self.__lines[-1]
-                            automaton.add_transition(start, end_node, self.__next_label, "")
-                            self.__next_label = ""
-
-                        elif self.__next_label == "return":
-                            self.__next_label = ""
-
-                if not all_return:
+                if last_node is not None or not all_return:
                     self.__lines.append(end_node)
                     automaton.add_node(end_node)
+
                 else:
                     automaton.disable()
 
             else:
+                all_return = True
+
                 if_node = self.get_new_node(node.get_line())
                 self.__lines.append(if_node)
                 automaton.add_node(if_node)
@@ -295,11 +308,13 @@ class Generator:
                 return2 = False
 
                 if self.__next_label != "return" and self.__next_label != "break":
+                    all_return = False
                     start = self.__lines[-1]
                     automaton.add_transition(start, selection_end, self.__next_label, "")
                     self.__next_label = ""
 
                 elif self.__next_label == "break":
+                    all_return = False
                     start = self.__lines[-1]
                     automaton.add_transition(start, self.__for_lines[-1], "", "")
                     self.__next_label = ""
@@ -321,11 +336,13 @@ class Generator:
                     automaton.enable()
 
                     if self.__next_label != "return" and self.__next_label != "break":
+                        all_return = False
                         start = self.__lines[-1]
                         automaton.add_transition(start, selection_end, self.__next_label, "")
                         self.__next_label = ""
 
                     elif self.__next_label == "break":
+                        all_return = False
                         start = self.__lines[-1]
                         automaton.add_transition(start, self.__for_lines[-1], "", "")
                         self.__next_label = ""
@@ -360,6 +377,9 @@ class Generator:
                 if not return1 or not return2:
                     automaton.add_node(selection_end)
                     self.__lines.append(selection_end)
+
+                if all_return:
+                    automaton.disable()
 
         elif node.get_label() == "Iteration Statement":
             # push the current line on the for_lines stack

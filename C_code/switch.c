@@ -9,9 +9,9 @@ bool test_switch(){
                 break;
                 a++;
             case 3:
-                return true;
+                a++;
             default:
-                return true;
+                a++;
         }
 
         a ++;
@@ -21,4 +21,6 @@ bool test_switch(){
         a += 5;
         return true;
     }
+
+    return true;
 }

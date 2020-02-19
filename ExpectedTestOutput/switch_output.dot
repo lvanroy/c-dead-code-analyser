@@ -93,21 +93,21 @@ digraph G {
 		Q44 -> Q46
 		Q46[label="Val = 3"];
 		Q44 -> Q47
-		Q47[label="Jump Statement"];
+		Q47[label="Postfix Expression"];
 		Q47 -> Q48
-		Q48[label="return"];
+		Q48[label="ID = a"];
 		Q47 -> Q49
-		Q49[label="Val = true"];
+		Q49[label="++"];
 		Q26 -> Q50
 		Q50[label="Labeled Statement"];
 		Q50 -> Q51
 		Q51[label="default"];
 		Q50 -> Q52
-		Q52[label="Jump Statement"];
+		Q52[label="Postfix Expression"];
 		Q52 -> Q53
-		Q53[label="return"];
+		Q53[label="ID = a"];
 		Q52 -> Q54
-		Q54[label="Val = true"];
+		Q54[label="++"];
 		Q22 -> Q55
 		Q55[label="Postfix Expression"];
 		Q55 -> Q56
@@ -136,5 +136,11 @@ digraph G {
 		Q67[label="return"];
 		Q66 -> Q68
 		Q68[label="Val = true"];
+		Q7 -> Q69
+		Q69[label="Jump Statement"];
+		Q69 -> Q70
+		Q70[label="return"];
+		Q69 -> Q71
+		Q71[label="Val = true"];
 		
 }
