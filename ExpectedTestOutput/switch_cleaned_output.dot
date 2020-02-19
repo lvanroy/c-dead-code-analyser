@@ -64,77 +64,67 @@ digraph G {
 		Q31[label="ID = a"];
 		Q30 -> Q32
 		Q32[label="++"];
-		Q26 -> Q33
+		Q27 -> Q33
 		Q33[label="Postfix Expression"];
 		Q33 -> Q34
 		Q34[label="ID = a"];
 		Q33 -> Q35
 		Q35[label="++"];
-		Q26 -> Q36
+		Q27 -> Q36
 		Q36[label="Jump Statement"];
 		Q36 -> Q37
 		Q37[label="return"];
 		Q36 -> Q38
 		Q38[label="Val = true"];
 		Q26 -> Q39
-		Q39[label="Jump Statement"];
+		Q39[label="Labeled Statement"];
 		Q39 -> Q40
-		Q40[label="break"];
-		Q26 -> Q41
-		Q41[label="Postfix Expression"];
-		Q41 -> Q42
-		Q42[label="ID = a"];
-		Q41 -> Q43
-		Q43[label="++"];
-		Q26 -> Q44
-		Q44[label="Labeled Statement"];
-		Q44 -> Q45
-		Q45[label="case"];
-		Q44 -> Q46
-		Q46[label="Val = 3"];
-		Q44 -> Q47
+		Q40[label="case"];
+		Q39 -> Q41
+		Q41[label="Val = 3"];
+		Q39 -> Q42
+		Q42[label="Jump Statement"];
+		Q42 -> Q43
+		Q43[label="return"];
+		Q42 -> Q44
+		Q44[label="Val = true"];
+		Q26 -> Q45
+		Q45[label="Labeled Statement"];
+		Q45 -> Q46
+		Q46[label="default"];
+		Q45 -> Q47
 		Q47[label="Jump Statement"];
 		Q47 -> Q48
 		Q48[label="return"];
 		Q47 -> Q49
 		Q49[label="Val = true"];
-		Q26 -> Q50
-		Q50[label="Labeled Statement"];
+		Q22 -> Q50
+		Q50[label="Postfix Expression"];
 		Q50 -> Q51
-		Q51[label="default"];
+		Q51[label="ID = a"];
 		Q50 -> Q52
-		Q52[label="Jump Statement"];
-		Q52 -> Q53
-		Q53[label="return"];
-		Q52 -> Q54
-		Q54[label="Val = true"];
-		Q22 -> Q55
-		Q55[label="Postfix Expression"];
-		Q55 -> Q56
-		Q56[label="ID = a"];
-		Q55 -> Q57
-		Q57[label="++"];
-		Q22 -> Q58
-		Q58[label="Jump Statement"];
-		Q58 -> Q59
-		Q59[label="return"];
-		Q58 -> Q60
-		Q60[label="Val = true"];
-		Q16 -> Q61
-		Q61[label="Compound Statement"];
+		Q52[label="++"];
+		Q22 -> Q53
+		Q53[label="Jump Statement"];
+		Q53 -> Q54
+		Q54[label="return"];
+		Q53 -> Q55
+		Q55[label="Val = true"];
+		Q16 -> Q56
+		Q56[label="Compound Statement"];
+		Q56 -> Q57
+		Q57[label="Assignment Expression"];
+		Q57 -> Q58
+		Q58[label="ID = a"];
+		Q57 -> Q59
+		Q59[label="+="];
+		Q57 -> Q60
+		Q60[label="Val = 5"];
+		Q56 -> Q61
+		Q61[label="Jump Statement"];
 		Q61 -> Q62
-		Q62[label="Assignment Expression"];
-		Q62 -> Q63
-		Q63[label="ID = a"];
-		Q62 -> Q64
-		Q64[label="+="];
-		Q62 -> Q65
-		Q65[label="Val = 5"];
-		Q61 -> Q66
-		Q66[label="Jump Statement"];
-		Q66 -> Q67
-		Q67[label="return"];
-		Q66 -> Q68
-		Q68[label="Val = true"];
+		Q62[label="return"];
+		Q61 -> Q63
+		Q63[label="Val = true"];
 		
 }

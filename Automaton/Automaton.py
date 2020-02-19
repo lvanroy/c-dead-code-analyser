@@ -4,8 +4,18 @@ class Automaton:
         self.nodes = list()
         self.transitions = list()
         self.initial = None
+        self.enabled = True
+
+    def disable(self):
+        self.enabled = False
+
+    def enable(self):
+        self.enabled = True
 
     def add_node(self, name):
+        if not self.enabled:
+            return None
+
         node = Node(name, len(self.nodes))
         self.nodes.append(node)
 
@@ -30,11 +40,15 @@ class Automaton:
         return None
 
     def add_transition(self, start, finish, label="", condition=""):
+        if not self.enabled:
+            return None
         transition = Transition(start, finish, label, condition)
         self.transitions.append(transition)
         return transition
 
     def remove_transition(self, start, finish):
+        if not self.enabled:
+            return None
         for transition in self.transitions:
             if transition.start == start and transition.finish == finish:
                 index = self.transitions.index(transition)
@@ -49,11 +63,17 @@ class Automaton:
         return None
 
     def set_transition_label(self, start, finish, new_label):
+        if not self.enabled:
+            return None
+
         for transition in self.transitions:
             if transition.start == start and transition.finish == finish:
                 transition.label = new_label
 
     def add_to_transition_label(self, start, finish, new_label):
+        if not self.enabled:
+            return None
+
         for transition in self.transitions:
             if transition.start == start and transition.finish == finish:
                 if transition.label == "":
@@ -62,6 +82,9 @@ class Automaton:
                     transition.label += ", " + new_label
 
     def add_to_transition_condition(self, start, finish, new_condition):
+        if not self.enabled:
+            return None
+
         for transition in self.transitions:
             if transition.start == start and transition.finish == finish:
                 if transition.condition == "":

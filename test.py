@@ -72,14 +72,6 @@ class TestFirstLoop(unittest.TestCase):
             expected_output = myFile.read()
         self.assertEqual(expected_output, actual_output)
 
-    def test_switch(self):
-        self.compiler.analysis("./C_code/switch.c")
-        with open('./TreePlots/switch_output.dot', 'r') as myFile:
-            actual_output = myFile.read()
-        with open('ExpectedTestOutput/switch_output.dot', 'r') as myFile:
-            expected_output = myFile.read()
-        self.assertEqual(expected_output, actual_output)
-
 
 class TestCleanerLoop(unittest.TestCase):
     instance = AbstractSyntaxTree
@@ -307,13 +299,36 @@ class FullProgramTest(unittest.TestCase):
                 expected_output = myFile.read()
             self.assertEqual(expected_output, actual_output)
 
+    def test_test_switch(self):
+        output = io.StringIO()
+        sys.stdout = output
+        self.compiler.analysis("./C_code/switch.c")
+        sys.stdout = sys.__stdout__
+        with open("ExpectedTestOutput/switch_trace.txt", 'w') as text_file:
+            text_file.write(output.getvalue())
+        with open("ExpectedTestOutput/switch_trace.txt", 'r') as text_file:
+            self.assertEqual(text_file.read(), output.getvalue())
+        with open('./TreePlots/switch_output.dot', 'r') as myFile:
+            actual_output = myFile.read()
+        with open('ExpectedTestOutput/switch_output.dot', 'r') as myFile:
+            expected_output = myFile.read()
+        self.assertEqual(expected_output, actual_output)
+        with open('./TreePlots/switch_cleaned_output.dot', 'r') as myFile:
+            actual_output = myFile.read()
+        with open('ExpectedTestOutput/switch_cleaned_output.dot', 'r') as myFile:
+            expected_output = myFile.read()
+        self.assertEqual(expected_output, actual_output)
+        with open('./TreePlots/switch_reachability_automaton_test_switch.dot', 'r') as myfile:
+            actual_output = myfile.read()
+        with open('./ExpectedTestOutput/switch_reachability_automaton_test_switch.dot', 'r') as myfile:
+            expected_output = myfile.read()
+        self.assertEqual(actual_output, expected_output)
+
     def test_invalid_expressions(self):
         output = io.StringIO()
         sys.stdout = output
         self.compiler.analysis("./C_code/test_invalid_expressions.c")
         sys.stdout = sys.__stdout__
-        with open("ExpectedTestOutput/test_invalid_expressions_trace.txt", 'w') as text_file:
-            text_file.write(output.getvalue())
         with open("ExpectedTestOutput/test_invalid_expressions_trace.txt", 'r') as text_file:
             self.assertEqual(text_file.read(), output.getvalue())
         with open('./TreePlots/test_invalid_expressions_output.dot', 'r') as myFile:
@@ -332,8 +347,6 @@ class FullProgramTest(unittest.TestCase):
         sys.stdout = output
         self.compiler.analysis("./C_code/test_invalid_conditions.c")
         sys.stdout = sys.__stdout__
-        with open("ExpectedTestOutput/test_invalid_conditions_trace.txt", 'w') as text_file:
-            text_file.write(output.getvalue())
         with open("ExpectedTestOutput/test_invalid_conditions_trace.txt", 'r') as text_file:
             self.assertEqual(text_file.read(), output.getvalue())
         with open('./TreePlots/test_invalid_conditions_output.dot', 'r') as myFile:
@@ -352,8 +365,6 @@ class FullProgramTest(unittest.TestCase):
         sys.stdout = output
         self.compiler.analysis("./C_code/test_too_many_counters.c")
         sys.stdout = sys.__stdout__
-        with open("ExpectedTestOutput/test_too_many_counters_trace.txt", 'w') as text_file:
-            text_file.write(output.getvalue())
         with open("ExpectedTestOutput/test_too_many_counters_trace.txt", 'r') as text_file:
             self.assertEqual(text_file.read(), output.getvalue())
         with open('./TreePlots/test_too_many_counters_output.dot', 'r') as myFile:

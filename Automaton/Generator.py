@@ -197,56 +197,104 @@ class Generator:
             # get the automaton object for the current function
             automaton = self.__automatons[self.__functions_counter - 1]
 
-            # add the start node for the inner selection segment
-            if_node = self.get_new_node(node.get_line())
-            self.__lines.append(if_node)
-            automaton.add_node(if_node)
+            if node.get_children()[0].get_label() == "switch":
+                variable = node.get_children()[1].get_label()
 
-            # evaluate the inner segment
-            self.generate_automaton(node.get_children()[2])
+                if variable[:5] == "ID = ":
+                    start_of_condition = "{}".format(variable[5:])
+                else:
+                    start_of_condition = "{}".format(variable[6:])
 
-            selection_end = self.get_new_node(node.get_line())
+                end_node = self.get_new_node(node.get_line())
+                all_return = True
 
-            return1 = False
-            return2 = False
+                for child in node.get_children()[2].get_children():
+                    if child.get_children()[0].get_label() == "case":
+                        condition = child.get_children()[1].get_label()
 
-            # add a transition from the last node, to the end node of the selection statement, in case the
-            # last statement of the inner scope was not return, if this would have been the case, we do not add
-            # any transition as this is the end of the code
-            if self.__next_label != "return" and self.__next_label != "break":
-                # add an end node for the selection statement
-                start = self.__lines[-1]
-                automaton.add_transition(start, selection_end, self.__next_label, "")
-                self.__next_label = ""
+                        start = self.__lines[-1]
 
-            elif self.__next_label == "break":
-                start = self.__lines[-1]
-                automaton.add_transition(start, self.__for_lines[-1], "", "")
-                self.__next_label = ""
+                        if_node = self.get_new_node(node.get_line())
+                        self.__lines.append(if_node)
+                        automaton.add_node(if_node)
 
-            # if label is return, we just end the transitions here, as this is the end of the execution
-            elif self.__next_label == "return":
-                self.__next_label = ""
-                return1 = True
+                        if condition[:6] == "Val = ":
+                            condition_statement = "{} = {}".format(start_of_condition, condition[6:])
+                            opposite_condition = "{} != {}".format(start_of_condition, condition[6:])
+                        else:
+                            condition_statement = "{} = {}".format(start_of_condition, condition[5:])
+                            opposite_condition = "{} != {}".format(start_of_condition, condition[5:])
 
-            else_node = None
+                        automaton.add_transition(start, if_node, "", condition_statement)
 
-            # check for potential else statement
-            if len(node.get_children()) == 4:
-                # add an inner node 0.50 which comes between .33 (start of the section) and .99 (end of the section),
-                # this node will represent the else clause
-                else_node = self.get_new_node(node.get_line())
-                self.__lines.append(else_node)
-                automaton.add_node(else_node)
+                        for i in range(2, len(child.get_children())):
+                            self.generate_automaton(child.get_children()[i])
 
-                # evaluate the inner else segment, this might contain further if else statements
-                self.generate_automaton(node.get_children()[3])
+                            if self.__next_label in {"return", "break"}:
+                                break
 
-                # add a transition from the last node, to the end node of the selection statement, in case the
-                # last statement of the inner scope was not return, if this would have been the case, we do not add
-                # any transition as this is the end of the code
+                        automaton.enable()
+
+                        else_node = self.get_new_node(node.get_line())
+
+                        if self.__next_label != "return" and self.__next_label != "break":
+                            all_return = False
+                            automaton.add_transition(self.__lines[-1], else_node, self.__next_label, "")
+                            self.__next_label = ""
+
+                        elif self.__next_label == "break":
+                            all_return = False
+                            automaton.add_transition(self.__lines[-1], end_node, "", "")
+                            self.__next_label = ""
+
+                        elif self.__next_label == "return":
+                            self.__next_label = ""
+
+                        self.generate_inequality_transition(opposite_condition, start, else_node)
+
+                        self.__lines.append(else_node)
+                        automaton.add_node(else_node)
+
+                    # default statement
+                    else:
+                        for i in range(1, len(child.get_children())):
+                            self.generate_automaton(child.get_children()[i])
+
+                            if self.__next_label in {"return", "break"}:
+                                break
+
+                        automaton.enable()
+
+                        if self.__next_label != "return":
+                            all_return = False
+                            start = self.__lines[-1]
+                            automaton.add_transition(start, end_node, self.__next_label, "")
+                            self.__next_label = ""
+
+                        elif self.__next_label == "return":
+                            self.__next_label = ""
+
+                if not all_return:
+                    self.__lines.append(end_node)
+                    automaton.add_node(end_node)
+                else:
+                    automaton.disable()
+
+            else:
+                if_node = self.get_new_node(node.get_line())
+                self.__lines.append(if_node)
+                automaton.add_node(if_node)
+
+                self.generate_automaton(node.get_children()[2])
+
+                automaton.enable()
+
+                selection_end = self.get_new_node(node.get_line())
+
+                return1 = False
+                return2 = False
+
                 if self.__next_label != "return" and self.__next_label != "break":
-                    # add an end node for the selection statement
                     start = self.__lines[-1]
                     automaton.add_transition(start, selection_end, self.__next_label, "")
                     self.__next_label = ""
@@ -256,40 +304,62 @@ class Generator:
                     automaton.add_transition(start, self.__for_lines[-1], "", "")
                     self.__next_label = ""
 
-                # if label is return, we just end the transitions here, as this is the end of the execution
                 elif self.__next_label == "return":
                     self.__next_label = ""
-                    return2 = True
+                    return1 = True
 
-            # evaluate the associated condition
-            condition, opposite_condition = self.evaluate_condition(node.get_children()[1])
+                else_node = None
 
-            # add the needed nodes and transitions to enable so that the correct path gets chosen dependent on the
-            # conditions
-            start = node.get_line()
-            if else_node is None:
-                else_node = selection_end
+                # check for potential else statement
+                if len(node.get_children()) == 4:
+                    else_node = self.get_new_node(node.get_line())
+                    self.__lines.append(else_node)
+                    automaton.add_node(else_node)
 
-            if "!=" in condition:
-                self.generate_inequality_transition(condition, start, if_node)
-            elif ">" in condition and ">=" not in condition:
-                self.generate_greater_transition(condition, start, if_node)
-            elif "<" in condition and "<=" not in condition:
-                self.generate_less_transition(condition, start, if_node)
-            else:
-                automaton.add_transition(start, if_node, "", condition)
-            if "!=" in opposite_condition:
-                self.generate_inequality_transition(opposite_condition, start, else_node)
-            elif ">" in opposite_condition and ">=" not in opposite_condition:
-                self.generate_greater_transition(opposite_condition, start, else_node)
-            elif "<" in opposite_condition and "<=" not in opposite_condition:
-                self.generate_less_transition(opposite_condition, start, else_node)
-            else:
-                automaton.add_transition(start, else_node, "", opposite_condition)
+                    self.generate_automaton(node.get_children()[3])
 
-            if not return1 or not return2:
-                automaton.add_node(selection_end)
-                self.__lines.append(selection_end)
+                    automaton.enable()
+
+                    if self.__next_label != "return" and self.__next_label != "break":
+                        start = self.__lines[-1]
+                        automaton.add_transition(start, selection_end, self.__next_label, "")
+                        self.__next_label = ""
+
+                    elif self.__next_label == "break":
+                        start = self.__lines[-1]
+                        automaton.add_transition(start, self.__for_lines[-1], "", "")
+                        self.__next_label = ""
+
+                    elif self.__next_label == "return":
+                        self.__next_label = ""
+                        return2 = True
+
+                condition, opposite_condition = self.evaluate_condition(node.get_children()[1])
+
+                start = node.get_line()
+                if else_node is None:
+                    else_node = selection_end
+
+                if "!=" in condition:
+                    self.generate_inequality_transition(condition, start, if_node)
+                elif ">" in condition and ">=" not in condition:
+                    self.generate_greater_transition(condition, start, if_node)
+                elif "<" in condition and "<=" not in condition:
+                    self.generate_less_transition(condition, start, if_node)
+                else:
+                    automaton.add_transition(start, if_node, "", condition)
+                if "!=" in opposite_condition:
+                    self.generate_inequality_transition(opposite_condition, start, else_node)
+                elif ">" in opposite_condition and ">=" not in opposite_condition:
+                    self.generate_greater_transition(opposite_condition, start, else_node)
+                elif "<" in opposite_condition and "<=" not in opposite_condition:
+                    self.generate_less_transition(opposite_condition, start, else_node)
+                else:
+                    automaton.add_transition(start, else_node, "", opposite_condition)
+
+                if not return1 or not return2:
+                    automaton.add_node(selection_end)
+                    self.__lines.append(selection_end)
 
         elif node.get_label() == "Iteration Statement":
             # push the current line on the for_lines stack
@@ -350,6 +420,8 @@ class Generator:
                 self.generate_automaton(node.get_children()[1])
             elif node.get_children()[0].get_label() == "for":
                 self.generate_automaton(node.get_children()[2])
+
+            automaton.enable()
 
             # if no break or return statement occurred in the inner segment, create a transition from the end of the
             # inner segment, to the start of the loop

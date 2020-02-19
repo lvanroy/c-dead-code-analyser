@@ -1,0 +1,24 @@
+Initial antlr compilation started.
+Initial antlr compilation finished.
+Basic AST generation started.
+Basic AST generation finished.
+Optimized AST generation started.
+Optimization cycle started
+Optimization cycle finished
+================= test_switch =================
+symbol a with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+
+Optimized AST generation finished.
+The following symbol table was derived from the code:
+================= test_switch =================
+symbol a with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+
+Counter validation loop started.
+Counter Validation loop finished.
+The following functions where found:
+
+Function test_switch with return type bool and no parameters is OK for one counter automaton generation.
+The function has the following counter variable(s):
+	Counter with name a is first used at line 3 and last used at line 21
+Automaton generator started.
+Automaton generator finished.

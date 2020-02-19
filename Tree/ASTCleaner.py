@@ -1144,8 +1144,11 @@ class ASTCleaner:
     def clean_jump_statement(self, node):
         index = node.get_parent().find_child(node)
         size = len(node.get_parent().get_children())
-        for i in reversed(range(index + 1, size)):
-            node.get_parent().pop_child(i)
+        for i in range(index + 1, size):
+            child = node.get_parent().get_children()[index+1]
+            if child.get_label() == "Labeled Statement" and child.get_children()[0].get_label() in {"case", "default"}:
+                break
+            node.get_parent().pop_child(index+1)
 
         func = node.get_children()[0].get_label()
         if func == "return":
@@ -1252,6 +1255,27 @@ class ASTCleaner:
                 return output[:-2]
 
     def clean_selection_statement(self, node):
+        if node.get_children()[0].get_label() == "switch":
+            variable = node.get_children()[1].get_label()
+            if variable[:5] == "ID = ":
+                self.__symbol_table.set_used(variable[5:], True)
+                self.__symbol_table.set_counter(True, variable[5:])
+
+            max_i = len(node.get_children()[2].get_children())
+            i = 0
+
+            temp = node.get_children()[2]
+
+            while i < max_i:
+                statement = temp.get_children()[i]
+                if statement.get_label() != "Labeled Statement":
+                    temp.pop_child(i)
+                    statement.set_parent(temp.get_children()[i-1])
+                    temp.get_children()[i-1].add_child(statement)
+                    max_i -= 1
+                else:
+                    i += 1
+
         if self.__entered_branch:
             self.clean(node.get_children()[1])
             self.clean(node.get_children()[2])
@@ -1524,7 +1548,8 @@ class ASTCleaner:
 
         # head node for a labeled statement
         elif node.get_label() == "Labeled Statement":
-            self.clean(node.get_children()[-1])
+            for i in reversed(range(2, len(node.get_children()))):
+                self.clean(node.get_children()[i])
             return ""
 
         # head node for a logical and comparison, needed for condition evaluation
