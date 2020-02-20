@@ -197,12 +197,13 @@ class ASTValidator:
             variable_name = node.get_label()[5:]
             if self.__symbol_table.is_counter(variable_name, None):
                 if variable_name not in self.__counters[self.__functions_counter - 1]:
+                    var_type = self.__symbol_table.get_type(variable_name)
                     if self.__first_outer_line is None:
                         iv = self.__symbol_table.get_initial_value(variable_name)
-                        counter = Counter(variable_name, self.__node_counter, node.get_line(), iv)
+                        counter = Counter(variable_name, var_type, self.__node_counter, node.get_line(), iv)
                     else:
                         iv = self.__symbol_table.get_initial_value(variable_name)
-                        counter = Counter(variable_name, self.__node_counter, self.__first_outer_line, iv)
+                        counter = Counter(variable_name, var_type, self.__node_counter, self.__first_outer_line, iv)
                     self.__counters[self.__functions_counter - 1][variable_name] = counter
                 self.__counters[self.__functions_counter - 1][variable_name].set_last_usage(self.__node_counter)
                 self.__counters[self.__functions_counter - 1][variable_name].set_last_usage_line(node.get_line())
@@ -308,6 +309,7 @@ class ASTValidator:
     def validate_functions(self):
         temp = 0
         success = True
+
         for function_def in self.__functions.values():
             return_type = function_def.get_return_type()
             if return_type != "bool":
@@ -337,6 +339,10 @@ class ASTValidator:
                                             "number of counters equal to 1.")
                     success = False
                     break
+
+            for counter in self.__counters[temp].values():
+                if counter.get_type() != "int":
+                    function_def.add_status("Incorrect counter type, this tool can only handle counters of type int.")
 
             if len(function_def.get_statuses()) == 0:
                 function_def.add_status("OK")
@@ -434,13 +440,17 @@ this function is a one counter function.
 
 
 class Counter:
-    def __init__(self, name, first, first_line, initial_value):
+    def __init__(self, name, counter_type, first, first_line, initial_value):
         self.__name = name
+        self.__type = counter_type
         self.__first_used = first
         self.__last_used = 0
         self.__first_used_line = first_line
         self.__last_used_line = 0
         self.__initial_value = initial_value
+
+    def get_type(self):
+        return self.__type
 
     def set_last_usage(self, last_used):
         self.__last_used = last_used

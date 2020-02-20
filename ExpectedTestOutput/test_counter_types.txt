@@ -1,0 +1,40 @@
+Initial antlr compilation started.
+Initial antlr compilation finished.
+Basic AST generation started.
+Basic AST generation finished.
+Optimized AST generation started.
+Optimization cycle started
+Optimization cycle finished
+================= if_all_return =================
+symbol a with type int has initial value a and final value 10, this value is used: True, this variable is a counter and is a parameter.
+================= switch_all_return =================
+symbol a with type int has initial value a and final value 0, this value is used: True, this variable is a counter and is a parameter.
+================= switch_all_return_2 =================
+symbol a with type int has initial value a and final value 0, this value is used: True, this variable is a counter and is a parameter.
+
+Optimized AST generation finished.
+The following symbol table was derived from the code:
+================= if_all_return =================
+symbol a with type int has initial value a and final value 10, this value is used: True, this variable is a counter and is a parameter.
+================= switch_all_return =================
+symbol a with type int has initial value a and final value 0, this value is used: True, this variable is a counter and is a parameter.
+================= switch_all_return_2 =================
+symbol a with type int has initial value a and final value 0, this value is used: True, this variable is a counter and is a parameter.
+
+Counter validation loop started.
+Counter Validation loop finished.
+The following functions where found:
+
+Function if_all_return with return type bool and parameter types ['int'] is OK for one counter automaton generation.
+The function has the following counter variable(s):
+	Counter with name a is first used at line 2 and last used at line 10
+
+Function switch_all_return with return type bool and parameter types ['int'] is OK for one counter automaton generation.
+The function has the following counter variable(s):
+	Counter with name a is first used at line 15 and last used at line 19
+
+Function switch_all_return_2 with return type bool and parameter types ['int'] is OK for one counter automaton generation.
+The function has the following counter variable(s):
+	Counter with name a is first used at line 24 and last used at line 33
+Automaton generator started.
+Automaton generator finished.

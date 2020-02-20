@@ -381,8 +381,6 @@ class FullProgramTest(unittest.TestCase):
         sys.stdout = output
         self.compiler.analysis("./C_code/test_all_return.c")
         sys.stdout = sys.__stdout__
-        with open("ExpectedTestOutput/test_all_return_trace.txt", 'w') as text_file:
-            text_file.write(output.getvalue())
         with open("ExpectedTestOutput/test_all_return_trace.txt", 'r') as text_file:
             self.assertEqual(text_file.read(), output.getvalue())
         with open('./TreePlots/test_all_return_output.dot', 'r') as myFile:
@@ -396,6 +394,25 @@ class FullProgramTest(unittest.TestCase):
             expected_output = myFile.read()
         self.assertEqual(expected_output, actual_output)
 
+    def test_counter_types(self):
+        output = io.StringIO()
+        sys.stdout = output
+        self.compiler.analysis("./C_code/test_all_return.c")
+        sys.stdout = sys.__stdout__
+        with open("ExpectedTestOutput/test_counter_types.txt", 'w') as text_file:
+            text_file.write(output.getvalue())
+        with open("ExpectedTestOutput/test_all_return_trace.txt", 'r') as text_file:
+            self.assertEqual(text_file.read(), output.getvalue())
+        with open('./TreePlots/test_all_return_output.dot', 'r') as myFile:
+            actual_output = myFile.read()
+        with open('ExpectedTestOutput/test_all_return_output.dot', 'r') as myFile:
+            expected_output = myFile.read()
+        self.assertEqual(expected_output, actual_output)
+        with open('./TreePlots/test_all_return_cleaned_output.dot', 'r') as myFile:
+            actual_output = myFile.read()
+        with open('ExpectedTestOutput/test_all_return_cleaned_output.dot', 'r') as myFile:
+            expected_output = myFile.read()
+        self.assertEqual(expected_output, actual_output)
 
 
 if __name__ == '__main__':
