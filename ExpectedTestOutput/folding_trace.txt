@@ -30,4 +30,6 @@ The function has the following issues:
 Function f with return type int and parameter types ['int', 'float'] is NOT OK.
 The function has the following issues: 
 	Incorrect return type, return type must be boolean.
-Since at least one of the functions was found to be invalid, no counter automaton will be generated.
+	Incorrect parameter type found, this tool can only handle parametersof type int.
+Automaton generator started.
+Automaton generator finished.

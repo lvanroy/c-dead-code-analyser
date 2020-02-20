@@ -32,4 +32,5 @@ The function has the following counter variable(s):
 	Counter with name a is first used at line 2 and last used at line 9
 	Counter with name counter1 is first used at line 5 and last used at line 6
 	Counter with name counter2 is first used at line 5 and last used at line 6
-Since at least one of the functions was found to be invalid, no counter automaton will be generated.
+Automaton generator started.
+Automaton generator finished.

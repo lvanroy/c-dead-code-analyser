@@ -308,13 +308,11 @@ class ASTValidator:
 
     def validate_functions(self):
         temp = 0
-        success = True
 
         for function_def in self.__functions.values():
             return_type = function_def.get_return_type()
             if return_type != "bool":
                 function_def.add_status("Incorrect return type, return type must be boolean.")
-                success = False
 
             combinations = itertools.combinations(range(len(self.__counters[temp])), 2)
             counter_names = list(self.__counters[temp].keys())
@@ -337,19 +335,23 @@ class ASTValidator:
                 if len(intersection) != 0:
                     function_def.add_status("Incorrect number of counters, this tool can only handle a maximal "
                                             "number of counters equal to 1.")
-                    success = False
                     break
 
             for counter in self.__counters[temp].values():
                 if counter.get_type() != "int":
                     function_def.add_status("Incorrect counter type, this tool can only handle counters of type int.")
 
+            for parameter_type in function_def.get_function_parameter_types():
+                if parameter_type != "int":
+                    function_def.add_status("Incorrect parameter type found, this tool can only handle parameters"
+                                            "of type int.")
+
             if len(function_def.get_statuses()) == 0:
                 function_def.add_status("OK")
 
             temp += 1
 
-        return success
+        return
 
     def print_functions(self):
         temp = 0
@@ -405,6 +407,9 @@ class Function:
 
     def set_function_parameter_types(self, function_parameter_types):
         self.__parameter_types = function_parameter_types
+
+    def get_function_parameter_types(self):
+        return self.__parameter_types
 
     def add_status(self, status):
         self.__status_list.append(status)

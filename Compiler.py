@@ -114,17 +114,12 @@ class Compiler:
             print("Counter validation loop started.")
 
         self.validator = ASTValidator(self.cleaned_ast, self.cleaner.get_symbol_table())
-        validity = self.validator.validate()
+        self.validator.validate()
 
         if self.trace:
             print("Counter Validation loop finished.")
             print("The following functions where found:")
             self.validator.print_functions()
-
-        if not validity and self.trace:
-            print("Since at least one of the functions was found to be invalid, "
-                  "no counter automaton will be generated.")
-            return 0
 
         if self.trace:
             print("Automaton generator started.")

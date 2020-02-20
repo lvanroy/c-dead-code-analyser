@@ -79,4 +79,5 @@ The function has the following issues:
 The function has the following counter variable(s):
 	Counter with name j is first used at line 45 and last used at line 58
 	Counter with name i is first used at line 51 and last used at line 53
-Since at least one of the functions was found to be invalid, no counter automaton will be generated.
+Automaton generator started.
+Automaton generator finished.

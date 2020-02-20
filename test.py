@@ -161,8 +161,6 @@ class TestCleanerLoop(unittest.TestCase):
         sys.stdout = output
         self.compiler.analysis("./C_code/assignments_int.c")
         sys.stdout = sys.__stdout__
-        with open("ExpectedTestOutput/assignments_int_trace.txt", "w") as text_file:
-            text_file.write(output.getvalue())
         with open("ExpectedTestOutput/assignments_int_trace.txt", 'r') as text_file:
             self.assertEqual(text_file.read(), output.getvalue())
         with open('./TreePlots/assignments_int_output.dot', 'r') as myFile:
@@ -397,20 +395,36 @@ class FullProgramTest(unittest.TestCase):
     def test_counter_types(self):
         output = io.StringIO()
         sys.stdout = output
-        self.compiler.analysis("./C_code/test_all_return.c")
+        self.compiler.analysis("./C_code/test_counter_types.c")
         sys.stdout = sys.__stdout__
-        with open("ExpectedTestOutput/test_counter_types.txt", 'w') as text_file:
-            text_file.write(output.getvalue())
-        with open("ExpectedTestOutput/test_all_return_trace.txt", 'r') as text_file:
+        with open("ExpectedTestOutput/test_counter_types_trace.txt", 'r') as text_file:
             self.assertEqual(text_file.read(), output.getvalue())
-        with open('./TreePlots/test_all_return_output.dot', 'r') as myFile:
+        with open('./TreePlots/test_counter_types_output.dot', 'r') as myFile:
             actual_output = myFile.read()
-        with open('ExpectedTestOutput/test_all_return_output.dot', 'r') as myFile:
+        with open('ExpectedTestOutput/test_counter_types_output.dot', 'r') as myFile:
             expected_output = myFile.read()
         self.assertEqual(expected_output, actual_output)
-        with open('./TreePlots/test_all_return_cleaned_output.dot', 'r') as myFile:
+        with open('./TreePlots/test_counter_types_cleaned_output.dot', 'r') as myFile:
             actual_output = myFile.read()
-        with open('ExpectedTestOutput/test_all_return_cleaned_output.dot', 'r') as myFile:
+        with open('ExpectedTestOutput/test_counter_types_cleaned_output.dot', 'r') as myFile:
+            expected_output = myFile.read()
+        self.assertEqual(expected_output, actual_output)
+
+    def test_parameter_types(self):
+        output = io.StringIO()
+        sys.stdout = output
+        self.compiler.analysis("./C_code/test_parameter_types.c")
+        sys.stdout = sys.__stdout__
+        with open("ExpectedTestOutput/test_parameter_types_trace.txt", 'r') as text_file:
+            self.assertEqual(text_file.read(), output.getvalue())
+        with open('./TreePlots/test_parameter_types_output.dot', 'r') as myFile:
+            actual_output = myFile.read()
+        with open('ExpectedTestOutput/test_parameter_types_output.dot', 'r') as myFile:
+            expected_output = myFile.read()
+        self.assertEqual(expected_output, actual_output)
+        with open('./TreePlots/test_parameter_types_cleaned_output.dot', 'r') as myFile:
+            actual_output = myFile.read()
+        with open('ExpectedTestOutput/test_parameter_types_cleaned_output.dot', 'r') as myFile:
             expected_output = myFile.read()
         self.assertEqual(expected_output, actual_output)
 
