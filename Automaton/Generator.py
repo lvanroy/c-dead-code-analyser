@@ -165,10 +165,10 @@ class Generator:
                     elif assigned_value[:6] == "Val = ":
                         self.__next_label += "{} {}".format(op, assigned_value[6:])
 
-        elif "break" in node.get_label():
+        elif "break" == node.get_label():
             self.__next_label = "break"
 
-        elif "return" in node.get_label():
+        elif "return" == node.get_label():
             self.__next_label = "return"
 
         elif node.get_label() == "Postfix Expression":
@@ -213,7 +213,11 @@ class Generator:
                 branch_nodes = list()
                 last_node = None
 
-                compound = node.get_children()[2].get_children()
+                if node.get_children()[2].get_label() == "Compound Statement":
+                    compound = node.get_children()[2].get_children()
+                else:
+                    compound = list()
+                    compound.append(node.get_children()[2])
 
                 # generate the linked chain of inner statements
                 for child in compound:

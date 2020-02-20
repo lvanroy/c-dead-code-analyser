@@ -1266,15 +1266,16 @@ class ASTCleaner:
 
             temp = node.get_children()[2]
 
-            while i < max_i:
-                statement = temp.get_children()[i]
-                if statement.get_label() != "Labeled Statement":
-                    temp.pop_child(i)
-                    statement.set_parent(temp.get_children()[i-1])
-                    temp.get_children()[i-1].add_child(statement)
-                    max_i -= 1
-                else:
-                    i += 1
+            if temp.get_label() == "Compound Statement":
+                while i < max_i:
+                    statement = temp.get_children()[i]
+                    if statement.get_label() != "Labeled Statement":
+                        temp.pop_child(i)
+                        statement.set_parent(temp.get_children()[i-1])
+                        temp.get_children()[i-1].add_child(statement)
+                        max_i -= 1
+                    else:
+                        i += 1
 
         if self.__entered_branch:
             self.clean(node.get_children()[1])

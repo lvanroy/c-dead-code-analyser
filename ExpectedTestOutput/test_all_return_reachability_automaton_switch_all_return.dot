@@ -1,0 +1,22 @@
+digraph G {
+		rankdir=LR
+		Q0[label="14"];
+		Q1[label="15"];
+		Q2[label="14.97"];
+		Q3[label="14.98"];
+		Q4[label="14.99"];
+		Q5[label="15.02"];
+		Q6[label="17"];
+		Qi[style=invis];
+		Qi -> Q0 [label=""]
+		Q2 -> Q3 [label="<= a"]
+		Q3 -> Q3 [label="+1"]
+		Q3 -> Q1 [label="=a"]
+		Q2 -> Q4 [label=">= a"]
+		Q4 -> Q4 [label="-1"]
+		Q4 -> Q1 [label="=a"]
+		Q0 -> Q2 [label=""]
+		Q5 -> Q6 [label=""]
+		Q1 -> Q5 [label=""]
+		
+}
