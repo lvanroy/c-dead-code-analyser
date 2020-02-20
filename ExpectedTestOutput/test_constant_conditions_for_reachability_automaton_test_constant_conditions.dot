@@ -1,0 +1,43 @@
+digraph G {
+		rankdir=LR
+		Q0[label="1"];
+		Q1[label="2"];
+		Q2[label="3"];
+		Q3[label="3.01"];
+		Q4[label="3.03"];
+		Q5[label="6"];
+		Q6[label="5.97"];
+		Q7[label="5.98"];
+		Q8[label="5.99"];
+		Q9[label="6.01"];
+		Q10[label="7"];
+		Q11[label="6.03"];
+		Q12[label="6.04"];
+		Q13[label="6.05"];
+		Q14[label="6.06"];
+		Q15[label="6.02"];
+		Q16[label="9"];
+		Qi[style=invis];
+		Qi -> Q0 [label=""]
+		Q0 -> Q1 [label=""]
+		Q1 -> Q2 [label=""]
+		Q2 -> Q3 [label=""]
+		Q3 -> Q4 [label=""]
+		Q6 -> Q7 [label="<= 0"]
+		Q7 -> Q7 [label="+1"]
+		Q7 -> Q5 [label="=0"]
+		Q6 -> Q8 [label=">= 0"]
+		Q8 -> Q8 [label="-1"]
+		Q8 -> Q5 [label="=0"]
+		Q4 -> Q6 [label=""]
+		Q9 -> Q10 [label=""]
+		Q5 -> Q9 [label="= 5"]
+		Q5 -> Q11 [label="+1"]
+		Q11 -> Q12 [label="<=  5"]
+		Q12 -> Q15 [label="-1"]
+		Q5 -> Q13 [label="-1"]
+		Q13 -> Q14 [label=">=  5"]
+		Q14 -> Q15 [label="+1"]
+		Q15 -> Q16 [label=""]
+		
+}

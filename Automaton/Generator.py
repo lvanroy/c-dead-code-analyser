@@ -2,6 +2,8 @@ from Automaton.Automaton import Automaton
 
 from math import floor
 
+import operator
+
 """
 This class is intended to generate all the nodes and transitions that are in the automaton. It will 
 iterate through the tree that was generated during earlier steps. 
@@ -79,9 +81,27 @@ class Generator:
             return "!="
         elif condition == "!=":
             return "="
-        else:
-            print("no negation found for condition {}".format(condition))
-            return ""
+
+    @staticmethod
+    def get_operator(op):
+        return {
+            '+': operator.add,
+            '-': operator.sub,
+            '*': operator.mul,
+            '/': operator.truediv,
+            '%': operator.mod,
+            "<<": operator.lshift,
+            ">>": operator.rshift,
+            "&": operator.and_,
+            "^": operator.xor,
+            "|": operator.or_,
+            "==": operator.eq,
+            "!=": operator.ne,
+            "<": operator.lt,
+            "<=": operator.le,
+            ">": operator.gt,
+            ">=": operator.ge
+        }[op]
 
     def generate_automaton(self, node=None):
         if node is None:
@@ -298,39 +318,42 @@ class Generator:
             else:
                 all_return = True
 
+                condition, opposite_condition = self.evaluate_condition(node.get_children()[1])
                 if_node = self.get_new_node(node.get_line())
-                self.__lines.append(if_node)
-                automaton.add_node(if_node)
-
-                self.generate_automaton(node.get_children()[2])
-
-                automaton.enable()
 
                 selection_end = self.get_new_node(node.get_line())
 
                 return1 = False
                 return2 = False
 
-                if self.__next_label != "return" and self.__next_label != "break":
-                    all_return = False
-                    start = self.__lines[-1]
-                    automaton.add_transition(start, selection_end, self.__next_label, "")
-                    self.__next_label = ""
+                if condition != "false":
+                    self.__lines.append(if_node)
+                    automaton.add_node(if_node)
 
-                elif self.__next_label == "break":
-                    all_return = False
-                    start = self.__lines[-1]
-                    automaton.add_transition(start, self.__for_lines[-1], "", "")
-                    self.__next_label = ""
+                    self.generate_automaton(node.get_children()[2])
 
-                elif self.__next_label == "return":
-                    self.__next_label = ""
-                    return1 = True
+                    automaton.enable()
+
+                    if self.__next_label != "return" and self.__next_label != "break":
+                        all_return = False
+                        start = self.__lines[-1]
+                        automaton.add_transition(start, selection_end, self.__next_label, "")
+                        self.__next_label = ""
+
+                    elif self.__next_label == "break":
+                        all_return = False
+                        start = self.__lines[-1]
+                        automaton.add_transition(start, self.__for_lines[-1], "", "")
+                        self.__next_label = ""
+
+                    elif self.__next_label == "return":
+                        self.__next_label = ""
+                        return1 = True
 
                 else_node = None
 
                 # check for potential else statement
-                if len(node.get_children()) == 4:
+                if len(node.get_children()) == 4 and opposite_condition != "false":
                     else_node = self.get_new_node(node.get_line())
                     self.__lines.append(else_node)
                     automaton.add_node(else_node)
@@ -355,7 +378,8 @@ class Generator:
                         self.__next_label = ""
                         return2 = True
 
-                condition, opposite_condition = self.evaluate_condition(node.get_children()[1])
+                else:
+                    all_return = False
 
                 start = node.get_line()
                 if else_node is None:
@@ -367,15 +391,16 @@ class Generator:
                     self.generate_greater_transition(condition, start, if_node)
                 elif "<" in condition and "<=" not in condition:
                     self.generate_less_transition(condition, start, if_node)
-                else:
+                elif condition != "false":
                     automaton.add_transition(start, if_node, "", condition)
+
                 if "!=" in opposite_condition:
                     self.generate_inequality_transition(opposite_condition, start, else_node)
                 elif ">" in opposite_condition and ">=" not in opposite_condition:
                     self.generate_greater_transition(opposite_condition, start, else_node)
                 elif "<" in opposite_condition and "<=" not in opposite_condition:
                     self.generate_less_transition(opposite_condition, start, else_node)
-                else:
+                elif opposite_condition != "false":
                     automaton.add_transition(start, else_node, "", opposite_condition)
 
                 if not return1 or not return2:
@@ -388,6 +413,18 @@ class Generator:
         elif node.get_label() == "Iteration Statement":
             # push the current line on the for_lines stack
             self.__for_lines.append(node.get_line())
+
+            # ~~~ CONDITION ~~~
+            # evaluate the conditional statement
+            condition, opposite_condition = "", ""
+            if node.get_children()[0].get_label() == "while":
+                condition, opposite_condition = self.evaluate_condition(node.get_children()[1])
+            elif node.get_children()[0].get_label() == "do":
+                condition, opposite_condition = self.evaluate_condition(node.get_children()[3])
+            elif node.get_children()[0].get_label() == "for":
+                for_expression = node.get_children()[1].get_children()[1]
+                if len(for_expression.get_children()) != 0:
+                    condition, opposite_condition = self.evaluate_condition(for_expression.get_children()[0])
 
             # get the automaton related to the current function
             automaton = self.__automatons[self.__functions_counter - 1]
@@ -431,88 +468,77 @@ class Generator:
             else:
                 automaton.add_transition(iteration_start, pre_loop, "", "")
 
-            # ~~~ INNER SEGMENT ~~~
-            # add the first node of the loop, this node indicates start of inner segment
             inner_start = self.get_new_node(node.get_line())
-            self.__lines.append(inner_start)
-            automaton.add_node(inner_start)
 
-            # generate the inner segment
-            if node.get_children()[0].get_label() == "while":
-                self.generate_automaton(node.get_children()[2])
-            elif node.get_children()[0].get_label() == "do":
-                self.generate_automaton(node.get_children()[1])
-            elif node.get_children()[0].get_label() == "for":
-                self.generate_automaton(node.get_children()[2])
+            if condition != "false":
+                # ~~~ INNER SEGMENT ~~~
+                # add the first node of the loop, this node indicates start of inner segment
+                self.__lines.append(inner_start)
+                automaton.add_node(inner_start)
 
-            automaton.enable()
+                # generate the inner segment
+                if node.get_children()[0].get_label() == "while":
+                    self.generate_automaton(node.get_children()[2])
+                elif node.get_children()[0].get_label() == "do":
+                    self.generate_automaton(node.get_children()[1])
+                elif node.get_children()[0].get_label() == "for":
+                    self.generate_automaton(node.get_children()[2])
 
-            # if no break or return statement occurred in the inner segment, create a transition from the end of the
-            # inner segment, to the start of the loop
-            if self.__next_label != "break" and self.__next_label != "return":
-                start = self.__lines[-1]
-                if automaton.get_transition_label(start, pre_loop) is not None:
-                    automaton.add_to_transition_label(start, pre_loop, self.__next_label)
-                else:
-                    automaton.add_transition(start, pre_loop, self.__next_label, "")
-                self.__next_label = ""
-
-            # if a break occurred, create a transition from the end of the inner segment, to the end of the loop
-            elif self.__next_label == "break":
-                start = self.__lines[-1]
-                automaton.add_transition(start, iteration_end, "", "")
-                self.__next_label = ""
-
-            # if a return occurred, create no transition, as this is the end of the execution
-            elif self.__next_label == "return":
-                self.__next_label = ""
-
-            # analyze the post loop expression if no breaks or returns occurred
-            start = self.__lines[-1]
-            label = automaton.get_transition_label(start, pre_loop)
-            if node.get_children()[0].get_label() == "for" and label is not None:
-                self.generate_automaton(node.get_children()[1].get_children()[2])
+                automaton.enable()
 
                 # if no break or return statement occurred in the inner segment, create a transition from the end of the
-                # inner segment, to the end of the loop, and from the end of the loop to the start of the next cycle
-                if self.__next_label != "break" and self.__next_label != "return" and self.__next_label != "":
+                # inner segment, to the start of the loop
+                if self.__next_label != "break" and self.__next_label != "return":
                     start = self.__lines[-1]
-                    automaton.remove_transition(start, pre_loop)
-                    automaton.add_transition(start, loop_end, label, "")
-                    automaton.add_transition(loop_end, pre_loop, self.__next_label, "")
-                    self.__lines.append(loop_end)
-                    automaton.add_node(loop_end)
+                    if automaton.get_transition_label(start, pre_loop) is not None:
+                        automaton.add_to_transition_label(start, pre_loop, self.__next_label)
+                    else:
+                        automaton.add_transition(start, pre_loop, self.__next_label, "")
                     self.__next_label = ""
 
                 # if a break occurred, create a transition from the end of the inner segment, to the end of the loop
-                # and from the end of the loop, to the end of the statement
                 elif self.__next_label == "break":
                     start = self.__lines[-1]
-                    end = iteration_end
-                    end_statement = node.get_line() + 0.99
-                    automaton.remove_transition(start, end)
-                    automaton.add_transition(start, loop_end, label, "")
-                    automaton.add_transition(loop_end, end_statement, "", "")
-                    self.__lines.append(loop_end)
-                    automaton.add_node(loop_end)
+                    automaton.add_transition(start, iteration_end, "", "")
                     self.__next_label = ""
 
                 # if a return occurred, create no transition, as this is the end of the execution
                 elif self.__next_label == "return":
                     self.__next_label = ""
 
-            # ~~~ CONDITION ~~~
+                # analyze the post loop expression if no breaks or returns occurred
+                start = self.__lines[-1]
+                label = automaton.get_transition_label(start, pre_loop)
+                if node.get_children()[0].get_label() == "for" and label is not None:
+                    self.generate_automaton(node.get_children()[1].get_children()[2])
 
-            # evaluate the conditional statement
-            condition, opposite_condition = "", ""
-            if node.get_children()[0].get_label() == "while":
-                condition, opposite_condition = self.evaluate_condition(node.get_children()[1])
-            elif node.get_children()[0].get_label() == "do":
-                condition, opposite_condition = self.evaluate_condition(node.get_children()[3])
-            elif node.get_children()[0].get_label() == "for":
-                for_expression = node.get_children()[1].get_children()[1]
-                if len(for_expression.get_children()) != 0:
-                    condition, opposite_condition = self.evaluate_condition(for_expression.get_children()[0])
+                    # if no break or return statement occurred in the inner segment, create a transition from the end of the
+                    # inner segment, to the end of the loop, and from the end of the loop to the start of the next cycle
+                    if self.__next_label != "break" and self.__next_label != "return" and self.__next_label != "":
+                        start = self.__lines[-1]
+                        automaton.remove_transition(start, pre_loop)
+                        automaton.add_transition(start, loop_end, label, "")
+                        automaton.add_transition(loop_end, pre_loop, self.__next_label, "")
+                        self.__lines.append(loop_end)
+                        automaton.add_node(loop_end)
+                        self.__next_label = ""
+
+                    # if a break occurred, create a transition from the end of the inner segment, to the end of the loop
+                    # and from the end of the loop, to the end of the statement
+                    elif self.__next_label == "break":
+                        start = self.__lines[-1]
+                        end = iteration_end
+                        end_statement = node.get_line() + 0.99
+                        automaton.remove_transition(start, end)
+                        automaton.add_transition(start, loop_end, label, "")
+                        automaton.add_transition(loop_end, end_statement, "", "")
+                        self.__lines.append(loop_end)
+                        automaton.add_node(loop_end)
+                        self.__next_label = ""
+
+                    # if a return occurred, create no transition, as this is the end of the execution
+                    elif self.__next_label == "return":
+                        self.__next_label = ""
 
             # add the nodes and transitions to the automaton
             if condition == "":
@@ -524,15 +550,16 @@ class Generator:
                     self.generate_greater_transition(condition, pre_loop, inner_start)
                 elif "<" in condition and "<=" not in condition:
                     self.generate_less_transition(condition, pre_loop, inner_start)
-                else:
+                elif condition != "false":
                     automaton.add_transition(pre_loop, inner_start, "", condition)
+
                 if "!=" in opposite_condition:
                     self.generate_inequality_transition(opposite_condition, pre_loop, iteration_end)
                 elif ">" in opposite_condition and ">=" not in opposite_condition:
                     self.generate_greater_transition(opposite_condition, pre_loop, iteration_end)
                 elif "<" in opposite_condition and "<=" not in opposite_condition:
                     self.generate_less_transition(opposite_condition, pre_loop, iteration_end)
-                else:
+                elif opposite_condition != "false":
                     automaton.add_transition(pre_loop, iteration_end, "", opposite_condition)
 
             # add the lines to the lines, so that every sequential line beyond the loop will start from this line
@@ -598,7 +625,7 @@ class Generator:
             if first_use <= conditional_node.get_line() <= last_use:
                 condition = "{} {}".format(op, op2)
                 opposite_condition = "{} {}".format(self.get_negation(op), op2)
-        if op2 in self.__counters[self.__functions_counter - 1]:
+        elif op2 in self.__counters[self.__functions_counter - 1]:
             first_use = self.__counters[self.__functions_counter - 1][op2].get_first_used_line()
             last_use = self.__counters[self.__functions_counter - 1][op2].get_last_used_line()
             if first_use <= conditional_node.get_line() <= last_use:
@@ -608,6 +635,15 @@ class Generator:
                 else:
                     condition = "{} {}".format(op, op1)
                     opposite_condition = "{} {}".format(self.get_negation(op), op1)
+        # two values
+        else:
+            result = self.get_operator(op)(float(op1), float(op2))
+            if result:
+                condition = ""
+                opposite_condition = "false"
+            else:
+                condition = "false"
+                opposite_condition = ""
 
         return condition, opposite_condition
 

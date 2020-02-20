@@ -1,0 +1,32 @@
+Initial antlr compilation started.
+Initial antlr compilation finished.
+Basic AST generation started.
+Basic AST generation finished.
+Optimized AST generation started.
+Optimization cycle started
+Optimization cycle finished
+================= test_constant_conditions =================
+symbol i with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+================= test_constant_conditions_2 =================
+symbol i with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+
+Optimized AST generation finished.
+The following symbol table was derived from the code:
+================= test_constant_conditions =================
+symbol i with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+================= test_constant_conditions_2 =================
+symbol i with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+
+Counter validation loop started.
+Counter Validation loop finished.
+The following functions where found:
+
+Function test_constant_conditions with return type bool and no parameters is OK for one counter automaton generation.
+The function has the following counter variable(s):
+	Counter with name i is first used at line 3 and last used at line 9
+
+Function test_constant_conditions_2 with return type bool and no parameters is OK for one counter automaton generation.
+The function has the following counter variable(s):
+	Counter with name i is first used at line 17 and last used at line 23
+Automaton generator started.
+Automaton generator finished.
