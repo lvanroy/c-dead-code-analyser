@@ -302,9 +302,9 @@ class ASTValidator:
 
         # if this state is reached, we have fully evaluated the CompilationUnit node, and therefore the entire tree
         elif node.get_label() == "CompilationUnit":
-            success = self.validate_functions()
+            self.validate_functions()
 
-        return success
+        return
 
     def validate_functions(self):
         temp = 0
@@ -326,7 +326,6 @@ class ASTValidator:
                 if len(intersection) != 0:
                     function_def.add_status("Incorrect number of counters, this tool can only handle a maximal "
                                             "number of counters equal to 1.")
-                    success = False
                     break
 
                 range_1 = set(range(counter_1.get_first_used_line(), counter_1.get_last_used_line() + 1))
@@ -340,6 +339,9 @@ class ASTValidator:
             for counter in self.__counters[temp].values():
                 if counter.get_type() != "int":
                     function_def.add_status("Incorrect counter type, this tool can only handle counters of type int.")
+                if self.__symbol_table.is_global(counter.get_name()):
+                    function_def.add_status("Incorrect counter scope, we do not support any counters defined in the "
+                                            "global scope.")
 
             for parameter_type in function_def.get_function_parameter_types():
                 if parameter_type != "int":
@@ -456,6 +458,9 @@ class Counter:
 
     def get_type(self):
         return self.__type
+
+    def get_name(self):
+        return self.__name
 
     def set_last_usage(self, last_used):
         self.__last_used = last_used

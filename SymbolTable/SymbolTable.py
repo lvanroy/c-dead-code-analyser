@@ -268,6 +268,13 @@ class SymbolTable:
         else:
             return self.is_counter(symbol_name, scope.get_parent())
 
+    def is_global(self, symbol_name, scope=None):
+        scope = self.__scopes["0"]
+        if symbol_name in self.__symbols[scope]:
+            return True
+        else:
+            return False
+
     def set_counter(self, counter_val, symbol_name, scope=None):
         if scope is None:
             scope = self.__current_scope

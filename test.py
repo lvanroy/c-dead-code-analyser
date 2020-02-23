@@ -433,8 +433,6 @@ class FullProgramTest(unittest.TestCase):
         sys.stdout = output
         self.compiler.analysis("./C_code/test_constant_conditions_if.c")
         sys.stdout = sys.__stdout__
-        with open("ExpectedTestOutput/test_constant_conditions_if_trace.txt", "w") as text_file:
-            text_file.write(output.getvalue())
         with open("ExpectedTestOutput/test_constant_conditions_if_trace.txt", 'r') as text_file:
             self.assertEqual(text_file.read(), output.getvalue())
         with open('./TreePlots/test_constant_conditions_if_output.dot', 'r') as myFile:
@@ -453,8 +451,6 @@ class FullProgramTest(unittest.TestCase):
         sys.stdout = output
         self.compiler.analysis("./C_code/test_constant_conditions_for.c")
         sys.stdout = sys.__stdout__
-        with open("ExpectedTestOutput/test_constant_conditions_for_trace.txt", "w") as text_file:
-            text_file.write(output.getvalue())
         with open("ExpectedTestOutput/test_constant_conditions_for_trace.txt", 'r') as text_file:
             self.assertEqual(text_file.read(), output.getvalue())
         with open('./TreePlots/test_constant_conditions_for_output.dot', 'r') as myFile:
@@ -473,8 +469,6 @@ class FullProgramTest(unittest.TestCase):
         sys.stdout = output
         self.compiler.analysis("./C_code/test_constant_conditions_while.c")
         sys.stdout = sys.__stdout__
-        with open("ExpectedTestOutput/test_constant_conditions_while_trace.txt", "w") as text_file:
-            text_file.write(output.getvalue())
         with open("ExpectedTestOutput/test_constant_conditions_while_trace.txt", 'r') as text_file:
             self.assertEqual(text_file.read(), output.getvalue())
         with open('./TreePlots/test_constant_conditions_while_output.dot', 'r') as myFile:
@@ -493,8 +487,6 @@ class FullProgramTest(unittest.TestCase):
         sys.stdout = output
         self.compiler.analysis("./C_code/test_constant_conditions_do_while.c")
         sys.stdout = sys.__stdout__
-        with open("ExpectedTestOutput/test_constant_conditions_do_while_trace.txt", "w") as text_file:
-            text_file.write(output.getvalue())
         with open("ExpectedTestOutput/test_constant_conditions_do_while_trace.txt", 'r') as text_file:
             self.assertEqual(text_file.read(), output.getvalue())
         with open('./TreePlots/test_constant_conditions_do_while_output.dot', 'r') as myFile:
@@ -505,6 +497,26 @@ class FullProgramTest(unittest.TestCase):
         with open('./TreePlots/test_constant_conditions_do_while_cleaned_output.dot', 'r') as myFile:
             actual_output = myFile.read()
         with open('ExpectedTestOutput/test_constant_conditions_do_while_cleaned_output.dot', 'r') as myFile:
+            expected_output = myFile.read()
+        self.assertEqual(expected_output, actual_output)
+
+    def test_global_scope_counter(self):
+        output = io.StringIO()
+        sys.stdout = output
+        self.compiler.analysis("./C_code/test_global_scope_errors.c")
+        sys.stdout = sys.__stdout__
+        with open("ExpectedTestOutput/test_global_scope_errors_trace.txt", 'w') as text_file:
+            text_file.write(output.getvalue())
+        with open("ExpectedTestOutput/test_global_scope_errors_trace.txt", 'r') as text_file:
+            self.assertEqual(text_file.read(), output.getvalue())
+        with open('./TreePlots/test_global_scope_errors_output.dot', 'r') as myFile:
+            actual_output = myFile.read()
+        with open('ExpectedTestOutput/test_global_scope_errors_output.dot', 'r') as myFile:
+            expected_output = myFile.read()
+        self.assertEqual(expected_output, actual_output)
+        with open('./TreePlots/test_global_scope_errors_cleaned_output.dot', 'r') as myFile:
+            actual_output = myFile.read()
+        with open('ExpectedTestOutput/test_global_scope_errors_cleaned_output.dot', 'r') as myFile:
             expected_output = myFile.read()
         self.assertEqual(expected_output, actual_output)
 
