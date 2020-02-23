@@ -5,10 +5,40 @@ Basic AST generation finished.
 Optimized AST generation started.
 Optimization cycle started
 Optimization cycle finished
-================= main =================
-symbol a with type bool has initial value true and final value True, this value is used: False, this variable is not a counter and is not a parameter.
-symbol b with type bool has initial value false and final value False, this value is used: False, this variable is not a counter and is not a parameter.
+================= test =================
+symbol a with type bool has initial value true and final value 1, this value is used: True, this variable is a counter and is not a parameter.
+symbol b with type bool has initial value false and final value 0, this value is used: True, this variable is a counter and is not a parameter.
 symbol arr with type bool array has size 2, initial value None and final value {True, False}, this value is used: False, this variable is not a counter and is not a parameter.
+symbol c with type bool has initial value 0 and final value 1, this value is used: True, this variable is not a counter and is not a parameter.
+symbol d with type bool has initial value 1 and final value 1, this value is used: True, this variable is not a counter and is not a parameter.
+symbol m with type bool has initial value 0 and final value 1, this value is used: True, this variable is not a counter and is not a parameter.
+symbol f with type bool has initial value 1 and final value 1, this value is used: True, this variable is not a counter and is not a parameter.
+symbol g with type bool has initial value 1 and final value 1, this value is used: True, this variable is not a counter and is not a parameter.
+symbol h with type bool has initial value 0 and final value 1, this value is used: True, this variable is not a counter and is not a parameter.
+symbol i with type bool has initial value 0 and final value 1, this value is used: True, this variable is not a counter and is not a parameter.
+symbol j with type bool has initial value 1 and final value 1, this value is used: True, this variable is not a counter and is not a parameter.
+symbol k with type bool has initial value 1 and final value 1, this value is used: True, this variable is not a counter and is not a parameter.
+symbol l with type bool has initial value 0 and final value 1, this value is used: True, this variable is not a counter and is not a parameter.
+symbol e with type bool has initial value 0 and final value 1, this value is used: True, this variable is not a counter and is not a parameter.
+symbol n with type bool has initial value 6 and final value 1, this value is used: True, this variable is not a counter and is not a parameter.
+
+Optimization cycle started
+Optimization cycle finished
+================= test =================
+symbol a with type bool has initial value true and final value 1, this value is used: False, this variable is not a counter and is not a parameter.
+symbol b with type bool has initial value false and final value 0, this value is used: False, this variable is not a counter and is not a parameter.
+symbol c with type bool has initial value 0 and final value 1, this value is used: False, this variable is not a counter and is not a parameter.
+symbol d with type bool has initial value 1 and final value 1, this value is used: False, this variable is not a counter and is not a parameter.
+symbol m with type bool has initial value 0 and final value 1, this value is used: False, this variable is not a counter and is not a parameter.
+symbol f with type bool has initial value 1 and final value 1, this value is used: False, this variable is not a counter and is not a parameter.
+symbol g with type bool has initial value 1 and final value 1, this value is used: False, this variable is not a counter and is not a parameter.
+symbol h with type bool has initial value 0 and final value 1, this value is used: False, this variable is not a counter and is not a parameter.
+symbol i with type bool has initial value 0 and final value 1, this value is used: False, this variable is not a counter and is not a parameter.
+symbol j with type bool has initial value 1 and final value 1, this value is used: False, this variable is not a counter and is not a parameter.
+symbol k with type bool has initial value 1 and final value 1, this value is used: False, this variable is not a counter and is not a parameter.
+symbol l with type bool has initial value 0 and final value 1, this value is used: False, this variable is not a counter and is not a parameter.
+symbol e with type bool has initial value 0 and final value 1, this value is used: False, this variable is not a counter and is not a parameter.
+symbol n with type bool has initial value 6 and final value 1, this value is used: False, this variable is not a counter and is not a parameter.
 
 Optimization cycle started
 Optimization cycle finished
@@ -20,7 +50,7 @@ Counter validation loop started.
 Counter Validation loop finished.
 The following functions where found:
 
-Function main with return type int and no parameters is NOT OK.
+Function test with return type int and no parameters is NOT OK.
 The function has the following issues: 
 	Incorrect return type, return type must be boolean.
 Automaton generator started.

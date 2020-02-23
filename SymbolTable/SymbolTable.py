@@ -722,7 +722,9 @@ def cast(variable_value, variable_type):
             variable_value = 1
         if variable_value == 'false':
             variable_value = 0
-        return bool(variable_value)
+        if variable_value != 0:
+            variable_value = 1
+        return variable_value
     elif variable_type == 'char' and (type(variable_value) == int or variable_value.isnumeric()):
         return int(variable_value)
     elif variable_type == 'char' and (type(variable_value) == float or variable_value.replace(".", "").isnumeric()):

@@ -151,7 +151,7 @@ digraph G {
 		Q74 -> Q75
 		Q75[label="Val = \"%d \\n\""];
 		Q74 -> Q76
-		Q76[label="Val = 1"];
+		Q76[label="Val = 0"];
 		Q71 -> Q77
 		Q77[label=")"];
 		Q7 -> Q78

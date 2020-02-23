@@ -865,9 +865,9 @@ class ASTCleaner:
             return ""
 
         if operand_1[:6] == "Val = " and operand_2[:6] == "Val = ":
-            result = self.get_operator(operation)(operand_1[6:], operand_2[6:])
+            result = self.get_operator(operation)(float(operand_1[6:]), float(operand_2[6:]))
             self.__changes_occurred = True
-            if result:
+            if int(result) != 0:
                 self.clean_node(node, "Val = 1")
                 return "Val = 1"
             else:
@@ -1016,7 +1016,7 @@ class ASTCleaner:
             return self.clean(node.get_children()[0])
         elif label == "Bitwise Xor Expression":
             return self.clean(node.get_children()[0])
-        elif label == "Logical And Expression":
+        elif label == "Bitwise And Expression":
             return self.clean(node.get_children()[0])
         elif label == "Equality Expression":
             return self.clean(node.get_children()[0])
