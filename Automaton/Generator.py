@@ -191,7 +191,7 @@ class Generator:
         elif "return" == node.get_label():
             self.__next_label = "return"
 
-        elif node.get_label() == "Postfix Expression":
+        elif node.get_label() == "Postfix Expression" or node.get_label() == "Unary Expression":
             if len(node.get_children()) > 1:
                 variable = node.get_children()[0].get_label()
                 op = node.get_children()[1].get_label()
@@ -199,18 +199,7 @@ class Generator:
                 if variable[5:] in self.__counters[self.__functions_counter - 1] and op in {"++", "--"}:
                     first_use = self.__counters[self.__functions_counter - 1][variable[5:]].get_first_used_line()
                     last_use = self.__counters[self.__functions_counter - 1][variable[5:]].get_last_used_line()
-                    if first_use < node.get_line() < last_use:
-                        self.__next_label = "{} {}".format(op[0], 1)
-
-        elif node.get_label() == "Unary Expression":
-            if len(node.get_children()) > 1:
-                op = node.get_children()[0].get_label()
-                variable = node.get_children()[1].get_label()
-
-                if variable[5:] in self.__counters[self.__functions_counter - 1] and op in {"++", "--"}:
-                    first_use = self.__counters[self.__functions_counter - 1][variable[5:]].get_first_used_line()
-                    last_use = self.__counters[self.__functions_counter - 1][variable[5:]].get_last_used_line()
-                    if first_use < node.get_line() < last_use:
+                    if first_use <= node.get_line() <= last_use:
                         self.__next_label = "{} {}".format(op[0], 1)
 
         elif node.get_label() == "Selection Statement":

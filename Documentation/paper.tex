@@ -51,7 +51,11 @@ lars.vanroy@student.uantwerpen.be}
 
 \begin{abstract}
 \noindent
-Reachability is a known problem that can heavily affect the efficiency of code. It has been proven that reachability is decidable for one counter timed automata and to exploit this, we will create a program which will convert c code into such automata. In case the code conforms to the restrictions, enforced by the need of it being a one counter automata, a reachability test can be performed, but the latter will not be part of this research.
+\noindent
+Code reachability is a known problem within computer science. It affects the efficiency and readability of code and is therefore a relevant aspect to analyse.
+
+\noindent
+This paper will try to provide a clear overview of a means in which we can convert c code into a counter automaton. It has been proven by Daniel Bundala and Joal Ouaknine that the reachability for these can be determined as long as they are restricted to one counter. It will show the different steps taken in an example set up, with explanations with how it works, and why it works.
 \end{abstract}
 
 \section{Introduction}
@@ -541,7 +545,7 @@ The following code segment makes use of an if statement which has an equality co
 \begin{lstlisting}[style=CStyle]
 bool is_ten(int a){
 	int counter = a;
-	
+
 	if(counter == 10){
 		return true;
 	}
@@ -571,14 +575,12 @@ The final additional expressions that will be added to the program described wit
 \begin{lstlisting}[style=CStyle]
 bool is_ten(int a){
 	int counter = 10;
-	
 	if(counter <= a){
 		if(counter < a){
 			return false;
 		}
 		return true;
 	}
-	
 	return false;
 }
 \end{lstlisting}
@@ -591,8 +593,7 @@ The is\_ten code segment models both a less than or equal condition and a less t
 	\caption{Example of a less than expression and a greater than expression.}
 	\label{fig:less_than_greater_than}
 \end{figure}
-
-
+\newpage
 Part of the counter automaton of the is\_ten function can be seen in figure \ref{fig:less_than_greater_than}. This automaton has 3 as the start of the outer if and it has 3.01 and 3.02 as respective if and end nodes. The inner if has 4 as the start node, 4.01 as the start of the if segment, and 4.02 as the end node.
 
 The strict greater than condition, originating from node 3 and ending in node 3.02, consists of 3 different transitions. The first transition \textit{-1} and \textit{\textgreater =a}, test if the counter is strictly greater. The third transition \textit{+1} is there to make sure that the counter goes back to its original value.
