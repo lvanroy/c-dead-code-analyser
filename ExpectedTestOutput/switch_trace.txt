@@ -19,6 +19,6 @@ The following functions where found:
 
 Function test_switch with return type bool and no parameters is OK for one counter automaton generation.
 The function has the following counter variable(s):
-	Counter with name a is first used at line 3 and last used at line 21
+	Counter with name a is first used at line 3 and last used at line 22
 Automaton generator started.
 Automaton generator finished.

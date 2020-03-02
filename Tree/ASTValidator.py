@@ -182,6 +182,10 @@ class ASTValidator:
         elif node.get_label() == "Selection Statement":
             if self.__first_outer_line is None:
                 self.__first_outer_line = node.get_line()
+
+            self.__symbol_table.open_scope("scope_{}".format(self.__loop_counter))
+            self.__loop_counter += 1
+
             self.__constrained_conditional_statement = True
             self.validate(node.get_children()[1])
             self.__constrained_conditional_statement = False
@@ -256,7 +260,7 @@ class ASTValidator:
             self.validate(child)
 
         # register end of iteration scope
-        if node.get_label() == "Iteration Statement":
+        if node.get_label() in {"Iteration Statement", "Selection Statement"}:
             self.__symbol_table.close_scope()
             function_name = self.__functions[self.__functions_counter - 1].get_function_name()
             if self.__symbol_table.get_current_scope().get_label() == function_name:
@@ -265,14 +269,6 @@ class ASTValidator:
                         counter.set_last_usage_line(max(self.__lines))
                 self.__first_outer_line = None
 
-        # register end of selection scope
-        elif node.get_label() == "Selection Statement":
-            function_name = self.__functions[self.__functions_counter - 1].get_function_name()
-            if self.__symbol_table.get_current_scope().get_label() == function_name:
-                for counter in self.__counters[self.__functions_counter - 1].values():
-                    if counter.get_first_used_line() == self.__first_outer_line:
-                        counter.set_last_usage_line(max(self.__lines))
-                self.__first_outer_line = None
         # register end of function
         elif node.get_label() == "Function Definition":
             self.__symbol_table.close_scope()

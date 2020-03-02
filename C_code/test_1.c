@@ -43,15 +43,11 @@ bool for_loops(int a){
 bool while_loops(int b){
     int i = 0;
 
-
-
     while(i <= b){
         i ++;
-
     }
 
     while((i != b)){
-
         i--;
         break;
     }

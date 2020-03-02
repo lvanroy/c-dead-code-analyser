@@ -71,14 +71,14 @@ The function has the following counter variable(s):
 
 Function while_loops with return type bool and parameter types ['int'] is OK for one counter automaton generation.
 The function has the following counter variable(s):
-	Counter with name i is first used at line 48 and last used at line 64
+	Counter with name i is first used at line 46 and last used at line 60
 
 Function do_while_loops with return type bool and parameter types ['int'] is OK for one counter automaton generation.
 The function has the following counter variable(s):
-	Counter with name i is first used at line 72 and last used at line 88
+	Counter with name i is first used at line 68 and last used at line 84
 
 Function if_statements with return type bool and parameter types ['int'] is OK for one counter automaton generation.
 The function has the following counter variable(s):
-	Counter with name i is first used at line 96 and last used at line 111
+	Counter with name i is first used at line 92 and last used at line 107
 Automaton generator started.
 Automaton generator finished.

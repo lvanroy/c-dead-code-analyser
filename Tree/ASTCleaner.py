@@ -672,7 +672,8 @@ class ASTCleaner:
             return ""
 
     def clean_compound_statement(self, node):
-        if not node.is_parent("Function Definition") and not node.is_parent("Iteration Statement"):
+        if not node.is_parent("Function Definition") and not node.is_parent("Iteration Statement") and not \
+                node.is_parent("Selection Statement"):
             self.open_scope(node)
         else:
             self.clean_children(node)
@@ -1255,6 +1256,8 @@ class ASTCleaner:
                 return output[:-2]
 
     def clean_selection_statement(self, node):
+        self.__symbol_table.open_scope("scope_{}".format(self.__scope_counter))
+        self.__scope_counter += 1
         if node.get_children()[0].get_label() == "switch":
             variable = node.get_children()[1].get_label()
             if variable[:5] == "ID = ":
@@ -1289,6 +1292,8 @@ class ASTCleaner:
             if len(node.get_children()) > 3:
                 self.clean(node.get_children()[3])
             self.__entered_branch = False
+
+        self.__symbol_table.close_scope()
         return ""
 
     def clean_struct_or_union_specifier(self, node):

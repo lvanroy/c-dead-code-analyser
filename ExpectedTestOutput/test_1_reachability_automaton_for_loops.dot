@@ -10,62 +10,64 @@ digraph G {
 		Q7[label="8.01"];
 		Q8[label="8.04"];
 		Q9[label="9"];
-		Q10[label="8.05"];
-		Q11[label="8.06"];
-		Q12[label="8.03"];
-		Q13[label="12"];
-		Q14[label="11.97"];
-		Q15[label="11.98"];
-		Q16[label="11.99"];
-		Q17[label="12.01"];
-		Q18[label="12.04"];
-		Q19[label="12.05"];
-		Q20[label="12.06"];
-		Q21[label="13"];
-		Q22[label="12.07"];
-		Q23[label="12.08"];
-		Q24[label="12.09"];
-		Q25[label="12.1"];
-		Q26[label="12.03"];
-		Q27[label="18"];
-		Q28[label="20"];
-		Q29[label="20.01"];
-		Q30[label="20.04"];
-		Q31[label="20.05"];
-		Q32[label="20.06"];
-		Q33[label="21"];
-		Q34[label="20.03"];
-		Q35[label="24"];
-		Q36[label="24.01"];
-		Q37[label="24.04"];
-		Q38[label="24.05"];
-		Q39[label="24.06"];
-		Q40[label="25"];
-		Q41[label="24.03"];
-		Q42[label="28"];
-		Q43[label="28.01"];
-		Q44[label="28.04"];
-		Q45[label="28.05"];
-		Q46[label="28.06"];
-		Q47[label="28.03"];
-		Q48[label="30"];
-		Q49[label="30.01"];
-		Q50[label="30.04"];
-		Q51[label="31"];
-		Q52[label="31.01"];
-		Q53[label="32"];
-		Q54[label="33"];
-		Q55[label="31.03"];
-		Q56[label="35"];
-		Q57[label="36"];
-		Q58[label="31.04"];
-		Q59[label="31.05"];
-		Q60[label="31.06"];
-		Q61[label="31.07"];
-		Q62[label="31.02"];
-		Q63[label="30.02"];
-		Q64[label="30.03"];
-		Q65[label="40"];
+		Q10[label="8.02"];
+		Q11[label="8.05"];
+		Q12[label="8.06"];
+		Q13[label="8.03"];
+		Q14[label="12"];
+		Q15[label="11.97"];
+		Q16[label="11.98"];
+		Q17[label="11.99"];
+		Q18[label="12.01"];
+		Q19[label="12.04"];
+		Q20[label="12.05"];
+		Q21[label="12.06"];
+		Q22[label="13"];
+		Q23[label="12.02"];
+		Q24[label="12.07"];
+		Q25[label="12.08"];
+		Q26[label="12.09"];
+		Q27[label="12.1"];
+		Q28[label="12.03"];
+		Q29[label="18"];
+		Q30[label="20"];
+		Q31[label="20.01"];
+		Q32[label="20.04"];
+		Q33[label="20.05"];
+		Q34[label="20.06"];
+		Q35[label="21"];
+		Q36[label="20.03"];
+		Q37[label="24"];
+		Q38[label="24.01"];
+		Q39[label="24.04"];
+		Q40[label="24.05"];
+		Q41[label="24.06"];
+		Q42[label="25"];
+		Q43[label="24.03"];
+		Q44[label="28"];
+		Q45[label="28.01"];
+		Q46[label="28.04"];
+		Q47[label="28.05"];
+		Q48[label="28.06"];
+		Q49[label="28.03"];
+		Q50[label="30"];
+		Q51[label="30.01"];
+		Q52[label="30.04"];
+		Q53[label="31"];
+		Q54[label="31.01"];
+		Q55[label="32"];
+		Q56[label="33"];
+		Q57[label="31.03"];
+		Q58[label="35"];
+		Q59[label="36"];
+		Q60[label="31.04"];
+		Q61[label="31.05"];
+		Q62[label="31.06"];
+		Q63[label="31.07"];
+		Q64[label="31.02"];
+		Q65[label="30.02"];
+		Q66[label="30.03"];
+		Q67[label="40"];
 		Qi[style=invis];
 		Qi -> Q0 [label=""]
 		Q0 -> Q1 [label=""]
@@ -79,80 +81,82 @@ digraph G {
 		Q2 -> Q4 [label=""]
 		Q3 -> Q7 [label=""]
 		Q8 -> Q9 [label=""]
-		Q9 -> Q7 [label=""]
-		Q7 -> Q10 [label="+1"]
-		Q10 -> Q11 [label="<= 3"]
-		Q11 -> Q8 [label="-1"]
-		Q7 -> Q12 [label=">= 3"]
-		Q14 -> Q15 [label="<= 0"]
-		Q15 -> Q15 [label="+1"]
-		Q15 -> Q13 [label="=0"]
-		Q14 -> Q16 [label=">= 0"]
-		Q16 -> Q16 [label="-1"]
-		Q16 -> Q13 [label="=0"]
-		Q12 -> Q14 [label=""]
-		Q13 -> Q18 [label="<=  2"]
-		Q18 -> Q18 [label="+1"]
-		Q18 -> Q17 [label="= 2"]
-		Q13 -> Q19 [label=">=  2"]
-		Q19 -> Q19 [label="-1"]
-		Q19 -> Q17 [label="= 2"]
-		Q20 -> Q21 [label=""]
-		Q21 -> Q17 [label=""]
-		Q17 -> Q22 [label="+1"]
-		Q22 -> Q23 [label="<=  5"]
-		Q23 -> Q20 [label="-1"]
-		Q17 -> Q24 [label="-1"]
-		Q24 -> Q25 [label=">=  5"]
-		Q25 -> Q20 [label="+1"]
-		Q17 -> Q26 [label="= 5"]
-		Q26 -> Q27 [label=""]
-		Q27 -> Q28 [label="+ a"]
-		Q28 -> Q30 [label="<=  5"]
-		Q30 -> Q30 [label="+1"]
-		Q30 -> Q29 [label="= 5"]
-		Q28 -> Q31 [label=">=  5"]
-		Q31 -> Q31 [label="-1"]
-		Q31 -> Q29 [label="= 5"]
-		Q32 -> Q33 [label=""]
-		Q33 -> Q34 [label=""]
-		Q29 -> Q32 [label=""]
+		Q9 -> Q10 [label=""]
+		Q10 -> Q7 [label="+ 1"]
+		Q7 -> Q11 [label="+1"]
+		Q11 -> Q12 [label="<= 3"]
+		Q12 -> Q8 [label="-1"]
+		Q7 -> Q13 [label=">= 3"]
+		Q15 -> Q16 [label="<= 0"]
+		Q16 -> Q16 [label="+1"]
+		Q16 -> Q14 [label="=0"]
+		Q15 -> Q17 [label=">= 0"]
+		Q17 -> Q17 [label="-1"]
+		Q17 -> Q14 [label="=0"]
+		Q13 -> Q15 [label=""]
+		Q14 -> Q19 [label="<=  2"]
+		Q19 -> Q19 [label="+1"]
+		Q19 -> Q18 [label="= 2"]
+		Q14 -> Q20 [label=">=  2"]
+		Q20 -> Q20 [label="-1"]
+		Q20 -> Q18 [label="= 2"]
+		Q21 -> Q22 [label=""]
+		Q22 -> Q23 [label=""]
+		Q23 -> Q18 [label="+ 1"]
+		Q18 -> Q24 [label="+1"]
+		Q24 -> Q25 [label="<=  5"]
+		Q25 -> Q21 [label="-1"]
+		Q18 -> Q26 [label="-1"]
+		Q26 -> Q27 [label=">=  5"]
+		Q27 -> Q21 [label="+1"]
+		Q18 -> Q28 [label="= 5"]
+		Q28 -> Q29 [label=""]
+		Q29 -> Q30 [label="+ a"]
+		Q30 -> Q32 [label="<=  5"]
+		Q32 -> Q32 [label="+1"]
+		Q32 -> Q31 [label="= 5"]
+		Q30 -> Q33 [label=">=  5"]
+		Q33 -> Q33 [label="-1"]
+		Q33 -> Q31 [label="= 5"]
 		Q34 -> Q35 [label=""]
-		Q35 -> Q37 [label="<=  a"]
-		Q37 -> Q37 [label="+1"]
-		Q37 -> Q36 [label="= a"]
-		Q35 -> Q38 [label=">=  a"]
-		Q38 -> Q38 [label="-1"]
-		Q38 -> Q36 [label="= a"]
-		Q39 -> Q40 [label=""]
-		Q40 -> Q41 [label=""]
-		Q36 -> Q39 [label=""]
+		Q35 -> Q36 [label=""]
+		Q31 -> Q34 [label=""]
+		Q36 -> Q37 [label=""]
+		Q37 -> Q39 [label="<=  a"]
+		Q39 -> Q39 [label="+1"]
+		Q39 -> Q38 [label="= a"]
+		Q37 -> Q40 [label=">=  a"]
+		Q40 -> Q40 [label="-1"]
+		Q40 -> Q38 [label="= a"]
 		Q41 -> Q42 [label=""]
 		Q42 -> Q43 [label=""]
-		Q44 -> Q47 [label=""]
-		Q43 -> Q45 [label="+1"]
-		Q45 -> Q46 [label="<= 500"]
-		Q46 -> Q44 [label="-1"]
-		Q43 -> Q47 [label=">= 500"]
-		Q47 -> Q48 [label=""]
-		Q48 -> Q49 [label=""]
+		Q38 -> Q41 [label=""]
+		Q43 -> Q44 [label=""]
+		Q44 -> Q45 [label=""]
+		Q46 -> Q49 [label=""]
+		Q45 -> Q47 [label="+1"]
+		Q47 -> Q48 [label="<= 500"]
+		Q48 -> Q46 [label="-1"]
+		Q45 -> Q49 [label=">= 500"]
+		Q49 -> Q50 [label=""]
 		Q50 -> Q51 [label=""]
 		Q52 -> Q53 [label=""]
-		Q53 -> Q54 [label="= 9"]
-		Q54 -> Q64 [label=""]
-		Q55 -> Q56 [label=""]
-		Q56 -> Q57 [label=""]
-		Q57 -> Q62 [label="= 10"]
-		Q51 -> Q52 [label="= 10"]
-		Q51 -> Q58 [label="+1"]
-		Q58 -> Q59 [label="<=  10"]
-		Q59 -> Q55 [label="-1"]
-		Q51 -> Q60 [label="-1"]
-		Q60 -> Q61 [label=">=  10"]
-		Q61 -> Q55 [label="+1"]
-		Q62 -> Q63 [label=""]
-		Q63 -> Q49 [label="+ 1"]
-		Q49 -> Q50 [label=""]
+		Q54 -> Q55 [label=""]
+		Q55 -> Q56 [label="= 9"]
+		Q56 -> Q66 [label=""]
+		Q57 -> Q58 [label=""]
+		Q58 -> Q59 [label=""]
+		Q59 -> Q64 [label="= 10"]
+		Q53 -> Q54 [label="= 10"]
+		Q53 -> Q60 [label="+1"]
+		Q60 -> Q61 [label="<=  10"]
+		Q61 -> Q57 [label="-1"]
+		Q53 -> Q62 [label="-1"]
+		Q62 -> Q63 [label=">=  10"]
+		Q63 -> Q57 [label="+1"]
 		Q64 -> Q65 [label=""]
+		Q65 -> Q51 [label="+ 1"]
+		Q51 -> Q52 [label=""]
+		Q66 -> Q67 [label=""]
 		
 }
