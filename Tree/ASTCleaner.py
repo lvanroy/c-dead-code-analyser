@@ -1083,7 +1083,7 @@ class ASTCleaner:
 
         if iteration_type == "for":
             for child in node.get_children()[2].get_children():
-                if child.get_label() == "Jump Statement":
+                if child.get_label() in {"Jump Statement", "Iteration Statement", "Selection Statement"}:
                     self.clean(child)
             self.__symbol_table.close_scope()
 
