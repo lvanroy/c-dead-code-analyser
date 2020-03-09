@@ -7,13 +7,13 @@ Optimization cycle started
 Optimization cycle finished
 ================= test_invalid_conditions =================
 symbol a with type int has initial value a and final value 0, this value is used: True, this variable is not a counter and is a parameter.
-symbol counter with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+symbol counter with type int has initial value a and final value 0, this value is used: True, this variable is a counter and is not a parameter.
 
 Optimized AST generation finished.
 The following symbol table was derived from the code:
 ================= test_invalid_conditions =================
 symbol a with type int has initial value a and final value 0, this value is used: True, this variable is not a counter and is a parameter.
-symbol counter with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+symbol counter with type int has initial value a and final value 0, this value is used: True, this variable is a counter and is not a parameter.
 
 Counter validation loop started.
 Counter Validation loop finished.

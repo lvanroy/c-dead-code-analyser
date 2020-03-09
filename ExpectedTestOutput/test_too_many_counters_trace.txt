@@ -8,16 +8,16 @@ Optimization cycle finished
 ================= test_too_many_counters =================
 symbol a with type int has initial value a and final value 0, this value is used: True, this variable is a counter and is a parameter.
 symbol b with type int has initial value b and final value 0, this value is used: True, this variable is not a counter and is a parameter.
-symbol counter1 with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
-symbol counter2 with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+symbol counter1 with type int has initial value a and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+symbol counter2 with type int has initial value a and final value 0, this value is used: True, this variable is a counter and is not a parameter.
 
 Optimized AST generation finished.
 The following symbol table was derived from the code:
 ================= test_too_many_counters =================
 symbol a with type int has initial value a and final value 0, this value is used: True, this variable is a counter and is a parameter.
 symbol b with type int has initial value b and final value 0, this value is used: True, this variable is not a counter and is a parameter.
-symbol counter1 with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
-symbol counter2 with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+symbol counter1 with type int has initial value a and final value 0, this value is used: True, this variable is a counter and is not a parameter.
+symbol counter2 with type int has initial value a and final value 0, this value is used: True, this variable is a counter and is not a parameter.
 
 Counter validation loop started.
 Counter Validation loop finished.

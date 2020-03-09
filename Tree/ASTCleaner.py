@@ -788,7 +788,10 @@ class ASTCleaner:
                                     self.__symbol_table.set_group_instance_variable(declarator, variable, value[6:])
                         else:
                             self.__symbol_table.add_symbol(declaration_type, declarator)
-                            self.__symbol_table.set_initial_value(declarator, '0')
+                            if initializer[:5] == "ID = ":
+                                self.__symbol_table.set_initial_value(declarator, initializer[5:])
+                            else:
+                                self.__symbol_table.set_initial_value(declarator, '0')
 
                     else:
                         self.__symbol_table.add_array_symbol(declaration_type, declarator, size)
