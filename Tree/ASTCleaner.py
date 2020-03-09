@@ -1064,7 +1064,7 @@ class ASTCleaner:
         if node.get_children()[1].get_label() == "For Condition":
             self.clean(node.get_children()[1])
 
-        elif node.get_children()[1].get_label() == "Relational Expression":
+        elif node.get_children()[1].get_label() in {"Relational Expression", "Equality Expression"}:
             counter = node.get_children()[1].get_children()[0].get_label()
             if counter[:5] == "ID = " and not self.__symbol_table.is_parameter(counter[5:]):
                 self.__symbol_table.set_counter(True, counter[5:])
