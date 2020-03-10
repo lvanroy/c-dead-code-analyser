@@ -1087,20 +1087,17 @@ class ASTCleaner:
 
         if iteration_type == "for":
             for child in node.get_children()[2].get_children():
-                if child.get_label() in {"Jump Statement", "Iteration Statement", "Selection Statement"}:
-                    self.clean(child)
+                self.clean(child)
             self.__symbol_table.close_scope()
 
         elif iteration_type == "while":
             for child in node.get_children()[2].get_children():
-                if child.get_label() == "Jump Statement":
-                    self.clean(child)
+                self.clean(child)
             self.__symbol_table.close_scope()
 
         elif iteration_type == "do":
             for child in node.get_children()[1].get_children():
-                if child.get_label() == "Jump Statement":
-                    self.clean(child)
+                self.clean(child)
             if node.get_children()[3].get_label() != "Expression":
                 counter = node.get_children()[3].get_children()[0].get_label()
                 if counter[:5] == "ID = " and not self.__symbol_table.is_parameter(counter[5:]):

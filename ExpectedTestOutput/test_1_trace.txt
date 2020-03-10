@@ -14,10 +14,10 @@ symbol j with type int has initial value 0 and final value 0, this value is used
 symbol l with type int has initial value 5 and final value 5, this value is used: False, this variable is not a counter and is not a parameter.
 ================= while_loops =================
 symbol b with type int has initial value b and final value 0, this value is used: False, this variable is not a counter and is a parameter.
-symbol i with type int has initial value 0 and final value 0, this value is used: False, this variable is a counter and is not a parameter.
+symbol i with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
 ================= do_while_loops =================
 symbol c with type int has initial value c and final value 0, this value is used: False, this variable is not a counter and is a parameter.
-symbol i with type int has initial value 10 and final value 10, this value is used: False, this variable is a counter and is not a parameter.
+symbol i with type int has initial value 10 and final value 10, this value is used: True, this variable is a counter and is not a parameter.
 ================= if_statements =================
 symbol d with type int has initial value d and final value 0, this value is used: True, this variable is not a counter and is a parameter.
 symbol i with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
@@ -33,10 +33,10 @@ symbol j with type int has initial value 0 and final value 0, this value is used
 symbol l with type int has initial value 5 and final value 5, this value is used: False, this variable is not a counter and is not a parameter.
 ================= while_loops =================
 symbol b with type int has initial value b and final value 0, this value is used: False, this variable is not a counter and is a parameter.
-symbol i with type int has initial value 0 and final value 0, this value is used: False, this variable is a counter and is not a parameter.
+symbol i with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
 ================= do_while_loops =================
 symbol c with type int has initial value c and final value 0, this value is used: False, this variable is not a counter and is a parameter.
-symbol i with type int has initial value 10 and final value 10, this value is used: False, this variable is a counter and is not a parameter.
+symbol i with type int has initial value 10 and final value 10, this value is used: True, this variable is a counter and is not a parameter.
 ================= if_statements =================
 symbol d with type int has initial value d and final value 0, this value is used: True, this variable is not a counter and is a parameter.
 symbol i with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
@@ -52,10 +52,10 @@ symbol j with type int has initial value 0 and final value 0, this value is used
 symbol l with type int has initial value 5 and final value 5, this value is used: False, this variable is not a counter and is not a parameter.
 ================= while_loops =================
 symbol b with type int has initial value b and final value 0, this value is used: False, this variable is not a counter and is a parameter.
-symbol i with type int has initial value 0 and final value 0, this value is used: False, this variable is a counter and is not a parameter.
+symbol i with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
 ================= do_while_loops =================
 symbol c with type int has initial value c and final value 0, this value is used: False, this variable is not a counter and is a parameter.
-symbol i with type int has initial value 10 and final value 10, this value is used: False, this variable is a counter and is not a parameter.
+symbol i with type int has initial value 10 and final value 10, this value is used: True, this variable is a counter and is not a parameter.
 ================= if_statements =================
 symbol d with type int has initial value d and final value 0, this value is used: True, this variable is not a counter and is a parameter.
 symbol i with type int has initial value 0 and final value 0, this value is used: True, this variable is a counter and is not a parameter.
