@@ -424,15 +424,20 @@ class Generator:
             else:
                 iteration_start = self.__last_nodes[node.get_line()]
 
-            pre_loop = self.get_new_node(node.get_line())
-            loop_end = self.get_new_node(node.get_line())
+            if node.get_children()[0].get_label() == "for":
+                pre_loop = self.get_new_node(node.get_line())
+                loop_end = self.get_new_node(node.get_line())
+            else:
+                pre_loop = iteration_start
+
             iteration_end = self.get_new_node(node.get_line())
 
             # push the current line on the for_lines stack
             self.__for_lines.append(iteration_end)
 
-            automaton.add_node(pre_loop)
-            self.__lines.append(pre_loop)
+            if node.get_children()[0].get_label() == "for":
+                automaton.add_node(pre_loop)
+                self.__lines.append(pre_loop)
 
             # if working with a for loop, there is a segment that needs to be evaluated before the inner segment starts
             # the for is needed to support comma separated expressions
@@ -453,9 +458,6 @@ class Generator:
                     automaton.add_transition(iteration_start, pre_loop, self.__next_label, "")
 
                 self.__next_label = ""
-
-            else:
-                automaton.add_transition(iteration_start, pre_loop, "", "")
 
             inner_start = self.get_new_node(node.get_line())
 
