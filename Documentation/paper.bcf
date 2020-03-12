@@ -2182,9 +2182,11 @@
     <bcf:datasource type="file" datatype="bibtex">bibliography.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
-    <bcf:citekey order="1">danialandjoel</bcf:citekey>
-    <bcf:citekey order="2">informationprocessingletters</bcf:citekey>
-    <bcf:citekey order="3">higherdimensionaltimedautomata</bcf:citekey>
+    <bcf:citekey order="1">713323</bcf:citekey>
+    <bcf:citekey order="1">10.1145/1292316.1292319</bcf:citekey>
+    <bcf:citekey order="2">embeddedefficiency</bcf:citekey>
+    <bcf:citekey order="3">succintandparametriconecounter</bcf:citekey>
+    <bcf:citekey order="3">danialandjoel</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

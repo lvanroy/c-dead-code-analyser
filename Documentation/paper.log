@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7300 64-bit) (preloaded format=pdflatex 2020.2.9)  28 FEB 2020 15:56
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7300 64-bit) (preloaded format=pdflatex 2020.2.9)  12 MAR 2020 21:00
 entering extended mode
 **./paper.tex
 (paper.tex
@@ -483,23 +483,43 @@ Package graphics Info: Driver file: pdftex.def on input line 105.
 \Gin@req@height=\dimen125
 \Gin@req@width=\dimen126
 )
-\@quotelevel=\count309
-\@quotereset=\count310
+("C:\Users\larsv\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hyperref\nameref.s
+ty"
+Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
+
+("C:\Users\larsv\AppData\Local\Programs\MiKTeX 2.9\tex/latex/refcount\refcount.
+sty"
+Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
+)
+("C:\Users\larsv\AppData\Local\Programs\MiKTeX 2.9\tex/generic/gettitlestring\g
+ettitlestring.sty"
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
+)
+\c@section@level=\count309
+LaTeX Info: Redefining \ref on input line 356.
+LaTeX Info: Redefining \pageref on input line 356.
+)
+("C:\Users\larsv\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\lscape.st
+y"
+Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
+)
+\@quotelevel=\count310
+\@quotereset=\count311
  (paper.aux)
 \openout1 = `paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
 Package biblatex Info: Trying to load language 'english'...
 Package biblatex Info: ... file 'english.lbx' found.
 
@@ -515,22 +535,22 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'paper.bbl' found.
  (paper.bbl)
-Package biblatex Info: Reference section=0 on input line 49.
-Package biblatex Info: Reference segment=0 on input line 49.
+Package biblatex Info: Reference section=0 on input line 53.
+Package biblatex Info: Reference segment=0 on input line 53.
 
 ("C:\Users\larsv\AppData\Local\Programs\MiKTeX 2.9\tex/context/base/mkii\supp-p
 df.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count311
+\scratchcounter=\count312
 \scratchdimen=\dimen127
 \scratchbox=\box57
-\nofMPsegments=\count312
-\nofMParguments=\count313
+\nofMPsegments=\count313
+\nofMParguments=\count314
 \everyMPshowfont=\toks22
-\MPscratchCnt=\count314
+\MPscratchCnt=\count315
 \MPscratchDim=\dimen128
-\MPnumerator=\count315
-\makeMPintoPDFobject=\count316
+\MPnumerator=\count316
+\makeMPintoPDFobject=\count317
 \everyMPtoPDFconversion=\toks23
 )
 ("C:\Users\larsv\AppData\Local\Programs\MiKTeX 2.9\tex/latex/epstopdf-pkg\epsto
@@ -539,30 +559,30 @@ Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 85.
 )
-\c@lstlisting=\count317
-LaTeX Font Info:    Trying to load font information for U+msa on input line 50.
+\c@lstlisting=\count318
+LaTeX Font Info:    Trying to load font information for U+msa on input line 54.
 
 
 ("C:\Users\larsv\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 50.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 54.
 
 ("C:\Users\larsv\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
-{C:/Users/larsv/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 8
-3.
+{C:/Users/larsv/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] [2]
+LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 9
+5.
 
 ("C:\Users\larsv\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 83.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 95.
 
-[2] [3] [4]
+[3] [4] [5] [6] [7]
 ("C:\Users\larsv\AppData\Local\Programs\MiKTeX 2.9\tex/latex/listings\lstlang1.
 sty"
 File: lstlang1.sty 2019/09/10 1.8c listings language file
@@ -572,111 +592,172 @@ ty"
 File: lstmisc.sty 2019/09/10 1.8c (Carsten Heinz)
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 136.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 177.
 LaTeX Font Info:    Trying to load font information for OML+cmr on input line 1
-37.
+81.
  ("C:\Users\larsv\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\omlcmr.fd"
 File: omlcmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 137.
-<./images/is_greater_or_equal_counter_automaton.png, id=28, 1197.47375pt x 219.
-82124pt>
-File: ./images/is_greater_or_equal_counter_automaton.png Graphic file (type png
-)
-<use ./images/is_greater_or_equal_counter_automaton.png>
-Package pdftex.def Info: ./images/is_greater_or_equal_counter_automaton.png  us
-ed on input line 145.
-(pdftex.def)             Requested size: 390.0pt x 71.59198pt.
-LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <12> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 159.
- [5 <./images/is_greater_or_equal_counter_automaton.png>] [6] [7] [8]
-[9]
-<./images/unfolded_addition.png, id=49, 316.18124pt x 172.39406pt>
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 181.
+ [8]
+<./images/unfolded_addition.png, id=40, 316.18124pt x 172.39406pt>
 File: ./images/unfolded_addition.png Graphic file (type png)
 <use ./images/unfolded_addition.png>
-Package pdftex.def Info: ./images/unfolded_addition.png  used on input line 263
+Package pdftex.def Info: ./images/unfolded_addition.png  used on input line 227
 .
 (pdftex.def)             Requested size: 312.00119pt x 170.12611pt.
-<./images/folded_addition.png, id=50, 251.43938pt x 103.13531pt>
+<./images/folded_addition.png, id=41, 251.43938pt x 103.13531pt>
 File: ./images/folded_addition.png Graphic file (type png)
 <use ./images/folded_addition.png>
-Package pdftex.def Info: ./images/folded_addition.png  used on input line 272.
+Package pdftex.def Info: ./images/folded_addition.png  used on input line 236.
 (pdftex.def)             Requested size: 234.00238pt x 95.9825pt.
- [10 <./images/unfolded_addition.png> <./images/folded_addition.png>]
-[11] [12] [13]
-<./images/divide_cleaned.png, id=64, 2620.79124pt x 637.38126pt>
+ [9 <./images/unfolded_addition.png> <./images/folded_addition.png>]
+[10] [11] [12]
+<./images/divide_cleaned.png, id=55, 2620.79124pt x 637.38126pt>
 File: ./images/divide_cleaned.png Graphic file (type png)
 <use ./images/divide_cleaned.png>
-Package pdftex.def Info: ./images/divide_cleaned.png  used on input line 388.
+Package pdftex.def Info: ./images/divide_cleaned.png  used on input line 354.
 (pdftex.def)             Requested size: 390.0pt x 94.84445pt.
- [14 <./images/divide_cleaned.png>] [15]
-<./images/counter_assignment.png, id=72, 371.3875pt x 203.76125pt>
+ [13 <./images/divide_cleaned.png>] [14]
+LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 381.
+<./images/counter_assignment.png, id=65, 371.3875pt x 203.76125pt>
 File: ./images/counter_assignment.png Graphic file (type png)
 <use ./images/counter_assignment.png>
-Package pdftex.def Info: ./images/counter_assignment.png  used on input line 42
-2.
+Package pdftex.def Info: ./images/counter_assignment.png  used on input line 38
+6.
 (pdftex.def)             Requested size: 187.19833pt x 102.7074pt.
- [16 <./images/counter_assignment.png>]
-<./images/test_counter_automaton.png, id=77, 1777.64125pt x 219.82124pt>
+ [15 <./images/counter_assignment.png>]
+<./images/test_counter_automaton.png, id=70, 1046.91125pt x 176.66pt>
 File: ./images/test_counter_automaton.png Graphic file (type png)
 <use ./images/test_counter_automaton.png>
 Package pdftex.def Info: ./images/test_counter_automaton.png  used on input lin
-e 456.
-(pdftex.def)             Requested size: 390.0pt x 48.22664pt.
- [17 <./images/test_counter_automaton.png>]
-<./images/counter_switch.png, id=82, 2159.06625pt x 243.91125pt>
+e 414.
+(pdftex.def)             Requested size: 370.49881pt x 62.5193pt.
+ [16 <./images/test_counter_automaton.png>]
+<./images/counter_switch.png, id=75, 1035.87pt x 155.58125pt>
 File: ./images/counter_switch.png Graphic file (type png)
 <use ./images/counter_switch.png>
-Package pdftex.def Info: ./images/counter_switch.png  used on input line 497.
-(pdftex.def)             Requested size: 390.0pt x 44.05844pt.
- [18 <./images/counter_switch.png>]
-Overfull \hbox (39.07356pt too wide) in paragraph at lines 508--509
-[]\OT1/cmr/m/n/12 After the in-ner seg-ment, they will all end up at the $\OML/
-cmm/m/it/12 end of the iteration statement$
- []
-
-<./images/test2_counter_automaton.png, id=87, 2578.63374pt x 276.03125pt>
+Package pdftex.def Info: ./images/counter_switch.png  used on input line 446.
+(pdftex.def)             Requested size: 390.0pt x 58.57547pt.
+ [17 <./images/counter_switch.png>]
+<./images/test2_counter_automaton.png, id=80, 1349.04pt x 192.72pt>
 File: ./images/test2_counter_automaton.png Graphic file (type png)
 <use ./images/test2_counter_automaton.png>
 Package pdftex.def Info: ./images/test2_counter_automaton.png  used on input li
-ne 529.
-(pdftex.def)             Requested size: 390.0pt x 41.74405pt.
-[19 <./images/test2_counter_automaton.png>]
-<./images/inequality_expression.png, id=93, 668.4975pt x 205.76875pt>
+ne 475.
+(pdftex.def)             Requested size: 390.0pt x 55.71385pt.
+ [18 <./images/test2_counter_automaton.png>]
+<./images/inequality_expression.png, id=85, 928.46875pt x 203.76125pt>
 File: ./images/inequality_expression.png Graphic file (type png)
 <use ./images/inequality_expression.png>
 Package pdftex.def Info: ./images/inequality_expression.png  used on input line
- 561.
-(pdftex.def)             Requested size: 390.0pt x 120.04926pt.
+ 502.
+(pdftex.def)             Requested size: 390.0pt x 85.59157pt.
 LaTeX Font Info:    Font shape `OML/cmr/m/it' in size <12> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 566.
- [20 <./images/inequality_expression.png>]
-<./images/less_than_greater_than.png, id=98, 972.63374pt x 197.73875pt>
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 507.
+ [19 <./images/inequality_expression.png>]
+<./images/less_than_greater_than.png, id=91, 1373.13pt x 203.76125pt>
 File: ./images/less_than_greater_than.png Graphic file (type png)
 <use ./images/less_than_greater_than.png>
 Package pdftex.def Info: ./images/less_than_greater_than.png  used on input lin
-e 592.
-(pdftex.def)             Requested size: 390.0pt x 79.2872pt.
- [21 <./images/less_than_greater_than.png>] [22]
-Overfull \hbox (46.75304pt too wide) in paragraph at lines 618--618
-[]\OT1/cmr/m/n/12 Uli Fahren-berg. ``Higher-Dimensional Timed Au-tomata''. In: 
-\OT1/cmr/m/it/12 IFAC-PapersOnLine
- []
+e 533.
+(pdftex.def)             Requested size: 390.0pt x 57.87045pt.
+ [20 <./images/less_than_greater_than.png>] [21]
+<./images/final_overview_1.png, id=99, 99.37125pt x 44.41594pt>
+File: ./images/final_overview_1.png Graphic file (type png)
+<use ./images/final_overview_1.png>
+Package pdftex.def Info: ./images/final_overview_1.png  used on input line 593.
 
-[23] (paper.aux)
+(pdftex.def)             Requested size: 77.99881pt x 34.86386pt.
+<./images/final_overview_2.png, id=100, 188.20313pt x 44.41594pt>
+File: ./images/final_overview_2.png Graphic file (type png)
+<use ./images/final_overview_2.png>
+Package pdftex.def Info: ./images/final_overview_2.png  used on input line 602.
+
+(pdftex.def)             Requested size: 155.99762pt x 36.81776pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[22 <./images/final_overview_1.png>]
+<./images/final_overview_3.png, id=105, 502.87875pt x 236.885pt>
+File: ./images/final_overview_3.png Graphic file (type png)
+<use ./images/final_overview_3.png>
+Package pdftex.def Info: ./images/final_overview_3.png  used on input line 613.
+
+(pdftex.def)             Requested size: 272.99881pt x 128.59552pt.
+<./images/final_overview_4.png, id=106, 219.82124pt x 59.22125pt>
+File: ./images/final_overview_4.png Graphic file (type png)
+<use ./images/final_overview_4.png>
+Package pdftex.def Info: ./images/final_overview_4.png  used on input line 622.
+
+(pdftex.def)             Requested size: 136.50238pt x 36.77551pt.
+<./images/final_overview_5.png, id=107, 341.275pt x 59.22125pt>
+File: ./images/final_overview_5.png Graphic file (type png)
+<use ./images/final_overview_5.png>
+Package pdftex.def Info: ./images/final_overview_5.png  used on input line 631.
+
+(pdftex.def)             Requested size: 195.0pt x 33.83867pt.
+ [23 <./images/final_overview_2.png> <./images/final_overview_3.png> <./images/
+final_overview_4.png>]
+<./images/final_overview_6.png, id=114, 908.39375pt x 248.93pt>
+File: ./images/final_overview_6.png Graphic file (type png)
+<use ./images/final_overview_6.png>
+Package pdftex.def Info: ./images/final_overview_6.png  used on input line 646.
+
+(pdftex.def)             Requested size: 390.0pt x 106.87448pt.
+ [24 <./images/final_overview_5.png> <./images/final_overview_6.png>]
+<./images/final_overview_7.png, id=120, 1196.47pt x 131.49126pt>
+File: ./images/final_overview_7.png Graphic file (type png)
+<use ./images/final_overview_7.png>
+Package pdftex.def Info: ./images/final_overview_7.png  used on input line 663.
+
+(pdftex.def)             Requested size: 390.0pt x 42.86055pt.
+<./images/final_overview_8.png, id=121, 1208.515pt x 113.42375pt>
+File: ./images/final_overview_8.png Graphic file (type png)
+<use ./images/final_overview_8.png>
+Package pdftex.def Info: ./images/final_overview_8.png  used on input line 672.
+
+(pdftex.def)             Requested size: 390.0pt x 36.60266pt.
+ [25 <./images/final_overview_7.png> <./images/final_overview_8.png>]
+<./images/final_overview_9.png, id=128, 1038.88126pt x 200.75pt>
+File: ./images/final_overview_9.png Graphic file (type png)
+<use ./images/final_overview_9.png>
+Package pdftex.def Info: ./images/final_overview_9.png  used on input line 681.
+
+(pdftex.def)             Requested size: 390.0pt x 75.3607pt.
+<./images/final_overview_10.png, id=129, 203.76125pt x 59.22125pt>
+File: ./images/final_overview_10.png Graphic file (type png)
+<use ./images/final_overview_10.png>
+Package pdftex.def Info: ./images/final_overview_10.png  used on input line 690
+.
+(pdftex.def)             Requested size: 136.50238pt x 39.6744pt.
+ [26 <./images/final_overview_9.png> <./images/final_overview_10.png>]
+<./images/final_overview_11.png, id=135, 4064.18375pt x 259.97125pt>
+File: ./images/final_overview_11.png Graphic file (type png)
+<use ./images/final_overview_11.png>
+Package pdftex.def Info: ./images/final_overview_11.png  used on input line 700
+.
+(pdftex.def)             Requested size: 548.5pt x 35.0827pt.
+ [27 <./images/final_overview_11.png>] [28
+
+
+]
+[29] (paper.aux)
 Package logreq Info: Writing requests to 'paper.run.xml'.
 \openout1 = `paper.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 11638 strings out of 492476
- 199206 string characters out of 3121449
- 696094 words of memory out of 3000000
- 15877 multiletter control sequences out of 15000+200000
- 15172 words of font info for 58 fonts, out of 3000000 for 9000
+ 11935 strings out of 492476
+ 205687 string characters out of 3121449
+ 702317 words of memory out of 3000000
+ 16160 multiletter control sequences out of 15000+200000
+ 14820 words of font info for 57 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 36i,17n,60p,932b,1409s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 37i,17n,60p,1458b,1657s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/larsv/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts
 /cm/cmbx10.pfb><C:/Users/larsv/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/pu
 blic/amsfonts/cm/cmbx12.pfb><C:/Users/larsv/AppData/Local/Programs/MiKTeX 2.9/f
@@ -691,16 +772,14 @@ ts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/larsv/AppData/Local/Programs/Mi
 KTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/larsv/AppData/Local
 /Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/larsv/Ap
 pData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Use
-rs/larsv/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsl1
-2.pfb><C:/Users/larsv/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsf
-onts/cm/cmsy10.pfb><C:/Users/larsv/AppData/Local/Programs/MiKTeX 2.9/fonts/type
-1/public/amsfonts/cm/cmsy8.pfb><C:/Users/larsv/AppData/Local/Programs/MiKTeX 2.
-9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Users/larsv/AppData/Local/Progr
-ams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt12.pfb><C:/Users/larsv/AppDat
-a/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on paper.pdf (23 pages, 698043 bytes).
+rs/larsv/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy1
+0.pfb><C:/Users/larsv/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsf
+onts/cm/cmti12.pfb><C:/Users/larsv/AppData/Local/Programs/MiKTeX 2.9/fonts/type
+1/public/amsfonts/cm/cmtt12.pfb><C:/Users/larsv/AppData/Local/Programs/MiKTeX 2
+.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on paper.pdf (29 pages, 848443 bytes).
 PDF statistics:
- 167 PDF objects out of 1000 (max. 8388607)
+ 198 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 51 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 101 words of extra memory for PDF output out of 10000 (max. 10000000)
 
