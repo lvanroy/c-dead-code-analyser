@@ -200,7 +200,9 @@ class Generator:
                     first_use = self.__counters[self.__functions_counter - 1][variable[5:]].get_first_used_line()
                     last_use = self.__counters[self.__functions_counter - 1][variable[5:]].get_last_used_line()
                     if first_use <= node.get_line() <= last_use:
-                        self.__next_label = "{} {}".format(op[0], 1)
+                        if self.__next_label != "":
+                            self.__next_label += ", "
+                        self.__next_label += "{} {}".format(op[0], 1)
 
         elif node.get_label() == "Selection Statement":
             # get the automaton object for the current function
@@ -452,10 +454,24 @@ class Generator:
                     self.generate_automaton(expression)
 
                 # if additional next labels were generated, add these to the transition going to the start of the for
+                start = iteration_start
+                if "," in self.__next_label:
+                    labels = self.__next_label.split(", ")
+                    for i in range(0, len(labels)-1):
+                        temp_node = self.get_new_node(node.get_line())
+                        automaton.add_node(temp_node)
+                        self.__lines.append(temp_node)
+                        if "=" in labels[i]:
+                            self.generate_assignment_transition(labels[i], start, temp_node)
+                        else:
+                            automaton.add_transition(start, temp_node, labels[i], "")
+                        start = temp_node
+                    self.__next_label = labels[-1]
+
                 if "=" in self.__next_label:
-                    self.generate_assignment_transition(self.__next_label, iteration_start, pre_loop)
+                    self.generate_assignment_transition(self.__next_label, start, pre_loop)
                 else:
-                    automaton.add_transition(iteration_start, pre_loop, self.__next_label, "")
+                    automaton.add_transition(start, pre_loop, self.__next_label, "")
 
                 self.__next_label = ""
 
@@ -481,10 +497,7 @@ class Generator:
                 # inner segment, to the start of the loop
                 if self.__next_label != "break" and self.__next_label != "return":
                     start = self.__lines[-1]
-                    if automaton.get_transition_label(start, pre_loop) is not None:
-                        automaton.add_to_transition_label(start, pre_loop, self.__next_label)
-                    else:
-                        automaton.add_transition(start, pre_loop, self.__next_label, "")
+                    automaton.add_transition(start, pre_loop, self.__next_label, "")
                     self.__next_label = ""
 
                 # if a break occurred, create a transition from the end of the inner segment, to the end of the loop
@@ -498,37 +511,22 @@ class Generator:
                     self.__next_label = ""
 
                 # analyze the post loop expression if no breaks or returns occurred
+                # if a transition to the iteration end exists, there has been a break
+                # if no transition
                 start = self.__lines[-1]
-                label = automaton.get_transition_label(start, pre_loop)
-                if node.get_children()[0].get_label() == "for" and label is not None:
-                    self.generate_automaton(node.get_children()[1].get_children()[2])
-
-                    # if no break or return statement occurred in the inner segment, create a transition from the end of the
-                    # inner segment, to the end of the loop, and from the end of the loop to the start of the next cycle
-                    if self.__next_label != "break" and self.__next_label != "return" and self.__next_label != "":
-                        start = self.__lines[-1]
+                if node.get_children()[0].get_label() == "for":
+                    break_occured = automaton.get_transition_label(start, iteration_end) is not None
+                    return_occured = automaton.get_transition_label(start, loop_end) is None and not break_occured
+                    if not break_occured and not return_occured:
+                        label = automaton.get_transition_label(start, loop_end)
+                        if label is None:
+                            label = ""
+                        self.generate_automaton(node.get_children()[1].get_children()[2])
                         automaton.remove_transition(start, pre_loop)
                         automaton.add_transition(start, loop_end, label, "")
                         automaton.add_transition(loop_end, pre_loop, self.__next_label, "")
                         self.__lines.append(loop_end)
                         automaton.add_node(loop_end)
-                        self.__next_label = ""
-
-                    # if a break occurred, create a transition from the end of the inner segment, to the end of the loop
-                    # and from the end of the loop, to the end of the statement
-                    elif self.__next_label == "break":
-                        start = self.__lines[-1]
-                        end = iteration_end
-                        end_statement = node.get_line() + 0.99
-                        automaton.remove_transition(start, end)
-                        automaton.add_transition(start, loop_end, label, "")
-                        automaton.add_transition(loop_end, end_statement, "", "")
-                        self.__lines.append(loop_end)
-                        automaton.add_node(loop_end)
-                        self.__next_label = ""
-
-                    # if a return occurred, create no transition, as this is the end of the execution
-                    elif self.__next_label == "return":
                         self.__next_label = ""
 
             # add the nodes and transitions to the automaton

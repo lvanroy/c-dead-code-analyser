@@ -62,36 +62,6 @@ class Automaton:
                 return transition.label
         return None
 
-    def set_transition_label(self, start, finish, new_label):
-        if not self.enabled:
-            return None
-
-        for transition in self.transitions:
-            if transition.start == start and transition.finish == finish:
-                transition.label = new_label
-
-    def add_to_transition_label(self, start, finish, new_label):
-        if not self.enabled:
-            return None
-
-        for transition in self.transitions:
-            if transition.start == start and transition.finish == finish:
-                if transition.label == "":
-                    transition.label = new_label
-                else:
-                    transition.label += ", " + new_label
-
-    def add_to_transition_condition(self, start, finish, new_condition):
-        if not self.enabled:
-            return None
-
-        for transition in self.transitions:
-            if transition.start == start and transition.finish == finish:
-                if transition.condition == "":
-                    transition.condition = new_condition
-                else:
-                    transition.condition += "\n" + new_condition
-
     def to_dot(self):
         result = "digraph G {\n\t\t"
         result += "rankdir=LR\n\t\t"

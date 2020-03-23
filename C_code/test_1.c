@@ -5,11 +5,11 @@ bool for_loops(int a){
     int i = 0;
     int k = 0;
 
-    for(int j = 0, l = 5; j < 3; j ++){
+    for(int j = 0,j = 5, j = 8, l = 5; j < 3; j ++){
         continue;
     }
 
-    for(i = 2;i != 5; k++, i++){
+    for(i = 2, i = 8;i != 5; k++, i++, i++){
         continue;
         i += 1;
         break;
@@ -25,7 +25,7 @@ bool for_loops(int a){
         break;
     }
 
-    for(;i < 500;){break;}
+    for(;i > 500;){return true;}
 
     for(;;i++, k++){
         if(i == 10){
