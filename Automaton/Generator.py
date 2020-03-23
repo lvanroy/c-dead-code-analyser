@@ -516,14 +516,11 @@ class Generator:
                 start = self.__lines[-1]
                 if node.get_children()[0].get_label() == "for":
                     break_occured = automaton.get_transition_label(start, iteration_end) is not None
-                    return_occured = automaton.get_transition_label(start, loop_end) is None and not break_occured
+                    return_occured = automaton.get_transition_label(start, pre_loop) is None and not break_occured
                     if not break_occured and not return_occured:
-                        label = automaton.get_transition_label(start, loop_end)
-                        if label is None:
-                            label = ""
                         self.generate_automaton(node.get_children()[1].get_children()[2])
                         automaton.remove_transition(start, pre_loop)
-                        automaton.add_transition(start, loop_end, label, "")
+                        automaton.add_transition(start, loop_end, "", "")
                         automaton.add_transition(loop_end, pre_loop, self.__next_label, "")
                         self.__lines.append(loop_end)
                         automaton.add_node(loop_end)
