@@ -44,7 +44,8 @@
   <internal package="biblatex" priority="9" active="0">
     <generic>latex</generic>
     <provides type="dynamic">
-      <file>paper.bcf</file>
+      <file>paper.aux</file>
+      <file>paper-blx.bib</file>
     </provides>
     <requires type="dynamic">
       <file>paper.bbl</file>
@@ -52,6 +53,7 @@
     <requires type="static">
       <file>blx-dm.def</file>
       <file>blx-compat.def</file>
+      <file>blx-bibtex.def</file>
       <file>biblatex.def</file>
       <file>standard.bbx</file>
       <file>numeric.bbx</file>
@@ -61,13 +63,14 @@
     </requires>
   </internal>
   <external package="biblatex" priority="5" active="0">
-    <generic>biber</generic>
+    <generic>bibtex</generic>
     <cmdline>
-      <binary>biber</binary>
+      <binary>bibtex</binary>
+      <option>-min-crossrefs 2</option>
       <infile>paper</infile>
     </cmdline>
     <input>
-      <file>paper.bcf</file>
+      <file>paper.aux</file>
     </input>
     <output>
       <file>paper.bbl</file>
@@ -76,10 +79,14 @@
       <file>paper.bbl</file>
     </provides>
     <requires type="dynamic">
-      <file>paper.bcf</file>
+      <file>paper.aux</file>
+      <file>paper-blx.bib</file>
     </requires>
     <requires type="editable">
-      <file>bibliography.bib</file>
+      <file>bibliography</file>
+    </requires>
+    <requires type="static">
+      <file>biblatex.bst</file>
     </requires>
   </external>
 </requests>

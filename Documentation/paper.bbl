@@ -3,8 +3,8 @@
 % Do not modify the above lines!
 %
 % This is an auxiliary file used by the 'biblatex' package.
-% This file may safely be deleted. It will be recreated by
-% biber as required.
+% This file may safely be deleted. It will be recreated as
+% required.
 %
 \begingroup
 \makeatletter
@@ -16,195 +16,245 @@
   {}
 \endgroup
 
+\datalist[entry]{nty/global//global/global}
+  \entry{FEARNLEY201526}{article}{}
+    \name{author}{2}{}{%
+      {{hash=FJ}{%
+         family={Fearnley},
+         familyi={F\bibinitperiod},
+         given={John},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=JM}{%
+         family={Jurdziński},
+         familyi={J\bibinitperiod},
+         given={Marcin},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \keyw{Timed automata, Counter automata, PSPACE-complete}
+    \strng{namehash}{FJJM1}
+    \strng{fullhash}{FJJM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{F}
+    \field{sortinithash}{F}
+    \field{abstract}{%
+    Recently, Haase, Ouaknine, and Worrell have shown that reachability in
+  two-clock timed automata is log-space equivalent to reachability in bounded
+  one-counter automata. We show that reachability in bounded one-counter
+  automata is PSPACE-complete.%
+    }
+    \verb{doi}
+    \verb https://doi.org/10.1016/j.ic.2014.12.004
+    \endverb
+    \field{issn}{0890-5401}
+    \field{note}{40th International Colloquium on Automata, Languages and
+  Programming (ICALP 2013)}
+    \field{pages}{26 \bibrangedash  36}
+    \field{title}{Reachability in two-clock timed automata is PSPACE-complete}
+    \verb{url}
+    \verb http://www.sciencedirect.com/science/article/pii/S0890540114001564
+    \endverb
+    \field{volume}{243}
+    \field{journaltitle}{Information and Computation}
+    \field{year}{2015}
+  \endentry
 
-\refsection{0}
-  \datalist[entry]{nty/global//global/global}
-    \entry{succintandparametriconecounter}{article}{}
-      \name{author}{1}{}{%
-        {{hash=1b4e2af09161600f147aff07ddd9eb98}{%
-           family={J.},
-           familyi={J\bibinitperiod},
-           given={Haase\bibnamedelimb C.;\bibnamedelimb Kreutzer\bibnamedelimb S.;\bibnamedelimb Ouaknine\bibnamedelimb J.;\bibnamedelima Worrell},
-           giveni={H\bibinitperiod\bibinitdelim C\bibinitperiod\bibinitdelim K\bibinitperiod\bibinitdelim S\bibinitperiod\bibinitdelim O\bibinitperiod\bibinitdelim J\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
-      }
-      \strng{namehash}{1b4e2af09161600f147aff07ddd9eb98}
-      \strng{fullhash}{1b4e2af09161600f147aff07ddd9eb98}
-      \strng{bibnamehash}{1b4e2af09161600f147aff07ddd9eb98}
-      \strng{authorbibnamehash}{1b4e2af09161600f147aff07ddd9eb98}
-      \strng{authornamehash}{1b4e2af09161600f147aff07ddd9eb98}
-      \strng{authorfullhash}{1b4e2af09161600f147aff07ddd9eb98}
-      \field{sortinit}{J}
-      \field{sortinithash}{c45040a764d616897e7f5b30174d7b92}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{Lecture Notes in Computer Science}
-      \field{title}{Reachability in Succinct and Parametric One-Counter Automata.}
-      \field{volume}{5710}
-      \field{year}{2009}
-      \verb{doi}
-      \verb https://doi.org/10.1007/978-3-642-04081-8_25
-      \endverb
-    \endentry
-    \entry{10.1145/1292316.1292319}{proceedings}{}
-      \name{author}{3}{}{%
-        {{hash=dd3acd180fb6d9b66712fad51611e33a}{%
-           family={Janota},
-           familyi={J\bibinitperiod},
-           given={Mikoláš},
-           giveni={M\bibinitperiod}}}%
-        {{hash=826e278af0fa3d88dbd05a4dffce7868}{%
-           family={Grigore},
-           familyi={G\bibinitperiod},
-           given={Radu},
-           giveni={R\bibinitperiod}}}%
-        {{hash=b2dbe6dba9178571d04f21598e92005f}{%
-           family={Moskal},
-           familyi={M\bibinitperiod},
-           given={Michal},
-           giveni={M\bibinitperiod}}}%
-      }
-      \list{location}{1}{%
-        {Dubrovnik, Croatia}%
-      }
-      \list{publisher}{1}{%
-        {Association for Computing Machinery}%
-      }
-      \strng{namehash}{4f0ac52e967855914ff5d7dc51851e48}
-      \strng{fullhash}{4f0ac52e967855914ff5d7dc51851e48}
-      \strng{bibnamehash}{4f0ac52e967855914ff5d7dc51851e48}
-      \strng{authorbibnamehash}{4f0ac52e967855914ff5d7dc51851e48}
-      \strng{authornamehash}{4f0ac52e967855914ff5d7dc51851e48}
-      \strng{authorfullhash}{4f0ac52e967855914ff5d7dc51851e48}
-      \field{sortinit}{J}
-      \field{sortinithash}{c45040a764d616897e7f5b30174d7b92}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{booktitle}{Proceedings of the 2007 Conference on Specification and Verification of Component-Based Systems: 6th Joint Meeting of the European Conference on Software Engineering and the ACM SIGSOFT Symposium on the Foundations of Software Engineering}
-      \field{isbn}{9781595937216}
-      \field{series}{SAVCBS ’07}
-      \field{title}{Reachability Analysis for Annotated Code}
-      \field{year}{2007}
-      \field{pages}{23\bibrangedash 30}
-      \range{pages}{8}
-      \verb{doi}
-      \verb 10.1145/1292316.1292319
-      \endverb
-      \verb{urlraw}
-      \verb https://doi.org/10.1145/1292316.1292319
-      \endverb
-      \verb{url}
-      \verb https://doi.org/10.1145/1292316.1292319
-      \endverb
-      \keyw{JML,ESC/Java2}
-    \endentry
-    \entry{danialandjoel}{article}{}
-      \name{author}{1}{}{%
-        {{hash=aff418536b5c47012d009e881d918b46}{%
-           family={Ouaknine},
-           familyi={O\bibinitperiod},
-           given={Daniel\bibnamedelimb Bundala;\bibnamedelima Joel},
-           giveni={D\bibinitperiod\bibinitdelim B\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
-      }
-      \strng{namehash}{aff418536b5c47012d009e881d918b46}
-      \strng{fullhash}{aff418536b5c47012d009e881d918b46}
-      \strng{bibnamehash}{aff418536b5c47012d009e881d918b46}
-      \strng{authorbibnamehash}{aff418536b5c47012d009e881d918b46}
-      \strng{authornamehash}{aff418536b5c47012d009e881d918b46}
-      \strng{authorfullhash}{aff418536b5c47012d009e881d918b46}
-      \field{sortinit}{O}
-      \field{sortinithash}{ff8d4eeb5101e3cf3809959b3592d942}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{Information and Computation}
-      \field{title}{On parametric timed automata and one-counter machines}
-      \field{volume}{253, part 2}
-      \field{year}{2017}
-      \field{pages}{273\bibrangedash 303}
-      \range{pages}{31}
-      \verb{doi}
-      \verb http://doi.org/10.1016/j.ic.2016.07.011
-      \endverb
-      \keyw{Mathematics; Computer Science}
-    \endentry
-    \entry{embeddedefficiency}{proceedings}{}
-      \name{author}{4}{}{%
-        {{hash=f34670739a59bb0e9560af711d1fdef7}{%
-           family={W},
-           familyi={W\bibinitperiod},
-           given={Silva;},
-           giveni={S\bibinitperiod}}}%
-        {{hash=4b8a0708d490a4794fb2b159fe588b29}{%
-           family={Lisane},
-           familyi={L\bibinitperiod},
-           given={Brisolara;},
-           giveni={B\bibinitperiod}}}%
-        {{hash=e54ea82ef1d06a03a388f6612e632973}{%
-           family={Ulisses},
-           familyi={U\bibinitperiod},
-           given={Corrêa;},
-           giveni={C\bibinitperiod}}}%
-        {{hash=90192d0872062b8cb612145daca40db3}{%
-           family={Luigi},
-           familyi={L\bibinitperiod},
-           given={Carro;},
-           giveni={C\bibinitperiod}}}%
-      }
-      \strng{namehash}{ed0c6f04acba8ee06d0a15540b7ea55a}
-      \strng{fullhash}{d423c9c7a6b67a6c4cbe89c15ebadb10}
-      \strng{bibnamehash}{ed0c6f04acba8ee06d0a15540b7ea55a}
-      \strng{authorbibnamehash}{ed0c6f04acba8ee06d0a15540b7ea55a}
-      \strng{authornamehash}{ed0c6f04acba8ee06d0a15540b7ea55a}
-      \strng{authorfullhash}{d423c9c7a6b67a6c4cbe89c15ebadb10}
-      \field{sortinit}{W}
-      \field{sortinithash}{1af34bd8c148ffb32de1494636b49713}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{booktitle}{Proceedings of International Conference on Reliable Software Technologies}
-      \field{title}{Evaluation of the impact of code refactoring on embedded software efficiency}
-      \field{year}{2010}
-      \field{pages}{145\bibrangedash 150}
-      \range{pages}{6}
-    \endentry
-    \entry{713323}{article}{}
-      \name{author}{3}{}{%
-        {{hash=5eef63c2990ea3b2d6b055845c7edbad}{%
-           family={{Yih-Fam Chen}},
-           familyi={Y\bibinitperiod}}}%
-        {{hash=70d5fe9904d2dc9319d798a26fba63f1}{%
-           family={{Gansner}},
-           familyi={G\bibinitperiod},
-           given={E.\bibnamedelimi R.},
-           giveni={E\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
-        {{hash=50d723fd9b9c9a68c59c58d6dd17ed98}{%
-           family={{Koutsofios}},
-           familyi={K\bibinitperiod},
-           given={E.},
-           giveni={E\bibinitperiod}}}%
-      }
-      \strng{namehash}{d688a1a7de159544dab73d67ebdf1bcf}
-      \strng{fullhash}{d688a1a7de159544dab73d67ebdf1bcf}
-      \strng{bibnamehash}{d688a1a7de159544dab73d67ebdf1bcf}
-      \strng{authorbibnamehash}{d688a1a7de159544dab73d67ebdf1bcf}
-      \strng{authornamehash}{d688a1a7de159544dab73d67ebdf1bcf}
-      \strng{authorfullhash}{d688a1a7de159544dab73d67ebdf1bcf}
-      \field{sortinit}{Y}
-      \field{sortinithash}{6ae2ff5458ff901249c2745238c951b7}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{issn}{2326-3881}
-      \field{journaltitle}{IEEE Transactions on Software Engineering}
-      \field{number}{9}
-      \field{title}{A C++ data model supporting reachability analysis and dead code detection}
-      \field{volume}{24}
-      \field{year}{1998}
-      \field{pages}{682\bibrangedash 694}
-      \range{pages}{13}
-      \verb{doi}
-      \verb 10.1109/32.713323
-      \endverb
-      \keyw{object-oriented languages;object-oriented programming;C language;reachability analysis;software libraries;software reusability;systems re-engineering;reverse engineering;inheritance;data structures;C++;data model;reachability analysis;dead code detection;software repository;program understanding;system reengineering;software project;reverse engineering tools;large software projects;regression tests;software reuse;language complexity;class inheritance;friendship;template instantiation;impact analysis;class visibility analysis;Reachability analysis;Relational databases;Reverse engineering;Data models;Information analysis;Software testing;Software maintenance;Software tools;Buildings;Tree graphs}
-    \endentry
-  \enddatalist
-\endrefsection
+  \entry{succintandparametriconecounter}{article}{}
+    \name{author}{1}{}{%
+      {{hash=JHCKSOJW}{%
+         family={J.},
+         familyi={J\bibinitperiod},
+         given={Haase C.; Kreutzer S.; Ouaknine J.;\bibnamedelima Worrell},
+         giveni={H\bibinitperiod\bibinitdelim C\bibinitperiod\bibinitdelim
+  K\bibinitperiod\bibinitdelim S\bibinitperiod\bibinitdelim
+  O\bibinitperiod\bibinitdelim J\bibinitperiod\bibinitdelim W\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{JHCKSOJW1}
+    \strng{fullhash}{JHCKSOJW1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{J}
+    \field{sortinithash}{J}
+    \verb{doi}
+    \verb https://doi.org/10.1007/978-3-642-04081-8_25
+    \endverb
+    \field{title}{Reachability in Succinct and Parametric One-Counter
+  Automata.}
+    \field{volume}{5710}
+    \field{journaltitle}{Lecture Notes in Computer Science}
+    \field{year}{2009}
+  \endentry
+
+  \entry{10.1145/1292316.1292319}{proceedings}{}
+    \name{author}{3}{}{%
+      {{hash=JM}{%
+         family={Janota},
+         familyi={J\bibinitperiod},
+         given={Mikol\'{a}\v{s}},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=GR}{%
+         family={Grigore},
+         familyi={G\bibinitperiod},
+         given={Radu},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=MM}{%
+         family={Moskal},
+         familyi={M\bibinitperiod},
+         given={Michal},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Association for Computing Machinery}%
+    }
+    \keyw{JML, ESC/Java2}
+    \strng{namehash}{JMGRMM1}
+    \strng{fullhash}{JMGRMM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{J}
+    \field{sortinithash}{J}
+    \field{booktitle}{Proceedings of the 2007 Conference on Specification and
+  Verification of Component-Based Systems: 6th Joint Meeting of the European
+  Conference on Software Engineering and the ACM SIGSOFT Symposium on the
+  Foundations of Software Engineering}
+    \verb{doi}
+    \verb 10.1145/1292316.1292319
+    \endverb
+    \field{isbn}{9781595937216}
+    \field{pages}{23–30}
+    \field{series}{SAVCBS ’07}
+    \field{title}{Reachability Analysis for Annotated Code}
+    \verb{url}
+    \verb https://doi.org/10.1145/1292316.1292319
+    \endverb
+    \list{location}{1}{%
+      {Dubrovnik, Croatia}%
+    }
+    \field{year}{2007}
+    \warn{\item Can't use 'location' + 'address'}
+  \endentry
+
+  \entry{danialandjoel}{article}{}
+    \name{author}{1}{}{%
+      {{hash=ODBJ}{%
+         family={Ouaknine},
+         familyi={O\bibinitperiod},
+         given={Daniel Bundala;\bibnamedelima Joel},
+         giveni={D\bibinitperiod\bibinitdelim B\bibinitperiod\bibinitdelim
+  J\bibinitperiod},
+      }}%
+    }
+    \keyw{Mathematics; Computer Science}
+    \strng{namehash}{ODBJ1}
+    \strng{fullhash}{ODBJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{O}
+    \field{sortinithash}{O}
+    \verb{doi}
+    \verb http://doi.org/10.1016/j.ic.2016.07.011
+    \endverb
+    \field{pages}{273\bibrangedash 303}
+    \field{title}{On parametric timed automata and one-counter machines}
+    \field{volume}{253, part 2}
+    \field{journaltitle}{Information and Computation}
+    \field{year}{2017}
+  \endentry
+
+  \entry{embeddedefficiency}{proceedings}{}
+    \name{author}{4}{}{%
+      {{hash=WS}{%
+         family={W},
+         familyi={W},
+         given={Silva;},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=LB}{%
+         family={Lisane},
+         familyi={L\bibinitperiod},
+         given={Brisolara;},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=UC}{%
+         family={Ulisses},
+         familyi={U\bibinitperiod},
+         given={Corrêa;},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=LC}{%
+         family={Luigi},
+         familyi={L\bibinitperiod},
+         given={Carro;},
+         giveni={C\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{WS+1}
+    \strng{fullhash}{WSLBUCLC1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{W}
+    \field{sortinithash}{W}
+    \field{booktitle}{Proceedings of International Conference on Reliable
+  Software Technologies}
+    \field{pages}{145\bibrangedash 150}
+    \field{title}{Evaluation of the impact of code refactoring on embedded
+  software efficiency}
+    \field{year}{2010}
+  \endentry
+
+  \entry{713323}{article}{}
+    \name{author}{3}{}{%
+      {{hash=Y}{%
+         family={{Yih-Fam Chen}},
+         familyi={Y\bibinitperiod},
+      }}%
+      {{hash=GER}{%
+         family={{Gansner}},
+         familyi={G\bibinitperiod},
+         given={E.\bibnamedelima R.},
+         giveni={E\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=KE}{%
+         family={{Koutsofios}},
+         familyi={K\bibinitperiod},
+         given={E.},
+         giveni={E\bibinitperiod},
+      }}%
+    }
+    \keyw{object-oriented languages;object-oriented programming;C
+  language;reachability analysis;software libraries;software
+  reusability;systems re-engineering;reverse engineering;inheritance;data
+  structures;C++;data model;reachability analysis;dead code detection;software
+  repository;program understanding;system reengineering;software
+  project;reverse engineering tools;large software projects;regression
+  tests;software reuse;language complexity;class
+  inheritance;friendship;template instantiation;impact analysis;class
+  visibility analysis;Reachability analysis;Relational databases;Reverse
+  engineering;Data models;Information analysis;Software testing;Software
+  maintenance;Software tools;Buildings;Tree graphs}
+    \strng{namehash}{YGERKE1}
+    \strng{fullhash}{YGERKE1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{Y}
+    \field{sortinithash}{Y}
+    \verb{doi}
+    \verb 10.1109/32.713323
+    \endverb
+    \field{issn}{2326-3881}
+    \field{number}{9}
+    \field{pages}{682\bibrangedash 694}
+    \field{title}{A C++ data model supporting reachability analysis and dead
+  code detection}
+    \field{volume}{24}
+    \field{journaltitle}{IEEE Transactions on Software Engineering}
+    \field{year}{1998}
+  \endentry
+\enddatalist
 \endinput
-

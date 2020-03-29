@@ -1,17 +1,5 @@
-[0] Config.pm:304> INFO - This is Biber 2.14
-[0] Config.pm:307> INFO - Logfile is 'paper.blg'
-[55] biber-MSWIN64:322> INFO - === 
-[70] Biber.pm:415> INFO - Reading 'paper.bcf'
-[148] Biber.pm:943> INFO - Found 5 citekeys in bib section 0
-[161] Biber.pm:4256> INFO - Processing section 0
-[161] Utils.pm:75> INFO - Globbing data source 'bibliography.bib'
-[169] Utils.pm:91> INFO - Globbed data source 'bibliography.bib' to bibliography.bib
-[182] Biber.pm:4455> INFO - Looking for bibtex format file 'bibliography.bib' for section 0
-[186] bibtex.pm:1653> INFO - LaTeX decoding ...
-[199] bibtex.pm:1471> INFO - Found BibTeX data source 'bibliography.bib'
-[259] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[259] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[259] Biber.pm:4084> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'en-US'
-[259] Biber.pm:4090> INFO - No sort tailoring available for locale 'en-US'
-[269] bbl.pm:652> INFO - Writing 'paper.bbl' with encoding 'UTF-8'
-[271] bbl.pm:755> INFO - Output to paper.bbl
+This is BibTeX, Version 0.99dThe top-level auxiliary file: paper.aux
+The style file: biblatex.bst
+Database file #1: paper-blx.bib
+Database file #2: bibliography.bib
+Biblatex version: 3.13

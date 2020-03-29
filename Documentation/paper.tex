@@ -1,7 +1,7 @@
 \documentclass[12pt]{article}
 
-\usepackage{biblatex}
-\addbibresource{bibliography.bib}
+\usepackage[backend=bibtex]{biblatex}
+\addbibresource{bibliography}
 
 \usepackage{multicol}
 
@@ -43,7 +43,7 @@
 	language=C
 }
 
-\title{C Code Conversion to Counter Automata for Reachability Analysis}
+\title{C Code Conversion to One Counter Automata for Reachability Analysis}
 \author{Lars Van Roy\\
 \textit{dept. of Mathematics and Computer Science} \\
 \textit{University of Antwerp}\\
@@ -63,9 +63,9 @@ This paper will try to provide a clear overview of a means in which we can conve
 \end{abstract}
 
 \section{Introduction}
-A well known problem in writing code is the reachability of specific lines in said written code. It is often impossible to properly determine whether or not a line of code guarded by a conditional statement is going to be reachable in any possible execution of the code\cite{713323, 10.1145/1292316.1292319}. Unreachable code is never desired, but is an ever more pressing issue for energy restrained environments such as embedded computer systems \cite{embeddedefficiency}. In these systems, we want our execution to be as efficient as possible, and therefore avoid conditions that can never be satisfied or lines that can never be reached at any cost. In order to upgrade the efficiency of code that is affected by time constraints, or code in general, a proper reachability analysis would be of great use.
+A well known problem in writing code is the reachability of specific lines in said written code. It is often impossible to properly determine whether or not a line of code guarded by a conditional statement is going to be reachable in any possible execution of the code \cite{713323, 10.1145/1292316.1292319}. Unreachable code is never desired, but is an ever more pressing issue for energy restrained environments such as embedded computer systems \cite{embeddedefficiency}. In these systems, we want our execution to be as efficient as possible, and therefore avoid conditions that can never be satisfied or lines that can never be reached at any cost. In order to upgrade the efficiency of code that is affected by time constraints, or code in general, a proper reachability analysis is of great use.
 
-In order to analyse code reachability, we will want to make use of one counter automata. The one counter automata are especially interesting as code is easily convertible to counter automata and it has been proven \cite{succintandparametriconecounter, danialandjoel} that reachability is decidable for this type of automata. As will be shown in the continuation of this paper, adding the restriction of only allowing a single parametric clock has a big effect on the types of code we can analyse, but is unavoidable, since there is no proof for two counter machines. Reachability problems for machines with three or more counters have been proven to be undecidable.
+To analyze reachability in code artificats, we propose a translation from code to one counter automata. The one counter automata are especially interesting as code is easily convertible to counter automata and it has been proven that reachability is decidable for this type of automata \cite{succintandparametriconecounter, danialandjoel}. As will be shown in the continuation of this paper, adding the restriction of only allowing a single parametric clock has a big effect on the types of code we can analyse, but is unavoidable, since reachability for two counter machines has been proven to be np hard and reachability problems for machines with three or more counters have been proven to be undecidable \cite{FEARNLEY201526}.
 
 To analyse code reachability in (a subset of) c programs, we propose a program that will go through the following iterations on the path to generate a counter automaton.
 
@@ -77,14 +77,14 @@ To analyse code reachability in (a subset of) c programs, we propose a program t
 	\item generate the counter automaton
 \end{enumerate}
 
-We will only consider a subset of c programs, which contain at most one counter where a counter is a variable that is used inside a conditional statement. The program will be able to handle c code with zero counters, but this is considered trivial and will be disregarded for the remainder of this paper. Furthermore, the operations on the counter will be restricted, the counter can only be updated via assignments with parameters or constants, and the counter can only be compared using equality, inequality, strict less than, strict greater than, less than or equal, greater than or equal, and only to parameters or constants. Furthermore, the function parameters are not allowed to be altered throughout the duration of the code.
+We will only consider a subset of c programs, which contain at most one counter. Here a counter is a variable that is used inside a conditional statement. The program will be able to handle c code with zero counters, but this is considered trivial and will be disregarded for the remainder of this paper. Furthermore, the operations on the counter will be restricted, the counter can only be updated via assignments with parameters or constants, and the counter can only be compared using equality, inequality, strict less than, strict greater than, less than or equal, greater than or equal, and only to parameters or constants. Furthermore, the function parameters are not allowed to be altered throughout the duration of the code.
 
 Other then the described code constraint, functions must also have a boolean return type, and integer parameter types (if any) to be converted into a counter automaton.
 
 \section{Motivation}
 Popular IDE's do already implement reachability analysis up to a certain degree. However, two of the most used IDE's, being Eclipse and Clion, were tested, and they both show that in some code snippets, reachability analysis is not performed up until the degree that could be done using counter automata. It is capable to resolve trivial dead code (aka constant conditions or code post return etc), but it is not able to resolve impossible sequences, where no possible counter value would ever satisfy some of the conditions in the sequence.
 
-This proves that there is a definite need for additional research on analysis in code. Reachability analysis by using counter automata would not only allow for an expansion of the current reachability analysis as is, but might also allow further expansions based on the results of the counter automaton expansion.
+This shows that there is a definite need for additional research on analysis in code. Reachability analysis by using counter automata would allow to detect more cases of dead code than the original dead code analysis techniques could offer. 
 
 \section{Preliminaries}
 This paper will make use of counter automata and more specifically one counter automata. These automata are derived from the general definition of automata and signify an extension by adding the notion of counters.
@@ -94,12 +94,12 @@ The automata used in this research are a specific subset of the generally define
 \begin{itemize}
 	\item Q is the set of states
 	\item $\Sigma$ is a finite set of symbols, called the alphabet of the automaton
-	\item $\delta$ is the transition function, $\delta: Q \times \Sigma \rightarrow Q$
-	\item $q_0$ is the initial state, $q_0 \in Q$
-	\item F is a set of states of Q defining the final states, $F \subseteq Q$
+	\item $\delta: Q \times \Sigma \rightarrow Q$ is the transition function
+	\item $q_0 \in Q$ is the initial state
+	\item $F \subseteq Q$ is a set of states of Q defining the final states, 
 \end{itemize}
 
-\subsection{Counter automata}
+\subsection{Parametric counter automata}
 
 A one-counter automaton is a tuple $\mathcal{A}$ = $(Q, q_0, \sigma, op, F)$ where
 \begin{itemize}
@@ -110,16 +110,16 @@ A one-counter automaton is a tuple $\mathcal{A}$ = $(Q, q_0, \sigma, op, F)$ whe
 	\item $\sigma \subseteq Q \times op \times Q$ is the transition relation with $op$ the set of operations
 \end{itemize}
 
-The counter valuation $c \in \mathbb{N}$ is the value that will be analysed, updated during the evaluation of the automaton.
+The counter valuation $c \in \mathbb{N}$ is the value that will be analysed and updated during the evaluation of the automaton.
 
 At all times the automaton will be in a configuration $(q, c)$ where $q \in Q$ and $c$ the counter valuation where $(q_0, 0)$ is the initial configuration.
 
-Finally, we will consider the following set of allowed operations where $P$ is the set of parameters, the $\epsilon$ symbol will be used to represent an empty label.
+Parametric counter automata, as compared to regular counter automata, allow counters to be modified by parameters as well as constants. As the counters need to be integers, we will only allow integer type paramters. We will consider the following set of allowed operations where $P$ is the set of parameters, the $\epsilon$ symbol will be used to represent an empty label.
 \[
  op = \{+c, -c, +p, -p, \leq c, =c, \geq c, \leq p, =p, \geq p: c \in \mathbb{N}, p \in P\} \cup \{\epsilon\}
 \]
 
-The automata we will consider will be one-counter automata. The set $Q$ will contain a state for each line of code. The initial state $q_0$ will be the state corresponding with the first line of code. For now the set of final states $F$ will be empty, but the intended interpretation of a final state will be the line of which the reachability will be checked. The transition relation will consist of elements of the form $(q_i, l, q_{i+1})$ where $q_i, q_{i+1} \in Q$ and $l \in op$. 
+The automata we will consider will be one-counter parametric automata. The set $Q$ will contain a state for each line of code. The initial state $q_0$ will be the state corresponding with the first line of code. For now the set of final states $F$ will be empty, but the intended interpretation of a final state will be the line of which the reachability will be checked. The transition relation will consist of elements of the form $(q_i, l, q_{i+1})$ where $q_i, q_{i+1} \in Q$ and $l \in op$. 
 
 There are a few exceptions to the above described states, some segments will have additional nodes to avoid confusion. These special nodes, and their meaning, will be further explained in their relevant sections inside Section \ref{sec:generation}, \nameref{sec:generation}.
 
@@ -220,7 +220,7 @@ bool divide(int p, int n){
 \end{lstlisting}
 
 \subsubsection{Context-sensitive reduction example: addition folding}
-As described earlier, we do allow additions and subtractions of the form $-x$ and $+x$, where $x \in P$ or $x \in \mathbb{N}$ with $P$ the set of parameters. Given that the formation described in Figure \ref{fig:unfolded_addition} occurs in the automaton, we would technically not be allowed to accept this, as this is not directly in the specified format.
+As described earlier, we do allow additions and subtractions of the form $-x, +x, -n$ and $+n$, where $x \in P$ or $n \in \mathbb{N}$ with $P$ the set of parameters. Given that the formation, described in Figure \ref{fig:unfolded_addition} occurs in the automaton, we would technically not be allowed to accept this, as this is not directly in the specified format.
 
 \begin{figure}[h]
 	\centering
@@ -378,7 +378,7 @@ This allows us to just check the head nodes related to such expressions.
 First of all, we need the notion of the Function Definition statements. The generator will generate a counter automaton for each function, and needs to know when these start.
 
 \subsubsection{Assignments}
-Other than functions, we will also need to know when assignments to counters occur, so that we can add the proper transition labels. We only need to check whether or not we are assigning to a counter, if so, we read the operation used, and the variable that gets assigned. Valid counter assignments need to be of the form \textit{c op x} where $c$ is the counter, $op \in $ \textit{\{=, +=, -=\}} and $x \in P$ or $x \in \mathbb{N}$. 
+Other than functions, we will also need to know when assignments to counters occur, so that we can add the proper transition labels. We only need to check whether or not we are assigning to a counter, if so, we read the operation used, and the variable that gets assigned. Valid counter assignments need to be of the form \textit{c op x} where $c$ is the counter, $op \in $ \textit{\{=, +=, -=\}} and $x \in P \lor x \in \mathbb{N}$. 
 
 As mentioned earlier, assignments are not in the set of operations, but they can be represented using the operators displayed earlier, as can be seen in Figure \ref{fig:counter_assignment}. This can be done by using a reset operation, where we first check whether or not the counter is smaller or equal to the desired value. If so, it is either already satisfied, in which case we can just carry on, or it is smaller than the desired value, for which we will add a self loop with $+1$ as a label, so that we will eventually reach the desired value. 
 \begin{figure}[h]
@@ -391,6 +391,68 @@ As mentioned earlier, assignments are not in the set of operations, but they can
 The same thing can be done when the counter is larger or equal to the desired value, if so, it is either already satisfied, in which case we can just carry on, or it is larger than the desired value, at which point we will decrement the counter with a self loop of -1, until the condition is satisfied.
 
 An important thing to remark, is that we are not interested in general properties of runs for these automata. We are interested in the possibility of reachability or in other words, the existence of one path that will take us to a given node. In the given example, there is a path where we would remain in node 3.98 indefinitely but since there is at least one path that would take us to node 4, node 4 is still considered reachable.
+
+\subsubsection{Inequality conditions}
+\label{sec:inequality}
+Another statement we will need to support, are inequality conditions. If we want our conditional statements to be properly functioning, we will need to be able to generate opposing conditions, but the opposing condition of the equality condition, is the inequality condition, which we can not directly model using the given operations.
+
+The following code segment makes use of an if statement which has an equality condition in it, being the edge going towards the else node.
+
+\begin{lstlisting}[style=CStyle]
+bool is_ten(int c){
+if(c == 10){
+return true;
+}
+
+return false;
+}
+\end{lstlisting}
+
+When looking at part of a simplified counter automaton in Figure \ref{fig:inequality_expression}, we will notice the transitions going from the \textit{start\_if} node, towards the \textit{end\_if} node. There will not be an \textit{else} node, as there is no \textit{else if} or \textit{else} statement.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{inequality_expression}
+	\caption{Example of an inequality expression.}
+	\label{fig:inequality_expression}
+\end{figure}
+
+The first transition chain follows the \textit{lte} nodes, which starts with \textit{c += 1} followed by \textit{c \textless =10}, followed by \textit{c -= 1}, which results in the same expression as saying the original counter is strictly smaller than 10. The final \textit{c -= 1} is there to reset the counter, so that the counter is back to what it originally was. 
+
+The second transition chain follows the \textit{gte} nodes, with the first transition being \textit{c -= 1}, followed by \textit{c \textgreater =10}, followed by \textit{c += 1}. This chain states that the counter must be strictly greater than 10.
+
+If either of these can be taken, we can state that the counter must be different to the compared value (in this case 10), as these both express a strict inequality. 
+
+\subsubsection{Less than and greater than}
+\label{sec:strict}
+The final addition to the set of supported statements, are the less than and greater than expressions. These are needed to model the opposing conditions to greater than or equal and less than or equal respectively.
+
+\begin{lstlisting}[style=CStyle]
+bool is_ten(int c){
+	if(c <= 10){
+		if(c < 10){
+			return false;
+		}
+		return true;
+	}
+	return false;
+}
+\end{lstlisting}
+
+The is\_ten code segment models both a less than or equal condition and a less than condition. The first condition will need to be opposed with a strictly greater than condition, and the second one with a greater than or equal condition.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{less_than_greater_than}
+	\caption{Example of a less than expression and a greater than expression.}
+	\label{fig:less_than_greater_than}
+\end{figure}
+
+A simplified version of the counter automaton of the is\_ten function can be seen in Figure \ref{fig:less_than_greater_than}. This automaton has \textit{start\_if\_1} as the start of the outer if and it has \textit{if\_1} and \textit{end\_if\_1} as respective if and end nodes. The inner if has \textit{start\_if\_2} as the start node, \textit{if\_2} as the start of the if segment, and \textit{end\_if\_2} as the end node.
+
+The strict greater than condition, originating from node \textit{start\_if\_1} and ending in node \textit{end\_if\_1}, consists of 3 different transitions. The first transitions \textit{c -= 1} and \textit{c \textgreater =10}, test if the counter is strictly greater. The third transition \textit{c += 1} is there to make sure that the counter goes back to its original value.
+
+The strict less than condition, originating from node \textit{start\_if\_2} and ending in node \textit{if\_2}, consists of \textit{c += 1} and \textit{c \textless =a} as their first two transitions, which can only be satisfied in case the counter is strictly less than a. The final condition \textit{c -= 1} is there to make sure the counter goes back to its original value.
 
 \subsubsection{Iteration statements}
 We will also need the notion of iteration statements, which needs 5 additional special nodes to fully support it's functionality. The first node will be the \textit{start of the loop}. The second node is the \textit{pre node}, this node symbolizes the state after the precondition of the for loop has been evaluated. Next we need a node to identify the \textit{start of the inner segment}, which will be reached by a transition with the condition as a label. 
@@ -416,37 +478,6 @@ bool test(int c){
 	\label{fig:test_counter_automaton}
 \end{figure}
 
-\subsubsection{Switch statements}
-A second conditional statement that exists in c, is a \textit{switch statement}. This statement allows a variable to be compared against multiple values. What is special about the switch statements, is that if matched with one case, the code of all consequential cases will also be executed, until the end of the switch, or until a jump occurs.
-
-Consider the following code snippet. In this case, a variable a will be compared with multiple values, and depending on the matched case, a number of prints will occur.
-
-\begin{lstlisting}[style=CStyle]
-bool test(int a){
-	switch(a){
-		case 3:
-			printf("The parameter is greater than 2.");
-		case 2:
-			printf("The parameter is greater than 1.");
-		default:
-			printf("The parameter value is %d", a);
-	}
-	return true;
-}
-\end{lstlisting}
-
-To generate a counter automaton for a switch statement, we will start by generating a chain for the statements in the cases. This is represented by the chain starting from \textit{start\_switch}, all the way to \textit{default}, in Figure \ref{fig:counter_switch}.
-
-After that we need to add the conditional branches that correspond to the different cases. A first branch originates from \textit{start\_switch}, and can either go to \textit{case\_3} in case the counter is equal to 3, or to \textit{not\_case\_3} in case the counter is not.
-
-There is a second branch from \textit{not\_case\_3} where we can either go to \textit{case\_2} in case the counter is equal to 2, or to \textit{not\_case\_2} in case the counter is not. Finally, from \textit{not\_case\_2} we will always go to the \textit{default} node.
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\linewidth]{counter_switch}
-	\caption{Example of a switch statement.}
-	\label{fig:counter_switch}
-\end{figure}
 \subsubsection{If statements}
 \label{sec:if}
 Another important construct are the if statements. These statements will, just as the iteration statements did, require additional nodes to be able to be modelled. If statements require a total of 4 nodes to be modelled.
@@ -479,67 +510,37 @@ bool test2(int c){
 
 The program will return a more in depth version of the simplified counter automaton displayed in Figure \ref{fig:test2_counter_automaton}. The first if statement will start from $start\_if\_1$, and end at $end\_if\_1$, the else if will start from $start\_if\_2$, and end at $end\_if\_2$.
 
-\subsubsection{Inequality conditions}
-\label{sec:inequality}
-Another statement we will need to support, are inequality conditions. If we want our conditional statements to be properly functioning, we will need to be able to generate opposing conditions, but the opposing condition of the equality condition, is the inequality condition, which we can not directly model using the given operations.
+\subsubsection{Switch statements}
+A second conditional statement that exists in c, is a \textit{switch statement}. This statement allows a variable to be compared against multiple values. What is special about the switch statements, is that if matched with one case, the code of all consequential cases will also be executed, until the end of the switch, or until a jump occurs.
 
-The following code segment makes use of an if statement which has an equality condition in it, being the edge going towards the else node.
+Consider the following code snippet. In this case, a variable a will be compared with multiple values, and depending on the matched case, a number of prints will occur.
 
 \begin{lstlisting}[style=CStyle]
-bool is_ten(int c){
-	if(c == 10){
-		return true;
+bool test(int a){
+	switch(a){
+		case 3:
+			printf("The parameter is greater than 2.");
+		case 2:
+			printf("The parameter is greater than 1.");
+		default:
+			printf("The parameter value is %d", a);
 	}
-	
-	return false;
+	return true;
 }
 \end{lstlisting}
 
-When looking at part of a simplified counter automaton in Figure \ref{fig:inequality_expression}, we will notice the transitions going from the \textit{start\_if} node, towards the \textit{end\_if} node. There will not be an \textit{else} node, as there is no \textit{else if} or \textit{else} statement.
+To generate a counter automaton for a switch statement, we will start by generating a chain for the statements in the cases. This is represented by the chain starting from \textit{start\_switch}, all the way to \textit{default}, in Figure \ref{fig:counter_switch}.
+
+After that we need to add the conditional branches that correspond to the different cases. A first branch originates from \textit{start\_switch}, and can either go to \textit{case\_3} in case the counter is equal to 3, or to \textit{not\_case\_3} in case the counter is not.
+
+There is a second branch from \textit{not\_case\_3} where we can either go to \textit{case\_2} in case the counter is equal to 2, or to \textit{not\_case\_2} in case the counter is not. Finally, from \textit{not\_case\_2} we will always go to the \textit{default} node.
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=\linewidth]{inequality_expression}
-	\caption{Example of an inequality expression.}
-	\label{fig:inequality_expression}
+	\includegraphics[width=\linewidth]{counter_switch}
+	\caption{Example of a switch statement.}
+	\label{fig:counter_switch}
 \end{figure}
-
-The first transition chain follows the \textit{lte} nodes, which starts with \textit{c += 1} followed by \textit{c \textless =10}, followed by \textit{c -= 1}, which results in the same expression as saying the original counter is strictly smaller than 10. The final \textit{c -= 1} is there to reset the counter, so that the counter is back to what it originally was. 
-
-The second transition chain follows the \textit{gte} nodes, with the first transition being \textit{c -= 1}, followed by \textit{c \textgreater =10}, followed by \textit{c += 1}. This chain states that the counter must be strictly greater than 10.
-
-If either of these can be taken, we can state that the counter must be different to the compared value (in this case 10), as these both express a strict inequality. 
-
-\subsubsection{less than and greater than}
-\label{sec:strict}
-The final addition to the set of supported statements, are the less than and greater than expressions. These are needed to model the opposing conditions to greater than or equal and less than or equal respectively.
-
-\begin{lstlisting}[style=CStyle]
-bool is_ten(int c){
-	if(c <= 10){
-		if(c < 10){
-			return false;
-		}
-		return true;
-	}
-	return false;
-}
-\end{lstlisting}
-
-The is\_ten code segment models both a less than or equal condition and a less than condition. The first condition will need to be opposed with a strictly greater than condition, and the second one with a greater than or equal condition.
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\linewidth]{less_than_greater_than}
-	\caption{Example of a less than expression and a greater than expression.}
-	\label{fig:less_than_greater_than}
-\end{figure}
-
-A simplified version of the counter automaton of the is\_ten function can be seen in Figure \ref{fig:less_than_greater_than}. This automaton has \textit{start\_if\_1} as the start of the outer if and it has \textit{if\_1} and \textit{end\_if\_1} as respective if and end nodes. The inner if has \textit{start\_if\_2} as the start node, \textit{if\_2} as the start of the if segment, and \textit{end\_if\_2} as the end node.
-
-The strict greater than condition, originating from node \textit{start\_if\_1} and ending in node \textit{end\_if\_1}, consists of 3 different transitions. The first transitions \textit{c -= 1} and \textit{c \textgreater =10}, test if the counter is strictly greater. The third transition \textit{c += 1} is there to make sure that the counter goes back to its original value.
-
-The strict less than condition, originating from node \textit{start\_if\_2} and ending in node \textit{if\_2}, consists of \textit{c += 1} and \textit{c \textless =a} as their first two transitions, which can only be satisfied in case the counter is strictly less than a. The final condition \textit{c -= 1} is there to make sure the counter goes back to its original value.
 
 \subsubsection{Counter initialization}
 The counters do not get initialized at the point that they got declared within the code. This is a simple improvement that helps to reduce the number of counters. Consider the code segment below, in which two different counters are used.
@@ -560,7 +561,7 @@ bool two_counters(){
 The first counter will be initialized just before the if statement gets used. The second counter will not be initialized at that point, but will only be initialized just before the second if statement gets used. This means that the program will in fact be able to support the given code segment, even though it has two different counters.
 
 \subsubsection{Final overview}
-To give a in depth overview of how the conversion works, we will transform the following code into a counter automaton. This code consists of multiple if statements, as well as a loop, it makes use of a single counter value, being \textit{counter}, and two parameters. The loop and the final if both use inequality expressions, which are representable in a counter automaton, as was described earlier. The first two ifs make use of relational expressions with the $<$ and $>$ operators, which are also representable within a counter automaton. The counter is only modified using additions or subtractions with parameters and none of these parameters will ever be modified, which also conforms to the requirements. Finally, this function has only integer parameters and a bool return type, which makes us conclude that this entire function is representable in a counter automaton.
+To give a in depth overview of how the conversion works, we will transform the following code into a counter automaton. This code consists of multiple if statements, as well as a loop, it makes use of a single counter value, being \textit{counter}, and two parameters. The loop and the final \textit{if} both use inequality expressions, which are representable in a counter automaton, as was described earlier. The first two \textit{ifs} make use of relational expressions with the $<$ and $>$ operators, which are also representable within a counter automaton. The counter is only  using additions or subtractions with parameters and none of these parameters will ever be modified, which also conforms to the requirements. Finally, this function has only integer parameters and a bool return type, which makes us conclude that this entire function is representable in a counter automaton.
 
 \begin{lstlisting}[style=CStyle]
 bool gcm(int a, int b){
@@ -703,21 +704,23 @@ The complete overview of the counter automaton can be seen in Figure \ref{fig:fi
 	\end{figure}
 \end{landscape}
 
-\section{Tests}
-The referenced tool has been thoroughly tested using three groups of tests, which are all white box tests. The tests will check the outputted dot and the trace output of the program. 
+\section{Tool Validation}
+To determine the corectness of our tool, we created a test suite consisting out of three groups of tests, which are all white box tests. The tests will check the outputted dot and the trace output of the program, against traces and dot files which have been manually generated and verified.
 
 The first group will only test the first loop of the program, and it will check whether or not all nodes get properly generated. This purely tests on the generation of nodes, and will not regard any variation in configuration in which these nodes could occur.
 
 The second group will test the cleaner. It will test most cases (all common cases) in which folding and substituting should occur as well as the cases where it should not fold anything. In this group we will also perform extensive symbol table testing, to check whether or not all values get properly tracked by the symbol table.
 
-The third group will test the full tool. It has a few happy day scenarios, where all kinds of statements get tested in multiple configurations. As well as a lot of tests where invalid statements occur, where we test whether or not the program is capable of detecting all issues in the code.
+The third group will test the full tool. It will validate the dot file resulting from the cleaner, as well as the dot file(s) resulting from the counter automaton generator. It will also evaluate all output regarding the symbol table, and the potential errors of the code validator. There are happy day tests where each conditional statement gets tested separately, there are tests where conditional statements get nested and there are tests to see whether we can still evaluate conditional statements with constant conditions. Furthermore, there are failure tests that test whether or not we can properly detect incorrect counter types, incorrect parameter types, incorrect number of counters, incorrect conditional operations, incorrect counter modifications and properly detect counters defined in global scopes. There are also tests for edge case scenarios, such as returns in every single branch, the cleaner will not be able to detect these, and therefore the generator should be able to stop generating all nodes, once there are no branch that can carry on.
+
+The test coverage was validated using Codecov, which gave a total line coverage of 93\% at the end of development. This coverage was used as a metric to determine whether or not there were sufficient tests at each stage of development. The remaining 7\% are trivial lines that did not need any testing, such as \textit{\_\_str\_\_} operators.
 
 \section{Conclusion}
-In this paper we gave a brief description of a program capable of converting a small subset of the c language to counter automata. The resulting automata can be used in reachability analysis within the code. 
+In this paper we propose an algorithm for converting a small subset of the c language to counter automata, and discuss its implementation. The resulting automata can be used in reachability analysis within the code. 
 
 The paper gives a description on all the steps the program goes through in order to achieve this counter automaton, as well as a brief insight in why things are the way they are.
 
-The usability of this program without any further additions is very limited. The restrictions enforced on the c code make it fairly useless in more complex situations, where reachability analysis would be far more desired however, it is very effective in case the program is applicable. Big conditional statements or a large amount of conditional statements can make the reachability of certain sub segments hard, and with the addition of a reachability checker, they could definitely lead to improvements in coding.
+This proposed algorithm can be used to improve existing static code analysis and will furthermore be usable to solve the halting problem for a subset of c programs. It is however only usable in a limited amount of cases, in more complex situations, where reachability analysis would be far more desired, it will most likely not be usable as chances of violated conditions will be high. In the situations where it is applicable, big conditional statements or a large amount of conditional statements can make determining the reachability of certain sub segments hard, and with the addition of this algorithm as a reachability checker, it could definitely lead to improvements in coding.
 
 \section{Future work}
 One of the future aspects that still needs to be worked on, is the precision, efficiency and usefulness of the program. The program is too restrictive to be practically usable, and should therefore be expanded to support further c code.
