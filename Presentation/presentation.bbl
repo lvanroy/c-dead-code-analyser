@@ -1,0 +1,316 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.1 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\datalist[entry]{nty/global//global/global}
+  \entry{higherdimensionaltimedautomata}{article}{}
+    \name{author}{1}{}{%
+      {{hash=FU}{%
+         family={Fahrenberg},
+         familyi={F\bibinitperiod},
+         given={Uli},
+         giveni={U\bibinitperiod},
+      }}%
+    }
+    \keyw{timed automatahigher-dimensional automatareal timenon-interleaving
+  concurrencyhybrid automatastate-space explosion}
+    \strng{namehash}{FU1}
+    \strng{fullhash}{FU1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{F}
+    \field{sortinithash}{F}
+    \verb{doi}
+    \verb https://doi.org/10.1016/j.ifacol.2018.08.019
+    \endverb
+    \field{pages}{109\bibrangedash 114}
+    \field{title}{Higher-Dimensional Timed Automata}
+    \field{volume}{51}
+    \field{journaltitle}{IFAC-PapersOnLine}
+    \field{year}{2018}
+  \endentry
+
+  \entry{FEARNLEY201526}{article}{}
+    \name{author}{2}{}{%
+      {{hash=FJ}{%
+         family={Fearnley},
+         familyi={F\bibinitperiod},
+         given={John},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=JM}{%
+         family={Jurdziński},
+         familyi={J\bibinitperiod},
+         given={Marcin},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \keyw{Timed automata, Counter automata, PSPACE-complete}
+    \strng{namehash}{FJJM1}
+    \strng{fullhash}{FJJM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{F}
+    \field{sortinithash}{F}
+    \field{abstract}{%
+    Recently, Haase, Ouaknine, and Worrell have shown that reachability in
+  two-clock timed automata is log-space equivalent to reachability in bounded
+  one-counter automata. We show that reachability in bounded one-counter
+  automata is PSPACE-complete.%
+    }
+    \verb{doi}
+    \verb https://doi.org/10.1016/j.ic.2014.12.004
+    \endverb
+    \field{issn}{0890-5401}
+    \field{note}{40th International Colloquium on Automata, Languages and
+  Programming (ICALP 2013)}
+    \field{pages}{26 \bibrangedash  36}
+    \field{title}{Reachability in two-clock timed automata is PSPACE-complete}
+    \verb{url}
+    \verb http://www.sciencedirect.com/science/article/pii/S0890540114001564
+    \endverb
+    \field{volume}{243}
+    \field{journaltitle}{Information and Computation}
+    \field{year}{2015}
+  \endentry
+
+  \entry{succintandparametriconecounter}{article}{}
+    \name{author}{1}{}{%
+      {{hash=JHCKSOJW}{%
+         family={J.},
+         familyi={J\bibinitperiod},
+         given={Haase C.; Kreutzer S.; Ouaknine J.;\bibnamedelima Worrell},
+         giveni={H\bibinitperiod\bibinitdelim C\bibinitperiod\bibinitdelim
+  K\bibinitperiod\bibinitdelim S\bibinitperiod\bibinitdelim
+  O\bibinitperiod\bibinitdelim J\bibinitperiod\bibinitdelim W\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{JHCKSOJW1}
+    \strng{fullhash}{JHCKSOJW1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{J}
+    \field{sortinithash}{J}
+    \verb{doi}
+    \verb https://doi.org/10.1007/978-3-642-04081-8_25
+    \endverb
+    \field{title}{Reachability in Succinct and Parametric One-Counter
+  Automata.}
+    \field{volume}{5710}
+    \field{journaltitle}{Lecture Notes in Computer Science}
+    \field{year}{2009}
+  \endentry
+
+  \entry{10.1145/1292316.1292319}{proceedings}{}
+    \name{author}{3}{}{%
+      {{hash=JM}{%
+         family={Janota},
+         familyi={J\bibinitperiod},
+         given={Mikol\'{a}\v{s}},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=GR}{%
+         family={Grigore},
+         familyi={G\bibinitperiod},
+         given={Radu},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=MM}{%
+         family={Moskal},
+         familyi={M\bibinitperiod},
+         given={Michal},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Association for Computing Machinery}%
+    }
+    \keyw{JML, ESC/Java2}
+    \strng{namehash}{JMGRMM1}
+    \strng{fullhash}{JMGRMM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{J}
+    \field{sortinithash}{J}
+    \field{booktitle}{Proceedings of the 2007 Conference on Specification and
+  Verification of Component-Based Systems: 6th Joint Meeting of the European
+  Conference on Software Engineering and the ACM SIGSOFT Symposium on the
+  Foundations of Software Engineering}
+    \verb{doi}
+    \verb 10.1145/1292316.1292319
+    \endverb
+    \field{isbn}{9781595937216}
+    \field{pages}{23–30}
+    \field{series}{SAVCBS ’07}
+    \field{title}{Reachability Analysis for Annotated Code}
+    \verb{url}
+    \verb https://doi.org/10.1145/1292316.1292319
+    \endverb
+    \list{location}{1}{%
+      {Dubrovnik, Croatia}%
+    }
+    \field{year}{2007}
+    \warn{\item Can't use 'location' + 'address'}
+  \endentry
+
+  \entry{danialandjoel}{article}{}
+    \name{author}{1}{}{%
+      {{hash=ODBJ}{%
+         family={Ouaknine},
+         familyi={O\bibinitperiod},
+         given={Daniel Bundala;\bibnamedelima Joel},
+         giveni={D\bibinitperiod\bibinitdelim B\bibinitperiod\bibinitdelim
+  J\bibinitperiod},
+      }}%
+    }
+    \keyw{Mathematics; Computer Science}
+    \strng{namehash}{ODBJ1}
+    \strng{fullhash}{ODBJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{O}
+    \field{sortinithash}{O}
+    \verb{doi}
+    \verb http://doi.org/10.1016/j.ic.2016.07.011
+    \endverb
+    \field{pages}{273\bibrangedash 303}
+    \field{title}{On parametric timed automata and one-counter machines}
+    \field{volume}{253, part 2}
+    \field{journaltitle}{Information and Computation}
+    \field{year}{2017}
+  \endentry
+
+  \entry{embeddedefficiency}{proceedings}{}
+    \name{author}{4}{}{%
+      {{hash=WS}{%
+         family={W},
+         familyi={W},
+         given={Silva;},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=LB}{%
+         family={Lisane},
+         familyi={L\bibinitperiod},
+         given={Brisolara;},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=UC}{%
+         family={Ulisses},
+         familyi={U\bibinitperiod},
+         given={Corrêa;},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=LC}{%
+         family={Luigi},
+         familyi={L\bibinitperiod},
+         given={Carro;},
+         giveni={C\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{WS+1}
+    \strng{fullhash}{WSLBUCLC1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{W}
+    \field{sortinithash}{W}
+    \field{booktitle}{Proceedings of International Conference on Reliable
+  Software Technologies}
+    \field{pages}{145\bibrangedash 150}
+    \field{title}{Evaluation of the impact of code refactoring on embedded
+  software efficiency}
+    \field{year}{2010}
+  \endentry
+
+  \entry{informationprocessingletters}{article}{}
+    \name{author}{1}{}{%
+      {{hash=WMFKQMSJ}{%
+         family={Worrell},
+         familyi={W\bibinitperiod},
+         given={Martin Fränzle; Karin Quaas; Mahsa
+  Shirmohammadi;\bibnamedelima James},
+         giveni={M\bibinitperiod\bibinitdelim F\bibinitperiod\bibinitdelim
+  K\bibinitperiod\bibinitdelim Q\bibinitperiod\bibinitdelim
+  M\bibinitperiod\bibinitdelim S\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+    }
+    \keyw{Mathematics; Computer Science}
+    \strng{namehash}{WMFKQMSJ1}
+    \strng{fullhash}{WMFKQMSJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{W}
+    \field{sortinithash}{W}
+    \verb{doi}
+    \verb https://doi.org/10.1016/j.ipl.2019.105871
+    \endverb
+    \field{title}{Effective definability of the reachability relation in timed
+  automata}
+    \field{volume}{153}
+    \field{journaltitle}{Information Processing Letters}
+    \field{year}{2020}
+  \endentry
+
+  \entry{713323}{article}{}
+    \name{author}{3}{}{%
+      {{hash=Y}{%
+         family={{Yih-Fam Chen}},
+         familyi={Y\bibinitperiod},
+      }}%
+      {{hash=GER}{%
+         family={{Gansner}},
+         familyi={G\bibinitperiod},
+         given={E.\bibnamedelima R.},
+         giveni={E\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=KE}{%
+         family={{Koutsofios}},
+         familyi={K\bibinitperiod},
+         given={E.},
+         giveni={E\bibinitperiod},
+      }}%
+    }
+    \keyw{object-oriented languages;object-oriented programming;C
+  language;reachability analysis;software libraries;software
+  reusability;systems re-engineering;reverse engineering;inheritance;data
+  structures;C++;data model;reachability analysis;dead code detection;software
+  repository;program understanding;system reengineering;software
+  project;reverse engineering tools;large software projects;regression
+  tests;software reuse;language complexity;class
+  inheritance;friendship;template instantiation;impact analysis;class
+  visibility analysis;Reachability analysis;Relational databases;Reverse
+  engineering;Data models;Information analysis;Software testing;Software
+  maintenance;Software tools;Buildings;Tree graphs}
+    \strng{namehash}{YGERKE1}
+    \strng{fullhash}{YGERKE1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{Y}
+    \field{sortinithash}{Y}
+    \verb{doi}
+    \verb 10.1109/32.713323
+    \endverb
+    \field{issn}{2326-3881}
+    \field{number}{9}
+    \field{pages}{682\bibrangedash 694}
+    \field{title}{A C++ data model supporting reachability analysis and dead
+  code detection}
+    \field{volume}{24}
+    \field{journaltitle}{IEEE Transactions on Software Engineering}
+    \field{year}{1998}
+  \endentry
+\enddatalist
+\endinput

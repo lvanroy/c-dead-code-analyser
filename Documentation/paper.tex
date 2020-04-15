@@ -48,7 +48,6 @@
 \textit{dept. of Mathematics and Computer Science} \\
 \textit{University of Antwerp}\\
 lars.vanroy@student.uantwerpen.be}
-\date{\today}
 
 \begin{document}
 \maketitle{}
@@ -161,7 +160,8 @@ The rule for conditionalExpression needs to be there, as there is a chain of exp
 Since there is a chance no new node was added within the enter function, we will also be required to evaluate the top of the stack, to see whether or not the top of the stack is a node we need to pop, the code will do the same check that was done in the enter function of the traversal.
 
 \subsection{Context-sensitive abstract syntax tree reduction}
-There is still the need for context sensitive reductions. We will attempt to implement constant propagation and substitution, in which we compute constant expressions, and replace variables with known value, by their actual value. Furthermore we will try to rephrase expressions by expressions with the same meaning, so that all expressions, if possible, are in an acceptable format for the counter automaton.
+There is still the need for 
+ reductions. We will attempt to implement constant propagation and substitution, in which we compute constant expressions, and replace variables with known value, by their actual value. Furthermore we will try to rephrase expressions by expressions with the same meaning, so that all expressions, if possible, are in an acceptable format for the counter automaton.
 
 The context-sensitive reduction will also keep track of a lot of data about the variables in a symbol table. It will track whether or not variables are current initialized with a known value, values at certain points within the execution, it will track struct, union and enum definitions used for folding and so on. It will keep track of the kind of variables we have (eg. counters and parameters). All of this info will be used to enable the operations this cycle will perform, but will also be used in the validation loop.
 

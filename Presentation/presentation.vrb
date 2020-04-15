@@ -1,0 +1,7 @@
+\frametitle{Tcblisting}
+The code is quite tiny because I set the font size to very small in the definition of the little \texttt{myr}
+\begin{myr}{Load files}
+# text <- readLines(file.choose())
+filePath <- "http://www.link.com/a_text.txt"
+text <- readLines(filePath)
+\end{myr}
