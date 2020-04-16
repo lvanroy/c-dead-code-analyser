@@ -67,7 +67,9 @@ class AbstractSyntaxTree:
                 break
 
         for lower_limit in reversed(backslashes):
-            if label[lower_limit-1] != "\\" and label[lower_limit+1] != "\\":
+            if label[lower_limit -
+                     1] != "\\" and label[lower_limit +
+                                          1] != "\\":
                 label = label[:lower_limit] + "\\" + label[lower_limit:]
 
         quotation_marks = list()
@@ -80,7 +82,7 @@ class AbstractSyntaxTree:
                 break
 
         for lower_limit in reversed(quotation_marks):
-            if label[lower_limit-1] != '\\':
+            if label[lower_limit - 1] != '\\':
                 label = label[:lower_limit] + "\\" + label[lower_limit:]
 
         self.__label = label
@@ -89,7 +91,8 @@ class AbstractSyntaxTree:
 
         for child in self.__children:
             AbstractSyntaxTree.node_count += 1
-            result += "Q{0} -> Q{1}\n\t\t".format(node_id, AbstractSyntaxTree.node_count)
+            result += "Q{0} -> Q{1}\n\t\t".\
+                format(node_id, AbstractSyntaxTree.node_count)
             result += child.to_dot()
 
         if not self.__parent and self.__label == "CompilationUnit":

@@ -69,15 +69,19 @@ class Automaton:
         if len(self.nodes) > 0:
 
             for node in self.nodes:
-                result += "Q{0}[label=\"{1}\"];\n\t\t".format(node.index, node.name)
+                result += "Q{0}[label=\"{1}\"];\n\t\t".format(
+                    node.index, node.name)
 
             result += "Qi[style=invis];\n\t\t"
 
-            result += "Qi -> Q{0} [label=\"\"]\n\t\t".format(self.get_index_for_label(self.initial.name))
+            result += "Qi -> Q{0} [label=\"\"]\n\t\t".format(
+                self.get_index_for_label(self.initial.name))
 
             for transition in self.transitions:
-                result += "Q{0} -> Q{1} [label=\"".format(self.get_index_for_label(transition.start),
-                                                          self.get_index_for_label(transition.finish))
+                result += "Q{0} -> Q{1} [label=\"".format(
+                    self.get_index_for_label(
+                        transition.start), self.get_index_for_label(
+                        transition.finish))
                 if transition.label != "":
                     result += "{}".format(transition.label)
                 if transition.label != "" and transition.condition != "":
@@ -108,5 +112,5 @@ class Transition:
         self.condition = condition
 
     def __str__(self):
-        return "from {} to {} with label {} and conditional label {}".format(self.start, self.finish,
-                                                                             self.label, self.condition)
+        return "from {} to {} with label {} and conditional label {}".format(
+            self.start, self.finish, self.label, self.condition)

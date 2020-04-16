@@ -2,19 +2,23 @@ from math import floor
 
 
 # SymbolTable
-# class that tracks all declared variables, has the scope dictionaries to keep track of the different scopes
-# the current_scope will always refer to the scope we are currently in when tracing a segment of code
-# the symbols themselves will be stored in the symbols dict, each scope will have a separate symbols dict
+# class that tracks all declared variables, has the scope dictionaries
+# to keep track of the different scopes the current_scope will always
+# refer to the scope we are currently in when tracing a segment of code
+# the symbols themselves will be stored in the symbols dict, each scope
+# will have a separate symbols dict
 
 # scope
 # class that defines scope related data
 # has a scope label that defines the name of the scope
-# has a parent reference that references the scope directly above the scope it defines
+# has a parent reference that references the scope directly above the
+# scope it defines
 
 # symbol
 # class that defines the different symbols found in the code
 # a symbol has a type, a name, a value and a counter
-# this counter attribute defines whether or not this variable is referenced in a conditional statement
+# this counter attribute defines whether or not this variable is
+# referenced in a conditional statement
 
 class SymbolTable:
     def __init__(self):
@@ -81,7 +85,8 @@ class SymbolTable:
 
     def add_group_definition(self, group_name, group_type, variables):
         new_definition = GroupDefinition(group_name, group_type, variables)
-        self.__group_definitions[self.__current_scope][group_name] = new_definition
+        self.__group_definitions[self.__current_scope][group_name] = \
+            new_definition
 
     def symbol_exists(self, symbol_name, scope=None):
         if scope is None:
@@ -99,15 +104,28 @@ class SymbolTable:
         if definition_name in self.__group_definitions[scope]:
             return self.__group_definitions[scope][definition_name]
         else:
-            return self.get_group_definition(definition_name, scope.get_parent())
+            return self.get_group_definition(
+                definition_name, scope.get_parent())
 
     def add_group_instance(self, instance_name, instance_type):
-        group_defintion = self.get_group_definition(instance_type.split(" ")[1].replace("*", ""))
-        new_instance = GroupInstance(instance_name, instance_type, group_defintion)
-        self.__group_instances[self.__current_scope][instance_name] = new_instance
+        group_defintion = self.get_group_definition(
+            instance_type.split(" ")[1].replace("*", ""))
+        new_instance = GroupInstance(
+            instance_name, instance_type, group_defintion)
+        self.__group_instances[self.__current_scope][instance_name] = \
+            new_instance
 
-    def add_array_symbol(self, symbol_type, symbol_name, symbol_size, symbol_value=None):
-        new_symbol = Symbol(symbol_type, symbol_name, symbol_size, symbol_value)
+    def add_array_symbol(
+            self,
+            symbol_type,
+            symbol_name,
+            symbol_size,
+            symbol_value=None):
+        new_symbol = Symbol(
+            symbol_type,
+            symbol_name,
+            symbol_size,
+            symbol_value)
         self.__symbols[self.__current_scope][symbol_name] = new_symbol
 
     def add_reference(self, symbol_name, symbol_type, refenced_object=None):
@@ -123,15 +141,22 @@ class SymbolTable:
             scope = self.__current_scope
         if symbol_name in self.__enumerators[scope]:
             self.__enumerators[scope][symbol_name].set_used(True)
-            return self.__enumerators[scope][symbol_name].get_variable_value(variable)
+            return self.__enumerators[scope][symbol_name].get_variable_value(
+                variable)
         else:
-            return self.get_enumerator_val_for_id(symbol_name, variable, scope.get_parent())
+            return self.get_enumerator_val_for_id(
+                symbol_name, variable, scope.get_parent())
 
-    def set_referenced_object(self, symbol_name, referenced_object, scope=None):
+    def set_referenced_object(
+            self,
+            symbol_name,
+            referenced_object,
+            scope=None):
         if scope is None:
             scope = self.__current_scope
         if symbol_name in self.__references[scope]:
-            self.__references[scope][symbol_name].set_referenced_object(referenced_object)
+            self.__references[scope][symbol_name].set_referenced_object(
+                referenced_object)
         else:
             self.set_referenced_object(symbol_name, referenced_object)
 
@@ -147,7 +172,7 @@ class SymbolTable:
     def get_enumerators(self, scope):
         return self.__enumerators[self.__scopes[scope]].keys()
 
-    def is_enumerator_used(self, symbol_name, scope):
+    def is_enum_used(self, symbol_name, scope):
         return self.__enumerators[self.__scopes[scope]][symbol_name].is_used()
 
     def is_initialized(self, symbol_name, scope=None):
@@ -164,11 +189,13 @@ class SymbolTable:
         if scope is None:
             scope = self.__current_scope
         if symbol_name in self.__symbols[scope]:
-            return self.__symbols[scope][symbol_name].set_initialized(initialized)
+            return self.__symbols[scope][symbol_name].set_initialized(
+                initialized)
         elif self.__scopes["0"] == scope:
             return False
         else:
-            return self.set_initialized(symbol_name, initialized, scope.get_parent())
+            return self.set_initialized(
+                symbol_name, initialized, scope.get_parent())
 
     def set_used(self, symbol_name, value, scope=None):
         if scope is None:
@@ -199,44 +226,63 @@ class SymbolTable:
         else:
             return self.set_value(symbol_name, value, scope.get_parent())
 
-    def set_group_instance_variable(self, symbol_name, variable, value, scope=None):
+    def set_group_instance_variable(
+            self,
+            symbol_name,
+            variable,
+            value,
+            scope=None):
         if scope is None:
             scope = self.__current_scope
-        if symbol_name in self.__group_instances[scope]:
-            return self.__group_instances[scope][symbol_name].set_variable_value(variable, value)
-        elif symbol_name in self.__references[scope]:
-            symbol = self.__references[scope][symbol_name].get_referenced_object()
-            return self.set_group_instance_variable(symbol, variable, value, scope)
+        groups = self.__group_instances[scope]
+        refs = self.__references[scope]
+        if symbol_name in groups:
+            return groups[symbol_name].set_variable_value(variable, value)
+        elif symbol_name in refs:
+            symbol = refs[symbol_name].get_referenced_object()
+            return self.set_group_instance_variable(
+                symbol, variable, value, scope)
         elif scope.get_parent() is None:
             return
         else:
-            return self.set_group_instance_variable(symbol_name, variable, value, scope.get_parent())
+            return self.set_group_instance_variable(
+                symbol_name, variable, value, scope.get_parent())
 
-    def set_group_instance_variable_initialised(self, symbol_name, variable, value, scope=None):
+    def set_group_instance_variable_initialised(
+            self, symbol_name, variable, value, scope=None):
         if scope is None:
             scope = self.__current_scope
-        if symbol_name in self.__group_instances[scope]:
-            self.__group_instances[scope][symbol_name].set_variable_initialised(variable, value)
-        elif symbol_name in self.__references[scope]:
-            symbol = self.__references[scope][symbol_name].get_referenced_object()
-            self.set_group_instance_variable_initialised(symbol, variable, value, scope)
+        groups = self.__group_instances[scope]
+        refs = self.__references[scope]
+        if symbol_name in groups:
+            groups[symbol_name].set_variable_initialised(variable, value)
+        elif symbol_name in refs:
+            symbol = refs[symbol_name].get_referenced_object()
+            self.set_group_instance_variable_initialised(
+                symbol, variable, value, scope)
         elif scope.get_parent() is None:
             return
         else:
-            return self.set_group_instance_variable_initialised(symbol_name, variable, value, scope.get_parent())
+            return self.set_group_instance_variable_initialised(
+                symbol_name, variable, value, scope.get_parent())
 
-    def get_group_instance_variable_initialised(self, symbol_name, variable, scope=None):
+    def get_group_instance_variable_initialised(
+            self, symbol_name, variable, scope=None):
         if scope is None:
             scope = self.__current_scope
-        if symbol_name in self.__group_instances[scope]:
-            return self.__group_instances[scope][symbol_name].get_variable_initialised(variable)
-        elif symbol_name in self.__references[scope]:
-            symbol = self.__references[scope][symbol_name].get_referenced_object()
-            return self.get_group_instance_variable_initialised(symbol, variable, scope)
+        groups = self.__group_instances[scope]
+        refs = self.__references[scope]
+        if symbol_name in groups:
+            return groups[symbol_name].get_variable_initialised(variable)
+        elif symbol_name in refs:
+            symbol = refs[symbol_name].get_referenced_object()
+            return self.get_group_instance_variable_initialised(
+                symbol, variable, scope)
         elif scope.get_parent() is None:
             return
         else:
-            return self.get_group_instance_variable_initialised(symbol_name, variable, scope.get_parent())
+            return self.get_group_instance_variable_initialised(
+                symbol_name, variable, scope.get_parent())
 
     def get_type(self, symbol_name, scope=None):
         if scope is None:
@@ -283,7 +329,8 @@ class SymbolTable:
         else:
             if scope.get_label() == "0":
                 return False
-            return self.set_counter(counter_val, symbol_name, scope.get_parent())
+            return self.set_counter(
+                counter_val, symbol_name, scope.get_parent())
 
     def symbol_has_initial_value(self, symbol_name, scope=None):
         if scope is None:
@@ -291,7 +338,8 @@ class SymbolTable:
         if symbol_name in self.__symbols[scope]:
             return self.__symbols[scope][symbol_name].has_initial_value()
         else:
-            return self.symbol_has_initial_value(symbol_name, scope.get_parent())
+            return self.symbol_has_initial_value(
+                symbol_name, scope.get_parent())
 
     def set_initial_value(self, symbol_name, initial_value, scope=None):
         if scope is None:
@@ -301,7 +349,8 @@ class SymbolTable:
         else:
             if scope.get_label() == "0":
                 return False
-            self.set_initial_value(symbol_name, initial_value, scope.get_parent())
+            self.set_initial_value(
+                symbol_name, initial_value, scope.get_parent())
 
     def get_initial_value(self, symbol_name, scope=None):
         if scope is None:
@@ -327,11 +376,13 @@ class SymbolTable:
         if scope is None:
             scope = self.__current_scope
         if symbol_name in self.__symbols[scope]:
-            return self.__symbols[scope][symbol_name].set_parameter(parameter_val)
+            return self.__symbols[scope][symbol_name].set_parameter(
+                parameter_val)
         else:
-            return self.set_parameter(parameter_val, symbol_name, scope.get_parent())
+            return self.set_parameter(
+                parameter_val, symbol_name, scope.get_parent())
 
-    def is_instance_used(self, instance_name, scope):
+    def is_inst_used(self, instance_name, scope):
         if type(scope) == str:
             scope = self.__scopes[scope]
         if instance_name in self.__group_instances[scope]:
@@ -352,61 +403,86 @@ class SymbolTable:
             scope = self.__current_scope
         if symbol_name in self.__symbols[scope]:
             self.__symbols[scope][symbol_name].set_used(True)
-            return self.__symbols[scope][symbol_name].get_array_value_at_index(index)
+            return self.__symbols[scope][symbol_name].get_array_value_at_index(
+                index)
         else:
-            return self.get_array_value_at_index(symbol_name, index, scope.get_parent())
+            return self.get_array_value_at_index(
+                symbol_name, index, scope.get_parent())
 
     def get_group_array_value(self, group_variable, variable, scope=None):
         if scope is None:
             scope = self.__current_scope
-        if group_variable in self.__group_instances[scope]:
-            self.__group_instances[scope][group_variable].set_used(True)
-            return self.__group_instances[scope][group_variable].get_variable_value(variable)
-        elif group_variable in self.__references[scope]:
-            referenced_object = self.__references[scope][group_variable].get_referenced_object()
-            return self.get_group_array_value(referenced_object, variable, scope)
+        groups = self.__group_instances[scope]
+        refs = self.__references[scope]
+        if group_variable in groups:
+            groups[group_variable].set_used(True)
+            return groups[group_variable].get_variable_value(variable)
+        elif group_variable in refs:
+            referenced_object = refs[group_variable].get_referenced_object()
+            return self.get_group_array_value(
+                referenced_object, variable, scope)
         else:
-            return self.get_group_array_value(group_variable, variable, scope.get_parent())
+            return self.get_group_array_value(
+                group_variable, variable, scope.get_parent())
 
-    def get_group_array_value_at_index(self, group_variable, variable, index, scope=None):
+    def get_group_array_value_at_index(
+            self,
+            group_variable,
+            variable,
+            index,
+            scope=None):
         if scope is None:
             scope = self.__current_scope
-        if group_variable in self.__group_instances[scope]:
-            self.__group_instances[scope][group_variable].set_used(True)
-            return self.__group_instances[scope][group_variable].get_variable_value_at_index(variable, index)
-        elif group_variable in self.__references[scope]:
-            referenced_object = self.__references[scope][group_variable].get_referenced_object()
-            return self.get_group_array_value_at_index(referenced_object, variable, index, scope)
+        refs = self.__references[scope]
+        groups = self.__group_instances[scope]
+        if group_variable in groups:
+            groups[group_variable].set_used(True)
+            return groups[group_variable].get_variable_value_at_index(
+                variable, index)
+        elif group_variable in refs:
+            referenced_object = refs[group_variable].get_referenced_object()
+            return self.get_group_array_value_at_index(
+                referenced_object, variable, index, scope)
         else:
-            return self.get_group_array_value_at_index(group_variable, variable, index, scope.get_parent())
+            return self.get_group_array_value_at_index(
+                group_variable, variable, index, scope.get_parent())
 
     def print(self):
         output = ""
         for scope in self.__scopes.values():
-            if (scope in self.__symbols and self.__symbols[scope]) or \
-                    (scope in self.__group_instances and self.__group_instances[scope]) or \
-                    (scope in self.__references and self.__references[scope]) or \
-                    (scope in self.__enumerators and self.__enumerators[scope]):
-                output += "================= {} =================\n".format(scope.get_label())
+            if (
+                scope in self.__symbols and self.__symbols[scope]) or (
+                scope in self.__group_instances and
+                self.__group_instances[scope]) or (
+                scope in self.__references and self.__references[scope]) or (
+                    scope in self.__enumerators and self.__enumerators[scope]):
+                output += "================= {} =================\n".format(
+                    scope.get_label())
             if scope in self.__symbols and self.__symbols[scope]:
                 for symbol in self.__symbols[scope]:
                     output += str(self.__symbols[scope][symbol]) + "\n"
-            if scope in self.__group_instances and self.__group_instances[scope]:
+            if scope in self.__group_instances and \
+                    self.__group_instances[scope]:
                 for instance in self.__group_instances[scope]:
-                    output += str(self.__group_instances[scope][instance]) + "\n"
+                    output += str(self.__group_instances[scope]
+                                  [instance]) + "\n"
             if scope in self.__references and self.__references[scope]:
                 for reference in self.__references[scope]:
                     output += str(self.__references[scope][reference]) + "\n"
         if output != "":
             print(output)
         else:
-            print("No symbols were found/remained after the cleaning, the symbol table is empty.")
+            print(
+                "No symbols were found/remained after the cleaning, "
+                "the symbol table is empty.")
         output = ""
         for scope in self.__group_definitions.keys():
             if self.__group_definitions[scope]:
-                output += "================= {} =================\n".format(scope.get_label())
+                output += "================= {} =================\n".format(
+                    scope.get_label())
                 for definition in self.__group_definitions[scope]:
-                    output += str(self.__group_definitions[scope][definition]) + "\n"
+                    output += str(
+                        self.__group_definitions[scope][definition]) + "\n"
                 for enum in self.__enumerators[scope]:
                     output += str(self.__enumerators[scope][enum]) + "\n"
         if output != "":
@@ -442,7 +518,7 @@ class Symbol:
         else:
             self.__initialized = False
             self.__value = '0'
-        self.__used = False  # this is used to track whether or not an assignment had effect
+        self.__used = False
         self.__counter = False
         self.__parameter = False
         self.__size = symbol_size
@@ -499,13 +575,18 @@ class Symbol:
 
     def __str__(self):
         if self.__size is None and self.__initial_value is not None:
-            output = "symbol {} with type {} has initial value {} and final value {}"\
-                .format(self.__name, self.__type, self.__initial_value, self.__value)
+            output = "symbol {} with type {} has initial " \
+                     "value {} and final value {}"\
+                .format(self.__name, self.__type,
+                        self.__initial_value, self.__value)
         elif self.__initialized:
-            output = "symbol {} with type {} has size {}, initial value {} and final value {}"\
-                .format(self.__name, self.__type, self.__size, self.__initial_value, self.__value)
+            output = "symbol {} with type {} has size {}, " \
+                     "initial value {} and final value {}"\
+                .format(self.__name, self.__type,
+                        self.__size, self.__initial_value, self.__value)
         else:
-            output = "symbol {} with type {} has no initial value".format(self.__name, self.__type)
+            output = "symbol {} with type {} has no initial value".format(
+                self.__name, self.__type)
         if self.__type == 'char' and self.__value is not None:
             output += ", or {} in ascii".format(chr(int(self.__value)))
         output += ", this value is used: {}".format(self.__used)
@@ -530,8 +611,9 @@ class GroupDefinition:
         return self.__group_variables
 
     def __str__(self):
-        output = "Group {} with group type {} has the following variables\n".format(self.__group_name,
-                                                                                    self.__group_type)
+        output = "Group {} with group type {} has the " \
+                 "following variables\n".format(
+                  self.__group_name, self.__group_type)
         for variable in self.__group_variables:
             output += "\t{}\n".format(str(variable))
         return output
@@ -554,9 +636,11 @@ class GroupDefinitionVariable:
 
     def __str__(self):
         if self.__size is None:
-            return "symbol {} with type {}.".format(self.__variable_name, self.__variable_type)
+            return "symbol {} with type {}.".format(
+                self.__variable_name, self.__variable_type)
         else:
-            return "Symbol {} with type {} and size {}.".format(self.__variable_name, self.__variable_type, self.__size)
+            return "Symbol {} with type {} and size {}.".format(
+                self.__variable_name, self.__variable_type, self.__size)
 
 
 class GroupInstance:
@@ -569,13 +653,17 @@ class GroupInstance:
             var_name = variable.get_name()
             var_type = variable.get_type()
             var_size = variable.get_size()
-            self.__variables[var_name] = GroupInstanceVariable(var_name, var_type, var_size)
+            self.__variables[var_name] = GroupInstanceVariable(
+                var_name, var_type, var_size)
 
     def set_variable_value(self, variable, value):
-        if "array" in self.__variables[variable].get_type() or self.__variables[variable].get_type() == "char*":
-            self.__variables[variable].set_value(cast_array(value, self.__variables[variable].get_type()))
+        if "array" in self.__variables[variable].get_type(
+        ) or self.__variables[variable].get_type() == "char*":
+            self.__variables[variable].set_value(cast_array(
+                value, self.__variables[variable].get_type()))
         else:
-            self.__variables[variable].set_value(cast(value, self.__variables[variable].get_type()))
+            self.__variables[variable].set_value(
+                cast(value, self.__variables[variable].get_type()))
 
     def set_variable_initialised(self, variable, value):
         self.__variables[variable].set_initialised(value)
@@ -638,22 +726,23 @@ class GroupInstanceVariable:
     def __str__(self):
         if self.__type != "char":
             if self.__size is None:
-                return "Symbol {} with type {} has value {}.".format(self.__name, self.__type,
-                                                                     self.__value)
+                return "Symbol {} with type {} has value {}.".format(
+                    self.__name, self.__type, self.__value)
             else:
-                return "Symbol {} with type {} and size {} has value {}.".format(self.__name, self.__type,
-                                                                                 self.__size, self.__value)
+                return "Symbol {} with type {} and size {} " \
+                       "has value {}.".format(
+                        self.__name, self.__type, self.__size, self.__value)
         else:
             if self.__size is None:
-                return "Symbol {} with type {} has value {} or {} in ascii.".format(self.__name, self.__type,
-                                                                                    self.__value,
-                                                                                    chr(int(self.__value)))
+                return "Symbol {} with type {} has " \
+                       "value {} or {} in ascii.".format(
+                        self.__name, self.__type,
+                        self.__value, chr(int(self.__value)))
             else:
-                return "Symbol {} with type {} and size {} has value {} or {} in ascii.".format(self.__name,
-                                                                                                self.__type,
-                                                                                                self.__size,
-                                                                                                self.__value,
-                                                                                                chr(int(self.__value)))
+                return "Symbol {} with type {} and " \
+                       "size {} has value {} or {} in ascii.".format(
+                        self.__name, self.__type, self.__size,
+                        self.__value, chr(int(self.__value)))
 
 
 class Reference:
@@ -673,7 +762,8 @@ class Reference:
         return self.__referenced_object
 
     def __str__(self):
-        return "Reference {} with type {} references {}.".format(self.__name, self.__type, self.__referenced_object)
+        return "Reference {} with type {} references {}.".format(
+            self.__name, self.__type, self.__referenced_object)
 
 
 class Enumeration:
@@ -712,12 +802,19 @@ def cast(variable_value, variable_type):
         if variable_value.replace(".", "").replace("-", "").isnumeric():
             return float(variable_value)
         else:
-            return float(ord(variable_value.replace("'", "").replace("\\", "")))
+            return float(
+                ord(variable_value.replace("'", "").replace("\\", "")))
     elif variable_type == 'bool':
         if type(variable_value) == str:
             variable_value = variable_value.replace("\"", "").replace("'", "")
-        if type(variable_value) == str and variable_value.isalpha() and variable_value not in {'true', 'false'}:
-            variable_value = ord(variable_value.replace("\"", "").replace("'", ""))
+        if type(variable_value) == str and variable_value.isalpha(
+        ) and variable_value not in {'true', 'false'}:
+            variable_value = ord(
+                variable_value.replace(
+                    "\"",
+                    "").replace(
+                    "'",
+                    ""))
         if variable_value == 'true':
             variable_value = 1
         if variable_value == 'false':
@@ -725,9 +822,13 @@ def cast(variable_value, variable_type):
         if variable_value != 0:
             variable_value = 1
         return variable_value
-    elif variable_type == 'char' and (type(variable_value) == int or variable_value.isnumeric()):
+    elif variable_type == 'char' and \
+            (type(variable_value) == int or
+             variable_value.isnumeric()):
         return int(variable_value)
-    elif variable_type == 'char' and (type(variable_value) == float or variable_value.replace(".", "").isnumeric()):
+    elif variable_type == 'char' and \
+            (type(variable_value) == float or
+             variable_value.replace(".", "").isnumeric()):
         return int(float(variable_value))
     elif variable_type == 'char' and type(variable_value) == str:
         return ord(variable_value[int(floor(len(variable_value) / 2))])
@@ -737,7 +838,10 @@ def cast(variable_value, variable_type):
 
 def cast_array(variable_value, variable_type):
     if "{" in variable_value and "}" in variable_value:
-        variable_value = variable_value.replace("{", "").replace("}", "").replace(" ", "").split(",")
+        variable_value = variable_value.replace(
+            "{", "").replace(
+            "}", "").replace(
+            " ", "").split(",")
     else:
         variable_value = variable_value[2:-2]
     result = "{"
@@ -754,7 +858,8 @@ def cast_array(variable_value, variable_type):
             if val.replace(".", "").replace("-", "").isnumeric():
                 result += "{}, ".format(float(val))
             else:
-                result += "{}, ".format(float(ord(val[int((len(val) - 1) / 2)])))
+                result += "{}, ".format(
+                    float(ord(val[int((len(val) - 1) / 2)])))
 
         elif variable_type[:4] == "char":
             if val.replace(".", "").replace("-", "").isnumeric():
