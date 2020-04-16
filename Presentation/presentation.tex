@@ -170,20 +170,13 @@ lars.vanroy@student.uantwerpen.be}
 	\end{figure}
 \end{frame}
 
-\begin{frame}{Tool overview}
-	\begin{figure}[h]
-		\centering
-		\includegraphics[width=0.75\linewidth]{Images/tool_overview.png}
-	\end{figure}
-\end{frame}
-
 \section{Related Work}
 
 \begin{frame}{Related work I}
 	\begin{biblio}{}
 		\biblioref{Daniel Bundala, Joel Ouaknine}{2017}{On parametric timed automata and one-counter machines}{Information and Computation}
-		\biblioref{Jérôme Leroux, Grégoie Sutre}{2005}{Flat Counter Automata Almost Everywhere!}{Automated Technology for Verification and Analysis}
 		\biblioref{Ahmed Bouajjani, Marius Bozga, Peter Habermehl, Radu Iosif, Pierre Moro, Tomáš Vojnar}{2006}{Programs with Lists Are Counter Automata}{Computer Aided Verification}
+		\biblioref{Jérôme Leroux, Grégoie Sutre}{2005}{Flat Counter Automata Almost Everywhere!}{Automated Technology for Verification and Analysis}
 	\end{biblio}
 \end{frame}
 
@@ -194,6 +187,14 @@ lars.vanroy@student.uantwerpen.be}
 \end{frame}
 
 \section{Motivation}
+
+\begin{frame}{Motivation}
+	\begin{itemize}
+		\item Resource constrained environments
+		\item Code efficiency
+		\item Development time
+	\end{itemize}
+\end{frame}
 
 \section{One Counter Automata}
 
@@ -231,5 +232,125 @@ lars.vanroy@student.uantwerpen.be}
 	\end{figure}
 \end{frame}
 
+\begin{frame}{Counter automata III}
+	\begin{itemize}
+		\item Advantages
+		\begin{itemize}
+			\item Simple conversion
+			\item Known proven reachability solution
+			\begin{itemize}
+				\item PSPACE-complete
+				\item 2NEXP time
+			\end{itemize}
+		\end{itemize}
+		\item Disadvantages
+		\begin{itemize}
+			\item Enforced restrictions
+			\begin{itemize}
+				\item Counters
+				\item Operations
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\section{C code converter Tool}
+
+\begin{frame}{Tool overview}
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.75\linewidth]{Images/tool_overview.png}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Compilation}
+	\begin{minipage}[c]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{Images/ANTLR.jpeg}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[c]{0.6\textwidth}
+		\begin{itemize}
+			\item ANTLR compilation
+			\item Generates AST
+			\item Boolean extension
+		\end{itemize}
+	\end{minipage}
+\end{frame}
+
+\begin{frame}{First loop}
+	\begin{itemize}
+		\item Context free optimization
+		\item Remove redundant chains of nodes
+		\item Unify node structures
+		\item Enables improvements in further loops
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Second loop}
+	\begin{itemize}
+		\item Main cleaner loop
+		\item Symbol table
+		\item Constant folding/substitution
+		\item Dead code elimination
+		\item Counter tracking
+		\item No folding and/or substitution in conditional branches
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Third loop}
+	\begin{itemize}
+		\item validation loop
+		\item checks counter generation conditions
+		\begin{itemize}
+			\item Counter overlap
+			\item Counter type(s)
+			\item Return type
+			\item Parameter types
+			\item Parameter modification
+			\item Used operations on counter
+			\item Used conditional statements with counter
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Fourth Loop}
+	\begin{itemize}
+		\item Counter automaton generation
+		\item Simple loop
+		\item One node per line
+		\item Transitions
+		\begin{itemize}
+			\item Empty if no counter related operation occurs
+			\item Condition if a conditional statement with counter occurs
+			\item Operation if an operation on the counter occurs
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\section{Conclusion}
+
+\begin{frame}{Conclusion}
+	\begin{itemize}
+		\item Improvement to current algorithms
+		\item Cost in execution time
+		\item Need for additional operation support
+		\item Suited for resource constrained environments
+		\item $(l+3)*m$ loops
+		\begin{itemize}
+			\item m = number of nodes in AST
+			\item l = number of lines in c code
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\section{Future work}
+
+\begin{frame}{Future work}
+	\begin{itemize}
+		\item The reachability algorithm for the counter automata
+		\item Additional supported operations
+		\item Comparisons with other reachability algorithms 
+	\end{itemize}
+\end{frame}
 
 \end{document}

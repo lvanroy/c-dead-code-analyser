@@ -3,8 +3,14 @@
 \defcounter {refsection}{0}\relax 
 \beamer@sectionintoc {1}{Problem Overview}{3}{0}{1}
 \defcounter {refsection}{0}\relax 
-\beamer@sectionintoc {2}{Related Work}{6}{0}{2}
+\beamer@sectionintoc {2}{Related Work}{5}{0}{2}
 \defcounter {refsection}{0}\relax 
-\beamer@sectionintoc {3}{Motivation}{9}{0}{3}
+\beamer@sectionintoc {3}{Motivation}{8}{0}{3}
 \defcounter {refsection}{0}\relax 
 \beamer@sectionintoc {4}{One Counter Automata}{10}{0}{4}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {5}{C code converter Tool}{14}{0}{5}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {6}{Conclusion}{21}{0}{6}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {7}{Future work}{23}{0}{7}
