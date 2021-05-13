@@ -72,7 +72,11 @@ class Compiler:
         self.ast = constructor.get_ast()
 
         file_name = ""
-        file_names = code_file.split("/")
+        if "/" in code_file:
+            sep = "/"
+        else:
+            sep = "\\"
+        file_names = code_file.split(sep)
         for temp in file_names:
             if temp[-2:] == '.c':
                 file_name = temp[:-2]
@@ -91,12 +95,6 @@ class Compiler:
         self.cleaner = ASTCleaner(self.ast)
         self.cleaner.perform_full_clean(self.trace)
         self.cleaned_ast = self.cleaner.get_ast()
-
-        file_name = ""
-        file_names = code_file.split("/")
-        for temp in file_names:
-            if temp[-2:] == '.c':
-                file_name = temp[:-2]
 
         f = open("./TreePlots/{}_cleaned_output.dot".format(file_name), "w")
         temp = self.cleaned_ast.to_dot()
@@ -130,13 +128,9 @@ class Compiler:
         self.generator = Generator(code_file, self.cleaned_ast, counters, parameters, functions)
         self.generator.generate_automaton()
 
-        file_name = ""
-        file_names = code_file.split("/")
-        for temp in file_names:
-            if temp[-2:] == '.c':
-                file_name = temp[:-2]
         function_names = self.generator.get_function_names()
         dots = self.generator.to_dot()
+
         for counter in function_names.keys():
             function_name = function_names[counter]
             dot = dots[counter]
