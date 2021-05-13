@@ -419,9 +419,6 @@ class ASTValidator:
 
         for function_def in self.__functions.values():
             return_type = function_def.get_return_type()
-            if return_type != "bool":
-                function_def.add_status(
-                    "Incorrect return type, return type must be boolean.")
 
             combinations = itertools.combinations(
                 range(len(self.__counters[temp])), 2)
