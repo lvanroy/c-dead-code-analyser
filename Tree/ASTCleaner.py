@@ -1382,6 +1382,8 @@ class ASTCleaner:
                 if value[:5] == "ID = " and self.__symbol_table.is_initialized(
                         value[5:]):
                     value = self.__symbol_table.get_value(value[5:])
+                    if type(value) == int:
+                        value = "Val = {}".format(value)
                 if value[:6] == "Val = ":
                     node.get_children()[1].set_label(value)
         return ""

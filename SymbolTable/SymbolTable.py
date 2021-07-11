@@ -416,6 +416,8 @@ class SymbolTable:
             self.__symbols[scope][symbol_name].set_used(True)
             return self.__symbols[scope][symbol_name].get_array_value_at_index(
                 index)
+        elif scope.get_parent() is None:
+            return
         else:
             return self.get_array_value_at_index(
                 symbol_name, index, scope.get_parent())
