@@ -1422,7 +1422,8 @@ class ASTCleaner:
                 operation = node.get_children()[1].get_label()
 
             if operand_1[:6] == "Val = " and operation in {
-                    "++", "--"} and not self.__entered_branch:
+                    "++", "--"} and not self.__entered_branch and \
+                    operand_1[6:] != "None":
                 value_post_op = "Val = {}".format(
                     self.perform_optimal_cast(operand_1[6:]))
                 self.clean_node(node, value_post_op)
