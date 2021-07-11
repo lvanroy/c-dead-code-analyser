@@ -150,6 +150,8 @@ class SymbolTable:
             self.__enumerators[scope][symbol_name].set_used(True)
             return self.__enumerators[scope][symbol_name].get_variable_value(
                 variable)
+        elif scope.get_parent() is None:
+            return
         else:
             return self.get_enumerator_val_for_id(
                 symbol_name, variable, scope.get_parent())

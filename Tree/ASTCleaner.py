@@ -284,7 +284,8 @@ class ASTCleaner:
             self.clean_node(assignment_node, value)
         else:
             self.remove_node(assignment_node)
-        self.__queued_for_pop.append(self.__declarations[variable_name])
+        if variable_name in self.__declarations:
+            self.__queued_for_pop.append(self.__declarations[variable_name])
 
         self.__declarations[variable_name] = declaration_node
 
@@ -1031,7 +1032,8 @@ class ASTCleaner:
         if self.__entered_branch:
             return ""
 
-        if operand_1[:6] == "Val = " and operand_2[:6] == "Val = ":
+        if operand_1[:6] == "Val = " and operand_2[:6] == "Val = " and \
+                operand_1[6:] != "None" and operand_2[:6] != "None":
             result = self.get_operator(operation)(
                 float(operand_1[6:]), float(operand_2[6:]))
             self.__changes_occurred = True
@@ -1375,12 +1377,13 @@ class ASTCleaner:
 
         func = node.get_children()[0].get_label()
         if func == "return":
-            value = self.clean(node.get_children()[1])
-            if value[:5] == "ID = " and self.__symbol_table.is_initialized(
-                    value[5:]):
-                value = self.__symbol_table.get_value(value[5:])
-            if value[:6] == "Val = ":
-                node.get_children()[1].set_label(value)
+            if len(node.get_children()) > 1:
+                value = self.clean(node.get_children()[1])
+                if value[:5] == "ID = " and self.__symbol_table.is_initialized(
+                        value[5:]):
+                    value = self.__symbol_table.get_value(value[5:])
+                if value[:6] == "Val = ":
+                    node.get_children()[1].set_label(value)
         return ""
 
     def clean_postfix_expression(self, node):
