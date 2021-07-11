@@ -80,8 +80,6 @@ Counter validation loop started.
 Counter Validation loop finished.
 The following functions where found:
 
-Function main with return type int and no parameters is NOT OK.
-The function has the following issues: 
-	Incorrect return type, return type must be boolean.
+Function main with return type int and no parameters is OK for one counter automaton generation.
 Automaton generator started.
 Automaton generator finished.

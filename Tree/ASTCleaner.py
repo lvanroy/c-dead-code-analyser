@@ -1375,6 +1375,9 @@ class ASTCleaner:
         if len(node.get_children()) > 1:
             operation = node.get_children()[1].get_label()
 
+            if operand_1 == "Val = ":
+                return ""
+
             if operand_1[:5] == "ID = " and operation in {
                     "++", "--"} and self.is_initialized(operand_1[5:]):
                 operand_1 = "Val = {}".format(

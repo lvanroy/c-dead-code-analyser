@@ -23,13 +23,10 @@ Counter validation loop started.
 Counter Validation loop finished.
 The following functions where found:
 
-Function main with return type int and no parameters is NOT OK.
-The function has the following issues: 
-	Incorrect return type, return type must be boolean.
+Function main with return type int and no parameters is OK for one counter automaton generation.
 
 Function f with return type int and parameter types ['int', 'float'] is NOT OK.
-The function has the following issues: 
-	Incorrect return type, return type must be boolean.
+The function has the following issues:
 	Incorrect parameter type found, this tool can only handle parametersof type int.
 Automaton generator started.
 Automaton generator finished.
