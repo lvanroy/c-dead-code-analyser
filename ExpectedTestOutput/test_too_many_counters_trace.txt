@@ -26,7 +26,6 @@ The following functions where found:
 Function test_too_many_counters with return type int and parameter types ['int', 'int'] is NOT OK.
 The function has the following issues: 
 	Error found on line 5, relational expressions must be evaluations of a counter with a parameter or constant, these expressions can not be between counters.
-	Incorrect return type, return type must be boolean.
 	Incorrect number of counters, this tool can only handle a maximal number of counters equal to 1.
 The function has the following counter variable(s):
 	Counter with name a is first used at line 2 and last used at line 9
