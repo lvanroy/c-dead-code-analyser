@@ -684,6 +684,8 @@ class ASTCleaner:
     def clean_arguments(self, node):
         for child in node.get_children():
             val = self.clean(child)
+            if val is None:
+                return ""
             if val != "" and val[:5] == "ID = " and \
                     self.__symbol_table.is_initialized(val[5:]):
                 value = "Val = {}".format(
@@ -812,25 +814,31 @@ class ASTCleaner:
         children = node.get_children()
 
         declaration_type = ""
+        addend = ""
 
         i = 0
         child = None
         for i in range(len(children)):
             child = children[i]
             if child.get_label() == "Type Specifier":
-                declaration_type += self.clean(child)
+                addend = self.clean(child)
             elif child.get_label() == "Type Def Name":
-                declaration_type += self.clean(child)
+                addend = self.clean(child)
             elif child.get_label() == "Type Name":
-                declaration_type += self.clean(child)
+                addend = self.clean(child)
             elif child.get_label() == "Struct or Union Specifier":
-                declaration_type += self.clean(child)
+                addend = self.clean(child)
             elif child.get_label() == "auto":
-                declaration_type += "auto"
+                addend = "auto"
             elif child.get_label() == "Enum Specifier":
-                declaration_type += self.clean(child)
+                addend = self.clean(child)
             elif child.get_label() == "Init Declarator":
                 break
+
+            if addend != "":
+                if declaration_type != "":
+                    declaration_type += " "
+                declaration_type += addend
 
         if i == len(children) - 1 and child is not None and \
                 child.get_label() != "Init Declarator":
@@ -1050,25 +1058,31 @@ class ASTCleaner:
         children = node.get_children()
 
         declaration_type = ""
+        addend = ""
 
         i = 0
         child = None
         for i in range(len(children)):
             child = children[i]
             if child.get_label() == "Type Specifier":
-                declaration_type += self.clean(child)
+                addend = self.clean(child)
             elif child.get_label() == "Type Def Name":
-                declaration_type += self.clean(child)
+                addend = self.clean(child)
             elif child.get_label() == "Type Name":
-                declaration_type += self.clean(child)
+                addend = self.clean(child)
             elif child.get_label() == "Struct or Union Specifier":
-                declaration_type += self.clean(child)
+                addend = self.clean(child)
             elif child.get_label() == "auto":
-                declaration_type += "auto"
+                addend = self.clean(child)
             elif child.get_label() == "Enum Specifier":
-                declaration_type += self.clean(child)
+                addend = self.clean(child)
             elif child.get_label() == "Init Declarator":
                 break
+
+            if addend != "":
+                if declaration_type != "":
+                    declaration_type += " "
+                declaration_type += addend
 
         if i == len(
                 children) - 1 and child is not None and \
@@ -1687,8 +1701,17 @@ class ASTCleaner:
                     'long': 8,
                     'double': 8
                 }
-                value = "Val = {}".format(
-                    sizes[self.__symbol_table.get_type(original[5:])])
+                original_type = self.__symbol_table.get_type(original[5:])
+                if original_type in sizes:
+                    value = "Val = {}".format(sizes[original_type])
+                else:
+                    original_size = self.__symbol_table.get_size(original[5:])
+                    if original_size is None:
+                        value = ""
+                    elif type(original_size) == 'int':
+                        value = "Val = {}".format(original_size)
+                    else:
+                        value = "ID = {}".format(original_size)
                 self.clean_node(node, value)
                 return value
 

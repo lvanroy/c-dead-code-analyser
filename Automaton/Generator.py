@@ -682,58 +682,60 @@ class Generator:
         # statement between brackets
         if conditional_node.get_label() == "Primary Expression":
             return self.evaluate_condition(conditional_node.get_children()[1])
+        if len(conditional_node.get_children()) > 2:
+            op1 = conditional_node.get_children()[0].get_label()
+            op = conditional_node.get_children()[1].get_label()
+            op2 = conditional_node.get_children()[2].get_label()
 
-        op1 = conditional_node.get_children()[0].get_label()
-        op = conditional_node.get_children()[1].get_label()
-        op2 = conditional_node.get_children()[2].get_label()
+            if op1[:5] == "ID = ":
+                op1 = op1[5:]
+            elif op1[:6] == "Val = ":
+                op1 = op1[6:]
 
-        if op1[:5] == "ID = ":
-            op1 = op1[5:]
-        elif op1[:6] == "Val = ":
-            op1 = op1[6:]
+            if op2[:5] == "ID = ":
+                op2 = op2[5:]
+            elif op2[:6] == "Val = ":
+                op2 = op2[6:]
 
-        if op2[:5] == "ID = ":
-            op2 = op2[5:]
-        elif op2[:6] == "Val = ":
-            op2 = op2[6:]
-
-        # generate the condition and opposite condition as a string
-        condition = ""
-        opposite_condition = ""
-        if op == "==":
-            op = "="
-        if op1 in self.__counters[self.__functions_counter - 1]:
-            first_use = self.__counters[self.__functions_counter -
-                                        1][op1].get_first_used_line()
-            last_use = self.__counters[self.__functions_counter -
-                                       1][op1].get_last_used_line()
-            if first_use <= conditional_node.get_line() <= last_use:
-                condition = "{} {}".format(op, op2)
-                opposite_condition = "{} {}".format(self.get_negation(op), op2)
-        elif op2 in self.__counters[self.__functions_counter - 1]:
-            first_use = self.__counters[self.__functions_counter -
-                                        1][op2].get_first_used_line()
-            last_use = self.__counters[self.__functions_counter -
-                                       1][op2].get_last_used_line()
-            if first_use <= conditional_node.get_line() <= last_use:
-                if op != "=" and op != "!=":
-                    condition = "{} {}".format(self.get_negation(op), op1)
-                    opposite_condition = "{} {}".format(op, op1)
+            # generate the condition and opposite condition as a string
+            condition = ""
+            opposite_condition = ""
+            if op == "==":
+                op = "="
+            if op1 in self.__counters[self.__functions_counter - 1]:
+                first_use = self.__counters[self.__functions_counter -
+                                            1][op1].get_first_used_line()
+                last_use = self.__counters[self.__functions_counter -
+                                           1][op1].get_last_used_line()
+                if first_use <= conditional_node.get_line() <= last_use:
+                    condition = "{} {}".format(op, op2)
+                    opposite_condition = "{} {}".format(self.get_negation(op), op2)
+            elif op2 in self.__counters[self.__functions_counter - 1]:
+                first_use = self.__counters[self.__functions_counter -
+                                            1][op2].get_first_used_line()
+                last_use = self.__counters[self.__functions_counter -
+                                           1][op2].get_last_used_line()
+                if first_use <= conditional_node.get_line() <= last_use:
+                    if op != "=" and op != "!=":
+                        condition = "{} {}".format(self.get_negation(op), op1)
+                        opposite_condition = "{} {}".format(op, op1)
+                    else:
+                        condition = "{} {}".format(op, op1)
+                        opposite_condition = "{} {}".format(
+                            self.get_negation(op), op1)
+            # two values
+            elif op1.isnumeric() and op2.isnumeric():
+                result = self.get_operator(op)(float(op1), float(op2))
+                if result:
+                    condition = ""
+                    opposite_condition = "false"
                 else:
-                    condition = "{} {}".format(op, op1)
-                    opposite_condition = "{} {}".format(
-                        self.get_negation(op), op1)
-        # two values
-        else:
-            result = self.get_operator(op)(float(op1), float(op2))
-            if result:
-                condition = ""
-                opposite_condition = "false"
-            else:
-                condition = "false"
-                opposite_condition = ""
+                    condition = "false"
+                    opposite_condition = ""
 
-        return condition, opposite_condition
+            return condition, opposite_condition
+        else:
+            return "", ""
 
     def generate_inequality_transition(self, condition, start_node, end_node):
         automaton = self.__automatons[self.__functions_counter - 1]

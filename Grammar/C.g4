@@ -886,12 +886,12 @@ SChar
     ;
 
 ComplexDefine
-    :   '#' Whitespace? 'define'  ~[\n]* '\n'
+    :   '#' Whitespace? 'define'  ~[\n]* Newline
         -> skip
     ;
 
 IncludeDirective
-    :   '#' Whitespace? 'include' Whitespace? (('"' ~[\r\n]* '"') | ('<' ~[\r\n]* '>' )) Whitespace? Newline
+    :   '#' Whitespace? 'include' Whitespace? (('"' ~[\r\n]* '"') | ('<' ~[\r\n]* '>' )) Whitespace? ~[\n]* Newline
         -> skip
     ;
 

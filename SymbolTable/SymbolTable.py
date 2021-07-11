@@ -166,8 +166,10 @@ class SymbolTable:
         if symbol_name in self.__references[scope]:
             self.__references[scope][symbol_name].set_referenced_object(
                 referenced_object)
+        elif scope.get_parent() is None:
+            return
         else:
-            self.set_referenced_object(symbol_name, referenced_object)
+            self.set_referenced_object(symbol_name, referenced_object, scope.get_parent())
 
     def get_symbols(self, scope):
         return self.__symbols[self.__scopes[scope]].keys()
@@ -302,6 +304,16 @@ class SymbolTable:
             return ""
         else:
             return self.get_type(symbol_name, scope.get_parent())
+
+    def get_size(self, symbol_name, scope=None):
+        if scope is None:
+            scope = self.__current_scope
+        if symbol_name in self.__symbols[scope]:
+            return self.__symbols[scope][symbol_name].get_size()
+        elif scope.get_parent() is None:
+            return
+        else:
+            return self.get_size(symbol_name, scope.get_parent())
 
     def is_used(self, symbol_name, scope):
         if type(scope) == str:
@@ -550,6 +562,9 @@ class Symbol:
 
     def get_value(self):
         return self.__value
+
+    def get_size(self):
+        return self.__size
 
     def set_value(self, value):
         self.__value = cast(value, self.__type)
