@@ -945,3 +945,7 @@ LineComment
     :   '//' ~[\r\n]*
         -> skip
     ;
+IfComment
+    :   '#if' .*? '#endif'
+        -> skip
+    ;

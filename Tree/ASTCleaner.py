@@ -142,6 +142,8 @@ class ASTCleaner:
 
     @staticmethod
     def perform_optimal_cast(value):
+        if value == 'None':
+            return value
         if value[0] == "\\":  # string
             return value
         elif value[0] == "'":  # character
@@ -734,6 +736,18 @@ class ASTCleaner:
     def clean_cast_expression(self, node):
         # check if this was meant to be a different expression
         if node.get_children()[0].get_label() == "Type Name":
+            # pop a potential const
+            if node.get_children()[0] \
+                .get_children()[0] \
+                .get_label() == "Type Qualifier":
+                if node.get_children()[0] \
+                    .get_children()[0] \
+                    .get_children()[0] \
+                    .get_label() == "const":
+                    node.get_children()[0].get_children()[0].get_children().pop(0)
+                    if len(node.get_children()[0].get_children()[0].get_children()) == 0:
+                        node.get_children()[0].get_children().pop(0)
+
             if node.get_children()[0].get_children()[
                     0].get_label() == "Type Def Name":
                 value = node.get_children()[0].get_children()[
@@ -757,6 +771,9 @@ class ASTCleaner:
 
         if value[:5] == "ID = " and self.is_initialized(value[5:]):
             value = "Val = {}".format(self.get_value(value[5:]))
+
+        if value[:5] == "ID = " and not self.is_initialized(value[5:]):
+            return value
 
         if value[:6] == "Val = ":
             value = "Val = {}".format(self.perform_cast(value[6:], var_type))
@@ -909,15 +926,19 @@ class ASTCleaner:
                     elif declaration_type.split(" ")[0] in \
                             {"struct", "union"} and \
                             initializer != "" and size is None:
-                        init_list = initializer.split(":")[1].split(",")
-                        for ind in range(len(init_list)):
-                            variable = init_list[ind].split(
-                                "=", 1)[0].replace(" ", "")
-                            value = init_list[ind].split("=", 1)[1]
-                            if value[:6] != "Val = ":
-                                continue
-                            self.__symbol_table.set_group_instance_variable(
-                                declarator, variable, value[6:])
+                        initializers = initializer.split(":")
+                        if len(initializers) > 1:
+                            init_list = initializers[1].split(",")
+                            for ind in range(len(init_list)):
+                                variable = init_list[ind].split(
+                                    "=", 1)[0].replace(" ", "")
+                                value = init_list[ind].split("=", 1)[1]
+                                if value[:6] != "Val = ":
+                                    continue
+                                self.__symbol_table.set_group_instance_variable(
+                                    declarator, variable, value[6:])
+                        else:
+                            self.__symbol_table.set_value(declarator, initializer[6:])
                     elif size is None:
                         self.__symbol_table.add_symbol(
                             declaration_type, declarator)
@@ -1364,16 +1385,13 @@ class ASTCleaner:
 
     def clean_postfix_expression(self, node):
         operand_1 = self.clean(node.get_children()[0])
+        original = operand_1
+
         if len(node.get_children()) > 1:
             operation = node.get_children()[1].get_label()
             if self.is_counter(operand_1[5:]) and operation in {
                     "++", "--"} and self.__entered_branch:
                 self.__symbol_table.set_initialized(operand_1[5:], False)
-
-        original = operand_1
-
-        if len(node.get_children()) > 1:
-            operation = node.get_children()[1].get_label()
 
             if operand_1 == "Val = ":
                 return ""
@@ -1408,6 +1426,8 @@ class ASTCleaner:
                     value = "Val = {}".format(value)
                     self.clean_node(node, value)
                     return value
+                else:
+                    return ""
 
             elif node.get_children()[0].get_label() == "Type Name" and \
                     node.get_children()[1].get_label() == "Initializer":

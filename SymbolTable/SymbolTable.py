@@ -87,6 +87,7 @@ class SymbolTable:
         new_definition = GroupDefinition(group_name, group_type, variables)
         self.__group_definitions[self.__current_scope][group_name] = \
             new_definition
+        return new_definition
 
     def symbol_exists(self, symbol_name, scope=None):
         if scope is None:
@@ -103,6 +104,8 @@ class SymbolTable:
             scope = self.__current_scope
         if definition_name in self.__group_definitions[scope]:
             return self.__group_definitions[scope][definition_name]
+        elif scope.get_parent() is None:
+            return None
         else:
             return self.get_group_definition(
                 definition_name, scope.get_parent())
@@ -110,6 +113,10 @@ class SymbolTable:
     def add_group_instance(self, instance_name, instance_type):
         group_defintion = self.get_group_definition(
             instance_type.split(" ")[1].replace("*", ""))
+        if group_defintion is None:
+            group_defintion = self.add_group_definition(
+                instance_type.split(" ")[1].replace("*", ""),
+                instance_type.split(" ")[0], [])
         new_instance = GroupInstance(
             instance_name, instance_type, group_defintion)
         self.__group_instances[self.__current_scope][instance_name] = \
@@ -378,6 +385,8 @@ class SymbolTable:
         if symbol_name in self.__symbols[scope]:
             return self.__symbols[scope][symbol_name].set_parameter(
                 parameter_val)
+        if scope.get_parent() is None:
+            return
         else:
             return self.set_parameter(
                 parameter_val, symbol_name, scope.get_parent())
@@ -421,6 +430,8 @@ class SymbolTable:
             referenced_object = refs[group_variable].get_referenced_object()
             return self.get_group_array_value(
                 referenced_object, variable, scope)
+        elif scope.get_parent() is None:
+            return None
         else:
             return self.get_group_array_value(
                 group_variable, variable, scope.get_parent())
@@ -443,6 +454,8 @@ class SymbolTable:
             referenced_object = refs[group_variable].get_referenced_object()
             return self.get_group_array_value_at_index(
                 referenced_object, variable, index, scope)
+        elif scope.get_parent() is None:
+            return None
         else:
             return self.get_group_array_value_at_index(
                 group_variable, variable, index, scope.get_parent())
@@ -792,6 +805,9 @@ class Enumeration:
 
 
 def cast(variable_value, variable_type):
+    if variable_value is None or variable_value == 'None':
+        return variable_value
+
     variable_value = str(variable_value)
     if variable_type == 'int':
         if variable_value.replace(".", "").replace("-", "").isnumeric():
