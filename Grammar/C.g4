@@ -647,6 +647,7 @@ Identifier
         (   IdentifierNondigit
         |   Digit
         )*
+        StringLiteral?
     ;
 
 fragment
@@ -945,7 +946,8 @@ LineComment
     :   '//' ~[\r\n]*
         -> skip
     ;
+
 IfComment
-    :   '#if' .*? '#endif'
+    :   ('#if' ~[\n]*? Newline | '#elif' ~[\n]*? Newline | '#else' ~[\n]*? Newline | '#endif' ~[\n]*? Newline)
         -> skip
     ;

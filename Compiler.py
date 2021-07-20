@@ -23,6 +23,8 @@ from Tree.ASTValidator import ASTValidator
 
 from Automaton.Generator import Generator
 
+from Preprocessor.Preprocessor import PreProcessor
+
 
 class Compiler:
     trace = False
@@ -44,6 +46,16 @@ class Compiler:
             os.system("cd Grammar;java -jar antlr.jar -visitor -Dlanguage=Python3 -o ../Antlr_files {}"
                       .format(grammar_file))
         return 0
+
+    @staticmethod
+    def preprocess(code_file):
+        preprocessor = PreProcessor(code_file)
+        result = preprocessor.analyze()
+
+        text_file = open("temp.c", "w")
+        text_file.write(result)
+        text_file.close()
+        print(result)
 
     def analysis(self, code_file):
         if not os.path.isdir("./TreePlots") and self.image_output:
@@ -169,7 +181,9 @@ if __name__ == '__main__':
             compiler.image_output = sys.argv[4]
 
         file = sys.argv[2]
-        compiler.analysis(file)
+        compiler.preprocess(file)
+        compiler.analysis("temp.c")
+        # os.remove("temp.c")
 
     else:
         print("Error: handler not recognised.")

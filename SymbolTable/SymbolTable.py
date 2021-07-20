@@ -701,10 +701,16 @@ class GroupInstance:
         self.__variables[variable].set_initialised(value)
 
     def get_variable_initialised(self, variable):
-        return self.__variables[variable].get_initialised()
+        if variable in self.__variables:
+            return self.__variables[variable].get_initialised()
+        else:
+            return None
 
     def get_variable_value(self, variable):
-        return self.__variables[variable].get_value()
+        if variable in self.__variables:
+            return self.__variables[variable].get_value()
+        else:
+            return None
 
     def get_variable_value_at_index(self, variable, index):
         return self.__variables[variable].get_value_at_index(index)

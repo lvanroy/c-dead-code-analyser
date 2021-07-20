@@ -3,3 +3,5 @@ venv
 gen
 *\__pycache__
 TreePlots
+mpv-master
+xrdp-devel

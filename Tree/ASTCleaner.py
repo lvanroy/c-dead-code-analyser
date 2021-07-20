@@ -751,14 +751,6 @@ class ASTCleaner:
                     if len(node.get_children()[0].get_children()[0].get_children()) == 0:
                         node.get_children()[0].get_children().pop(0)
 
-            if node.get_children()[0].get_children()[
-                    0].get_label() == "Type Def Name":
-                value = node.get_children()[0].get_children()[
-                    0].get_children()[0].get_label()
-                if self.__symbol_table.symbol_exists(value):
-                    self.revert_cast(node)
-                    self.__changes_occurred = True
-                    return ""
             type_spec = node.get_children()[0].get_children()[0]
             type_def = type_spec.get_children()[0]
             if (type_spec.get_label() == "Type Specifier" and
@@ -771,6 +763,9 @@ class ASTCleaner:
 
         var_type = self.clean(node.get_children()[0])
         value = self.clean(node.get_children()[1])
+
+        if value is None:
+            return ""
 
         if value[:5] == "ID = " and self.is_initialized(value[5:]):
             value = "Val = {}".format(self.get_value(value[5:]))
