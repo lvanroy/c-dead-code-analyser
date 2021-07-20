@@ -55,7 +55,6 @@ class Compiler:
         text_file = open("temp.c", "w")
         text_file.write(result)
         text_file.close()
-        print(result)
 
     def analysis(self, code_file):
         if not os.path.isdir("./TreePlots") and self.image_output:

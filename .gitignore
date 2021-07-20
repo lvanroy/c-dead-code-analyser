@@ -1,7 +1,11 @@
 .idea
 venv
+env
 gen
 *\__pycache__
 TreePlots
+Presentation
+Documentation
 mpv-master
 xrdp-devel
+temp.c
