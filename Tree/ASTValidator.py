@@ -310,8 +310,7 @@ class ASTValidator:
             function_parameter_names = list()
 
             for child in node.get_children():
-                parameter_type = child.get_children()[0].get_children()[
-                    0].get_label()
+                parameter_type = self.get_flattened_type(child.get_children()[0])
                 function_parameter_types.append(parameter_type)
 
                 if len(child.get_children()) > 1:
@@ -475,7 +474,7 @@ class ASTValidator:
                 if parameter_type != "int":
                     function_def.add_status(
                         "Incorrect parameter type found, "
-                        "this tool can only handle parameters"
+                        "this tool can only handle parameters "
                         "of type int.")
 
             if len(function_def.get_statuses()) == 0:
@@ -484,6 +483,20 @@ class ASTValidator:
             temp += 1
 
         return
+
+    def get_flattened_type(self, root):
+        resulting_type = ""
+
+        for child in root.get_children():
+            resulting_type += self.get_flattened_type(child)
+
+        if len(root.get_children()) == 0:
+            if root.get_label() == "pointer":
+                resulting_type += "*"
+            else:
+                resulting_type += root.get_label()
+
+        return resulting_type
 
     def print_functions(self):
         temp = 0
