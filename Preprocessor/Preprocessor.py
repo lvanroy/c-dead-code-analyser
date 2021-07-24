@@ -17,7 +17,7 @@ class PreProcessor:
 
         # store the patterns used to recognize the different macros
         self.define_pattern = '^#define .*'
-        self.include_pattern = '^#include ".*"'
+        self.include_pattern = '^#include ["<].*[">]'
         self.undefine_pattern = '^#undef .*'
         self.ifdef_pattern = "^#ifdef .*"
         self.ifndef_pattern = "^#ifndef .*"
@@ -28,6 +28,7 @@ class PreProcessor:
         self.elif_pattern = "^#elif .*"
         self.endif_pattern = "^#endif"
         self.equality_pattern = ".*? == .*?"
+        self.error_pattern = "#error .*"
 
         # keep track of what macros are currently active
         # a define mapping will make it so that every next line we encounter which contains
@@ -39,7 +40,8 @@ class PreProcessor:
             "L_ENDIAN": "",
             "__LITTLE_ENDIAN__": "",
             "CONFIG_AC_H": "",
-            "HAVE_FUNC_ATTRIBUTE_FORMAT": ""
+            "HAVE_FUNC_ATTRIBUTE_FORMAT": "",
+            "MDE_CPU_X64": ""
         }
 
         self.defined_functions = dict()
@@ -52,12 +54,14 @@ class PreProcessor:
         # this is done post eval to prevent double eval/messing with indices
         self.marked_for_addition = list()
 
-        # keep track of our current position within ifs
+        # keep track of our current position within if
+        # active if -> in the body of an if with condition that evaluated to true
+        # failed if -> in the body of an if with condition that evaluated to false
+        # if_was_true -> within an if that has been true at some point,
+        #                trivially fail elif's
         self.active_if = [False]
         self.failed_if = [False]
-
-        # keep track of ifs that get opened within a failed body
-        self.unclosed_ifs = 0
+        self.if_was_true = [False]
 
     def analyze(self):
         f = open(self.file_name, "r")
@@ -71,8 +75,11 @@ class PreProcessor:
 
             # check if any of the defines affect the current line
             for old in self.defined:
-                if old in line:
-                    content[i] = line.replace(old, self.defined[old])
+                if old in tokens:
+                    for ind in range(len(tokens)):
+                        if tokens[ind] == old:
+                            tokens[ind] = self.defined[old]
+                    content[i] = " ".join(tokens)
 
             # check if any of the func defines affect the current line
             for old_func in self.defined_functions:
@@ -81,28 +88,20 @@ class PreProcessor:
                     for invocation in invocations:
                         content[i] = line.replace(invocation, "")
 
-            if re.match(self.endif_pattern, line) and self.unclosed_ifs == 0:
+            if re.match(self.endif_pattern, line):
                 self.handle_endif(tokens)
                 self.marked_for_removal.append(i)
                 continue
 
-            if re.match(self.elif_pattern, line) and self.unclosed_ifs == 0:
+            if re.match(self.elif_pattern, line):
                 self.handle_elif(tokens)
                 self.marked_for_removal.append(i)
 
-            if re.match(self.else_pattern, line) and self.unclosed_ifs == 0:
+            if re.match(self.else_pattern, line):
                 self.handle_else(tokens)
                 self.marked_for_removal.append(i)
 
             if self.failed_if[-1]:
-                if (re.match(self.if_pattern, line) or
-                        re.match(self.ifdef_pattern, line) or
-                        re.match(self.ifndef_pattern, line)):
-                    self.unclosed_ifs += 1
-
-                if re.match(self.endif_pattern, line):
-                    self.unclosed_ifs -= 1
-
                 content[i] = ""
                 continue
 
@@ -139,6 +138,10 @@ class PreProcessor:
             # check for ifndef
             elif re.match(self.ifndef_pattern, line):
                 self.handle_ifndef(tokens)
+                self.marked_for_removal.append(i)
+
+            # check for error
+            elif re.match(self.error_pattern, line):
                 self.marked_for_removal.append(i)
 
         self.marked_for_removal.sort(reverse=True)
@@ -180,7 +183,6 @@ class PreProcessor:
 
         function_name = old.split("(", 1)[0]
         arguments = old.split("(", 1)[1].rsplit(")", 1)[0]
-        func_rep = None
         if arguments == "":
             nr_of_arguments = 0
         else:
@@ -231,11 +233,13 @@ class PreProcessor:
         # we do not support c paths as these can not deliver any relevant functionalities
         # for our specific use case. For files in the local directories we do not guarantee any
         # ordering
-        file = tokens.pop(0).replace("\"", "").replace("\n", "")
+        file = tokens.pop(0).replace("\"", "").replace("\n", "").replace(">", "").replace("<", "")
         local_file = glob.glob("./**/{}".format(file), recursive=True)
 
         if len(local_file) == 0:
             return
+
+        print(local_file)
 
         local_file = local_file[0]
         if local_file in self.processed_imports:
@@ -266,6 +270,10 @@ class PreProcessor:
         condition = condition.replace("defined (", "defined(")
         defines = re.findall(r'defined\([^()]*\)', condition)
 
+        if len(tokens) == 1 and len(defines) == 0 and not tokens[0].isnumeric():
+            condition = "defined({})".format(tokens[0])
+            defines = ["defined({})".format(tokens[0])]
+
         for define in defines:
             define_tag = define.replace("defined(", "")
             define_tag = "".join(define_tag.rsplit(")", 1))
@@ -290,6 +298,7 @@ class PreProcessor:
                     else:
                         condition = condition.replace(token, "0")
 
+        print(condition)
         return eval(condition)
 
     def handle_if(self, tokens):
@@ -301,9 +310,11 @@ class PreProcessor:
         if result:
             self.active_if.append(True)
             self.failed_if.append(False)
+            self.if_was_true.append(True)
         else:
             self.active_if.append(False)
             self.failed_if.append(True)
+            self.if_was_true.append(False)
 
     def handle_elif(self, tokens):
         # pop the 'elseif' token
@@ -314,19 +325,26 @@ class PreProcessor:
             self.failed_if[-1] = True
             return
 
+        if self.if_was_true[-1]:
+            self.active_if[-1] = False
+            self.failed_if[-1] = True
+            return
+
         result = self.evaluate_condition(tokens)
 
         if result:
             self.active_if[-1] = True
             self.failed_if[-1] = False
+            self.if_was_true[-1] = True
 
     def handle_else(self, tokens):
         # pop the 'else' token
         tokens.pop(0)
 
-        if not self.active_if[-1] and self.failed_if[-1]:
+        if not self.if_was_true[-1]:
             self.active_if[-1] = True
             self.failed_if[-1] = False
+            self.if_was_true[-1] = True
 
         else:
             self.active_if[-1] = False
@@ -339,6 +357,7 @@ class PreProcessor:
         if self.active_if[-1] or self.failed_if[-1]:
             self.failed_if.pop(-1)
             self.active_if.pop(-1)
+            self.if_was_true.pop(-1)
 
     def handle_ifdef(self, tokens):
         # pop the 'ifdef' token
@@ -352,9 +371,11 @@ class PreProcessor:
         if result:
             self.active_if.append(True)
             self.failed_if.append(False)
+            self.if_was_true.append(True)
         else:
             self.active_if.append(False)
             self.failed_if.append(True)
+            self.if_was_true.append(False)
 
     def handle_ifndef(self, tokens):
         # pop the 'ifndef' token
@@ -368,9 +389,11 @@ class PreProcessor:
         if result:
             self.active_if.append(True)
             self.failed_if.append(False)
+            self.if_was_true.append(True)
         else:
             self.active_if.append(False)
             self.failed_if.append(True)
+            self.if_was_true.append(False)
 
 
 class FunctionReplacement:
