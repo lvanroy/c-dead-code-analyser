@@ -24,6 +24,8 @@ class ASTValidator:
         # dictionary that stores all function objects
         self.__functions = dict()
 
+        self.__function = None
+
         # symbol table object that keeps track of all variables
         self.__symbol_table = symbol_table
 
@@ -161,8 +163,23 @@ class ASTValidator:
         # register opening of new function (+ function scope)
         if node.get_label() == "Function Definition":
             self.__functions[self.__functions_counter] = Function()
+            self.__function = self.__functions[self.__functions_counter]
             self.__counters[self.__functions_counter] = dict()
             self.__functions_counter += 1
+
+            children = node.get_children()
+            function_type = ""
+
+            for child in children:
+                if child.get_label() != "Type Def Name" and child.get_label() != "Declarator":
+                    if function_type != "":
+                        function_type += " {}".format(self.get_flattened_type(child))
+                    else:
+                        function_type = self.get_flattened_type(child)
+                else:
+                    break
+
+            self.__function.set_return_type(function_type)
 
         # register relational expression, validate whether or not
         # one of the operands is the counter, check whether
@@ -182,8 +199,7 @@ class ASTValidator:
                              "line {}, you are not allowed to have multiple "\
                              "evaluations in a single expression."\
                         .format(node.get_line())
-                    self.__functions[self.__functions_counter -
-                                     1].add_status(status)
+                    self.__function.add_status(status)
                 # check that either this variable is a counter, a parameter, or
                 # a constant
                 else:
@@ -206,24 +222,22 @@ class ASTValidator:
                                  "between counters.".format(node.get_line())
                         if self.__symbol_table.is_counter(child_label[5:]):
                             if counter_found:
-                                self.__functions[self.__functions_counter -
-                                                 1].add_status(status)
+                                self.__function.add_status(status)
                             else:
                                 counter_found = True
-
-        # register return type of function
-        elif node.get_label() == "Type Specifier" and \
-                node.get_parent().get_label() == "Function Definition":
-            function_type = node.get_children()[0].get_label()
-            self.__functions[self.__functions_counter -
-                             1].set_return_type(function_type)
 
         # register function name
         elif node.get_label() == "Declarator" and \
                 node.get_parent().get_label() == "Function Definition":
             func_name = node.get_children()[0].get_children()[0].get_label()
-            self.__functions[self.__functions_counter -
-                             1].set_function_name(func_name)
+            self.__function.set_function_name(func_name)
+            self.__symbol_table.open_scope(func_name)
+
+        # register function name
+        elif node.get_label() == "Type Def Name" and \
+                 node.get_parent().get_label() == "Function Definition":
+            func_name = node.get_children()[0].get_label()
+            self.__function.set_function_name(func_name)
             self.__symbol_table.open_scope(func_name)
 
         # register opening of iteration scopes
@@ -305,25 +319,53 @@ class ASTValidator:
             return success
 
         # register parameter definitions
-        elif node.get_label() == "Parameter Type List":
-            function_parameter_types = list()
-            function_parameter_names = list()
+        # elif node.get_label() == "Parameter Type List":
+        #     function_parameter_types = list()
+        #     function_parameter_names = list()
+        #
+        #     for child in node.get_children():
+        #         parameter_type = self.get_flattened_type(child.get_children()[0])
+        #         function_parameter_types.append(parameter_type)
+        #
+        #         if len(child.get_children()) > 1:
+        #             parameter_name = child.get_children()[1].get_children()[
+        #                 0].get_label()
+        #         else:
+        #             parameter_name = ""
+        #         function_parameter_names.append(parameter_name)
+        #
+        #     self.__function.set_function_parameter_types(function_parameter_types)
+        #     self.__parameters[self.__functions_counter - 1] = \
+        #         function_parameter_names
 
-            for child in node.get_children():
-                parameter_type = self.get_flattened_type(child.get_children()[0])
-                function_parameter_types.append(parameter_type)
+        # register parameter definition
+        elif node.get_label() == "Parameter Declaration":
+            parameter_type = ""
+            parameter_name = ""
+            if len(node.get_children()) > 1:
+                parameter_type = self.get_flattened_type(node.get_children()[0])
 
-                if len(child.get_children()) > 1:
-                    parameter_name = child.get_children()[1].get_children()[
-                        0].get_label()
-                else:
-                    parameter_name = ""
-                function_parameter_names.append(parameter_name)
+                node_children = node.get_children()[1].get_children()
+                parameter_name = node_children[0].get_label()
+            elif len(node.get_children()) == 1:
+                children = node.get_children()[0].get_children()
+                for i in range(len(children) - 1):
+                    child = children[i]
+                    if parameter_type == "":
+                        parameter_type = self.get_flattened_type(child)
+                    else:
+                        parameter_type += " {}".format(self.get_flattened_type(child))
 
-            self.__functions[self.__functions_counter - 1]\
-                .set_function_parameter_types(function_parameter_types)
-            self.__parameters[self.__functions_counter - 1] = \
-                function_parameter_names
+                parameter_name = children[-1].get_label()
+
+            self.__function.add_function_parameter_type(parameter_type)
+
+            if self.__functions_counter - 1 in self.__parameters:
+                params = self.__parameters[self.__functions_counter - 1]
+            else:
+                params = list()
+                self.__parameters[self.__functions_counter - 1] = params
+            params.append(parameter_name)
 
         # register postfix increment\decrement
         elif node.get_label() == "Postfix Expression":
@@ -337,8 +379,7 @@ class ASTValidator:
                          "found on line {}, parameter modification " \
                          "is not allowed."\
                     .format(node.get_line())
-                self.__functions[self.__functions_counter -
-                                 1].add_status(status)
+                self.__function.add_status(status)
 
         # register unary expression increment/decrement
         elif node.get_label() == "Unary Expression":
@@ -352,8 +393,7 @@ class ASTValidator:
                          "on line {}, parameter modification is " \
                          "not allowed."\
                     .format(node.get_line())
-                self.__functions[self.__functions_counter -
-                                 1].add_status(status)
+                self.__function.add_status(status)
 
         # evaluate all children of the current node,
         # every if statement before this statement operates as an enter
@@ -366,8 +406,7 @@ class ASTValidator:
         # register end of iteration scope
         if node.get_label() in {"Iteration Statement", "Selection Statement"}:
             self.__symbol_table.close_scope()
-            function_name = self.__functions[self.__functions_counter -
-                                             1].get_function_name()
+            function_name = self.__function.get_function_name()
             if self.__symbol_table.get_current_scope().get_label() == \
                     function_name:
                 for counter in \
@@ -417,8 +456,6 @@ class ASTValidator:
         temp = 0
 
         for function_def in self.__functions.values():
-            return_type = function_def.get_return_type()
-
             combinations = itertools.combinations(
                 range(len(self.__counters[temp])), 2)
             counter_names = list(self.__counters[temp].keys())
@@ -488,7 +525,10 @@ class ASTValidator:
         resulting_type = ""
 
         for child in root.get_children():
-            resulting_type += self.get_flattened_type(child)
+            if resulting_type == "":
+                resulting_type += self.get_flattened_type(child)
+            else:
+                resulting_type += " {}".format(self.get_flattened_type(child))
 
         if len(root.get_children()) == 0:
             if root.get_label() == "pointer":
@@ -554,6 +594,9 @@ class Function:
 
     def set_function_parameter_types(self, function_parameter_types):
         self.__parameter_types = function_parameter_types
+
+    def add_function_parameter_type(self, function_parameter_type):
+        self.__parameter_types.append(function_parameter_type)
 
     def get_function_parameter_types(self):
         return self.__parameter_types

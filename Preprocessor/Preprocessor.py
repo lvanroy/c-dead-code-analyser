@@ -233,8 +233,9 @@ class PreProcessor:
         # we do not support c paths as these can not deliver any relevant functionalities
         # for our specific use case. For files in the local directories we do not guarantee any
         # ordering
-        file = tokens.pop(0).replace("\"", "").replace("\n", "").replace(">", "").replace("<", "")
-        local_file = glob.glob("./**/{}".format(file), recursive=True)
+        include = tokens.pop(0).replace("\"", "").replace("\n", "").replace(">", "").replace("<", "")
+        directory = self.file_name.replace("./", "").split("/")[0]
+        local_file = glob.glob("./{}/**/{}".format(directory, include), recursive=True)
 
         if len(local_file) == 0:
             return

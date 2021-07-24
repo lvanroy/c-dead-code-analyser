@@ -704,6 +704,16 @@ class ASTCleaner:
             self.__symbol_table.set_initial_value(
                 parameter_name, parameter_name)
             self.__symbol_table.set_parameter(True, parameter_name)
+        elif len(node.get_children()) == 1 and node.get_children()[0].get_label() == "Direct Declarator":
+            child = node.get_children()[0]
+            parameter_type = ""
+            for i in range(len(child.get_children()) - 1):
+                parameter_type += self.clean(child.get_children()[i])
+            parameter_name = child.get_children()[-1].get_label()
+            self.__symbol_table.add_symbol(parameter_type, parameter_name)
+            self.__symbol_table.set_initial_value(
+                parameter_name, parameter_name)
+            self.__symbol_table.set_parameter(True, parameter_name)
         return ""
 
     def clean_operation_expression(self, node):
@@ -1190,11 +1200,19 @@ class ASTCleaner:
 
         for i in range(len(children)):
             child = children[i]
-            if child.get_label() == "Declarator":
+            if child.get_label() == "Declarator" or child.get_label() == "Type Def Name":
                 break
-            function_type += self.clean(child)
+            if function_type == "":
+                function_type += self.clean(child)
+            else:
+                function_type += " {}".format(self.clean(child))
 
         function_name = self.clean(children[i])
+
+        # handle the cases where the function name got mapped on type def name
+        if children[i].get_label() == "Type Def Name":
+            if children[i+1].get_label() != "compound statement":
+                children[i+1].set_label("Parameter Declaration")
 
         self.__symbol_table.open_scope(function_name)
 
@@ -1867,6 +1885,10 @@ class ASTCleaner:
         elif node.get_label() == "Parameter Declaration":
             return self.clean_parameter_declaration(node)
 
+        # head node for a pointer
+        elif node.get_label() == "pointer":
+            return "*"
+
         # head node for a postfix expression
         elif node.get_label() == "Postfix Expression":
             return self.clean_postfix_expression(node)
@@ -1889,6 +1911,10 @@ class ASTCleaner:
         # head node for a shift expression
         elif node.get_label() == "Shift Expression":
             return self.clean_operation_expression(node)
+
+        # head node signifying a static classifier
+        elif node.get_label() == "static":
+            return "static"
 
         # head node for a struct declaration, specifying the variables and
         # (possibly) their values
