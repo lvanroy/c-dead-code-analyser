@@ -76,7 +76,7 @@ class PreProcessor:
         content = re.sub(r'\\\n *', '', content)
         content = re.sub(r',\n *', ', ', content)
         content = re.sub(r'\"\n *\"', "", content)
-        content = re.sub(r'\/\*(?:.*?\n?)*?.*?\*\/', "", content)
+        content = re.sub(r'\/\*(?:.*?\n?)*?.*?\*\/ *', "", content)
         content = content.split("\n")
 
         for i in range(len(content)):
@@ -222,7 +222,7 @@ class PreProcessor:
 
         if "__attribute__" in new:
             new = ""
-        print("{} -> {}".format(old, new))
+        # print("{} -> {}".format(old, new))
         func_rep = FunctionReplacement(function_name, nr_of_arguments, new)
 
         # add the function definition to the class dict
@@ -253,7 +253,7 @@ class PreProcessor:
                 opened = new.count("(")
                 closed = new.count(")")
         else:
-            new = "1"
+            new = ""
 
         # add the define to the class dict
         self.defined[old] = new.replace("\n", "")
