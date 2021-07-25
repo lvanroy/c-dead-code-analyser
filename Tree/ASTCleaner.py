@@ -585,12 +585,18 @@ class ASTCleaner:
         operand_1 = self.clean(node.get_children()[0])
         operation = node.get_children()[1].get_label()
 
+        if operand_1 is None:
+            operand_1 = ""
+
         # validate whether this is a counter, if so enable counter assignment
         if operand_1[:5] == "ID = " and self.__symbol_table.is_counter(
                 operand_1[5:]):
             self.__assigning_to_counter = True
 
         operand_2 = self.clean(node.get_children()[2])
+
+        if operand_2 is None:
+            operand_2 = ""
 
         self.__assigning_to_counter = False
 
@@ -772,15 +778,16 @@ class ASTCleaner:
 
             type_spec = node.get_children()[0].get_children()[0]
             type_def = type_spec.get_children()[0]
-            operation = node.get_children()[1].get_children()[0].get_label()
-            if (type_spec.get_label() == "Type Specifier" and
-                    type_def.get_label() == "Type Def Name" and
-                    operation in ["+", "-", "*", "/"]):
-                value = type_def.get_children()[0].get_label()
-                if self.__symbol_table.symbol_exists(value):
-                    self.revert_cast(node)
-                    self.__changes_occurred = True
-                    return ""
+            if len(node.get_children()) > 1 and len(node.get_children()[1].get_children()) > 0:
+                operation = node.get_children()[1].get_children()[0].get_label()
+                if (type_spec.get_label() == "Type Specifier" and
+                        type_def.get_label() == "Type Def Name" and
+                        operation in ["+", "-", "*", "/"]):
+                    value = type_def.get_children()[0].get_label()
+                    if self.__symbol_table.symbol_exists(value):
+                        self.revert_cast(node)
+                        self.__changes_occurred = True
+                        return ""
 
         var_type = self.clean(node.get_children()[0])
         value = self.clean(node.get_children()[1])
@@ -1025,6 +1032,12 @@ class ASTCleaner:
         operand_1 = self.clean(node.get_children()[0])
         operation = node.get_children()[1].get_label()
         operand_2 = self.clean(node.get_children()[2])
+
+        if operand_1 is None:
+            operand_1 = ""
+
+        if operand_2 is None:
+            operand_2 = ""
 
         if self.__symbol_table.is_parameter(
                 operand_1[5:]) and \
@@ -1417,6 +1430,8 @@ class ASTCleaner:
         if func == "return":
             if len(node.get_children()) > 1:
                 value = self.clean(node.get_children()[1])
+                if value is None:
+                    value = ""
                 if value[:5] == "ID = " and self.__symbol_table.is_initialized(
                         value[5:]):
                     value = self.__symbol_table.get_value(value[5:])
