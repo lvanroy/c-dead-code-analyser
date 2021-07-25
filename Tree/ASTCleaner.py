@@ -150,6 +150,8 @@ class ASTCleaner:
     def perform_optimal_cast(value):
         if value == 'None':
             return value
+        if value == "":
+            return value
         if value[0] == "\\":  # string
             return value
         elif value[0] == "'":  # character
@@ -762,6 +764,8 @@ class ASTCleaner:
                 not self.__entered_branch:
             casted_operand_1 = self.perform_optimal_cast(operand_1[6:])
             casted_operand_2 = self.perform_optimal_cast(operand_2[6:])
+            if casted_operand_1 == "" or casted_operand_2 == "":
+                return ""
             result = self.get_operator(op)(casted_operand_1, casted_operand_2)
             value = "Val = {}".format(result)
             self.clean_node(node, value)

@@ -28,6 +28,7 @@ class ASTValidator:
 
         # symbol table object that keeps track of all variables
         self.__symbol_table = symbol_table
+        self.__symbol_table.clear_scopes()
 
         # dictionary that keeps track of the counters and parameters part of
         # each function scope
@@ -246,9 +247,7 @@ class ASTValidator:
             if self.__first_outer_line is None:
                 self.__first_outer_line = node.get_line()
 
-            self.__symbol_table.open_scope(
-                "for_scope_{}".format(
-                    self.__loop_counter))
+            self.__symbol_table.open_scope("for_scope_{}".format(self.__loop_counter))
             self.__loop_counter += 1
             if node.get_children()[0].get_label() == "while":
                 self.__constrained_conditional_statement = True
@@ -268,8 +267,7 @@ class ASTValidator:
             if self.__first_outer_line is None:
                 self.__first_outer_line = node.get_line()
 
-            self.__symbol_table.open_scope(
-                "scope_{}".format(self.__loop_counter))
+            self.__symbol_table.open_scope("scope_{}".format(self.__loop_counter))
             self.__loop_counter += 1
 
             self.__constrained_conditional_statement = True
@@ -281,8 +279,7 @@ class ASTValidator:
                 not node.is_parent("Function Definition") and \
                 not node.is_parent("Iteration Statement") and \
                 not node.is_parent("Selection Statement"):
-            self.__symbol_table.open_scope(
-                "scope_{}".format(self.__loop_counter))
+            self.__symbol_table.open_scope("scope_{}".format(self.__loop_counter))
             self.__loop_counter += 1
 
         # register variable usage
@@ -317,26 +314,6 @@ class ASTValidator:
                 self.__counters[self.__functions_counter - 1][variable_name].\
                     set_last_usage_line(node.get_line())
             return success
-
-        # register parameter definitions
-        # elif node.get_label() == "Parameter Type List":
-        #     function_parameter_types = list()
-        #     function_parameter_names = list()
-        #
-        #     for child in node.get_children():
-        #         parameter_type = self.get_flattened_type(child.get_children()[0])
-        #         function_parameter_types.append(parameter_type)
-        #
-        #         if len(child.get_children()) > 1:
-        #             parameter_name = child.get_children()[1].get_children()[
-        #                 0].get_label()
-        #         else:
-        #             parameter_name = ""
-        #         function_parameter_names.append(parameter_name)
-        #
-        #     self.__function.set_function_parameter_types(function_parameter_types)
-        #     self.__parameters[self.__functions_counter - 1] = \
-        #         function_parameter_names
 
         # register parameter definition
         elif node.get_label() == "Parameter Declaration":

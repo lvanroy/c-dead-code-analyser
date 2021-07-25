@@ -70,6 +70,10 @@ class SymbolTable:
         for scope in self.__scopes:
             self.__symbols[self.__scopes[scope]] = dict()
 
+    def clear_scopes(self):
+        self.__scopes = dict()
+        self.__scopes["0"] = Scope("0")
+
     def add_symbol(self, symbol_type, symbol_name, symbol_value=None):
         if "*" in symbol_type:
             self.add_reference(symbol_name, symbol_type)
@@ -530,6 +534,9 @@ class Scope:
     def get_label(self):
         return self.__label
 
+    def __str__(self):
+        return self.__label
+
 
 class Symbol:
     def __init__(self, symbol_type, symbol_name, symbol_size, symbol_value):
@@ -594,6 +601,8 @@ class Symbol:
     def get_array_value_at_index(self, index):
         value = self.__value.replace("{", "").replace("}", "").replace(" ", "")
         values = value.split(",")
+        if int(index) >= len(values):
+            return ""
         return values[int(index)]
 
     def has_initial_value(self):

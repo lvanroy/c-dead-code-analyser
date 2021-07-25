@@ -5,6 +5,7 @@ import glob
 _win64 = True
 _win32 = True
 
+
 class PreProcessor:
     def __init__(self, file_name, processed_imports=None):
         self.file_name = file_name
@@ -63,10 +64,19 @@ class PreProcessor:
         self.failed_if = [False]
         self.if_was_true = [False]
 
+        # keep track of nested ifs
+        # if there is a nested if in a block of code that is to be removed,
+        # we should ignore all related if statements until the nested if is closed
+        self.unclosed_ifs = 0
+
     def analyze(self):
         f = open(self.file_name, "r")
 
-        content = f.read().replace("\\\n", "").split("\n")
+        content = f.read()
+        content = re.sub(r'\\\n *', '', content)
+        content = re.sub(r',\n *', ', ', content)
+        content = re.sub(r'\"\n *\"', "", content)
+        content = content.split("\n")
 
         for i in range(len(content)):
             line = content[i]
@@ -104,17 +114,35 @@ class PreProcessor:
                         new = self.defined_functions[old_func].new.format(*parameters)
                         content[i] = line.replace(invocation, new)
 
+            # check for endif pattern
             if re.match(self.endif_pattern, line):
                 self.handle_endif(tokens)
                 self.marked_for_removal.append(i)
                 continue
 
+            # check for elif pattern
             if re.match(self.elif_pattern, line):
                 self.handle_elif(tokens)
                 self.marked_for_removal.append(i)
 
+            # check for else pattern
             if re.match(self.else_pattern, line):
                 self.handle_else(tokens)
+                self.marked_for_removal.append(i)
+
+            # check for if pattern
+            elif re.match(self.if_pattern, line):
+                self.handle_if(tokens)
+                self.marked_for_removal.append(i)
+
+            # check for ifdef
+            elif re.match(self.ifdef_pattern, line):
+                self.handle_ifdef(tokens)
+                self.marked_for_removal.append(i)
+
+            # check for ifndef
+            elif re.match(self.ifndef_pattern, line):
+                self.handle_ifndef(tokens)
                 self.marked_for_removal.append(i)
 
             if self.failed_if[-1]:
@@ -133,27 +161,12 @@ class PreProcessor:
 
             # check for include pattern
             elif re.match(self.include_pattern, line):
-                self.handle_include(tokens)
+                # self.handle_include(tokens)
                 self.marked_for_removal.append(i)
 
             # check for undefine pattern
             elif re.match(self.undefine_pattern, line):
                 self.handle_undefine(tokens)
-                self.marked_for_removal.append(i)
-
-            # check for if pattern
-            elif re.match(self.if_pattern, line):
-                self.handle_if(tokens)
-                self.marked_for_removal.append(i)
-
-            # check for ifdef
-            elif re.match(self.ifdef_pattern, line):
-                self.handle_ifdef(tokens)
-                self.marked_for_removal.append(i)
-
-            # check for ifndef
-            elif re.match(self.ifndef_pattern, line):
-                self.handle_ifndef(tokens)
                 self.marked_for_removal.append(i)
 
             # check for error
@@ -176,12 +189,12 @@ class PreProcessor:
 
         # get the old token, this is done by ensuring that there are no open brackets
         # the old and new field are seperated by a space but words can be grouped between brackets
-        open = tokens[0].count("(")
+        opened = tokens[0].count("(")
         closed = tokens[0].count(")")
         old = tokens.pop(0)
-        while open - closed != 0:
+        while opened - closed != 0:
             old += tokens.pop(0)
-            open = old.count("(")
+            opened = old.count("(")
             closed = old.count(")")
 
         # get the new token, this is done by ensuring that there are no open brackets
@@ -220,23 +233,23 @@ class PreProcessor:
 
         # get the old token, this is done by ensuring that there are no open brackets
         # the old and new field are seperated by a space but words can be grouped between brackets
-        open = tokens[0].count("(")
+        opened = tokens[0].count("(")
         closed = tokens[0].count(")")
         old = tokens.pop(0)
-        while open - closed != 0:
+        while opened - closed != 0:
             old += tokens.pop(0)
-            open = old.count("(")
+            opened = old.count("(")
             closed = old.count(")")
 
         # get the new token, this is done by ensuring that there are no open brackets
         # the old and new field are seperated by a space but words can be grouped between brackets
         if len(tokens) > 0:
-            open = tokens[0].count("(")
+            opened = tokens[0].count("(")
             closed = tokens[0].count(")")
             new = tokens.pop(0)
-            while open - closed != 0:
+            while opened - closed != 0:
                 new += tokens.pop(0)
-                open = new.count("(")
+                opened = new.count("(")
                 closed = new.count(")")
         else:
             new = "1"
@@ -303,8 +316,8 @@ class PreProcessor:
             else:
                 condition = condition.replace(define, "0")
 
-        condition = condition.replace("&&", "and")\
-            .replace("||", "or")\
+        condition = condition.replace("&&", "and") \
+            .replace("||", "or") \
             .replace("!", "not ")
 
         if re.match(self.equality_pattern, condition):
@@ -323,6 +336,10 @@ class PreProcessor:
         # remove the '#if' token
         tokens.pop(0)
 
+        if self.failed_if[-1]:
+            self.unclosed_ifs += 1
+            return
+
         result = self.evaluate_condition(tokens)
 
         if result:
@@ -337,6 +354,9 @@ class PreProcessor:
     def handle_elif(self, tokens):
         # pop the 'elseif' token
         tokens.pop(0)
+
+        if self.unclosed_ifs != 0:
+            return
 
         if self.active_if[-1]:
             self.active_if[-1] = False
@@ -359,6 +379,9 @@ class PreProcessor:
         # pop the 'else' token
         tokens.pop(0)
 
+        if self.unclosed_ifs != 0:
+            return
+
         if not self.if_was_true[-1]:
             self.active_if[-1] = True
             self.failed_if[-1] = False
@@ -372,6 +395,10 @@ class PreProcessor:
         # pop the 'endif' token
         tokens.pop(0)
 
+        if self.unclosed_ifs != 0:
+            self.unclosed_ifs -= 1
+            return
+
         if self.active_if[-1] or self.failed_if[-1]:
             self.failed_if.pop(-1)
             self.active_if.pop(-1)
@@ -383,6 +410,10 @@ class PreProcessor:
 
         # add the defined token, needed to evaluate
         tokens[0] = "defined({})".format(tokens[0])
+
+        if self.failed_if[-1]:
+            self.unclosed_ifs += 1
+            return
 
         result = self.evaluate_condition(tokens)
 
@@ -401,6 +432,10 @@ class PreProcessor:
 
         # add the defined token, needed to evaluate
         tokens[0] = "!defined({})".format(tokens[0])
+
+        if self.failed_if[-1]:
+            self.unclosed_ifs += 1
+            return
 
         result = self.evaluate_condition(tokens)
 
@@ -421,5 +456,5 @@ class FunctionReplacement:
         self.new = new
 
     def __str__(self):
-        return "function {} with {} arguments will be formatted into"\
+        return "function {} with {} arguments will be formatted into" \
                    .format(self.name, self.nr_of_arguments) + self.new

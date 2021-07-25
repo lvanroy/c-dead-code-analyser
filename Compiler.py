@@ -47,14 +47,18 @@ class Compiler:
                       .format(grammar_file))
         return 0
 
-    @staticmethod
-    def preprocess(code_file):
+    def preprocess(self, code_file):
+        if self.trace:
+            print("Pre processing started.")
         preprocessor = PreProcessor(code_file)
         result = preprocessor.analyze()
 
         text_file = open("temp.c", "w")
         text_file.write(result)
         text_file.close()
+
+        if self.trace:
+            print("Pre processing finished.")
 
     def analysis(self, code_file):
         if not os.path.isdir("./TreePlots") and self.image_output:
