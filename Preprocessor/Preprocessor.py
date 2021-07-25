@@ -161,7 +161,7 @@ class PreProcessor:
 
             # check for include pattern
             elif re.match(self.include_pattern, line):
-                # self.handle_include(tokens)
+                self.handle_include(tokens)
                 self.marked_for_removal.append(i)
 
             # check for undefine pattern
@@ -221,7 +221,7 @@ class PreProcessor:
 
         if "__attribute__" in new:
             new = ""
-        # print("{} -> {}".format(old, new))
+        print("{} -> {}".format(old, new))
         func_rep = FunctionReplacement(function_name, nr_of_arguments, new)
 
         # add the function definition to the class dict
@@ -271,7 +271,7 @@ class PreProcessor:
         if len(local_file) == 0:
             return
 
-        # print(local_file)
+        print(local_file)
 
         local_file = local_file[0]
         if local_file in self.processed_imports:
