@@ -99,3 +99,6 @@ class AbstractSyntaxTree:
             result += "\n}"
 
         return result
+
+    def __str__(self):
+        return self.__label

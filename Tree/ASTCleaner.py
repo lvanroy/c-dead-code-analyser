@@ -3,6 +3,7 @@ from Tree.AbstractSyntaxTree import AbstractSyntaxTree
 from SymbolTable.SymbolTable import SymbolTable
 
 import operator
+import os
 
 
 class ASTCleaner:
@@ -122,6 +123,11 @@ class ASTCleaner:
             if trace:
                 print("Optimization cycle finished")
                 self.__symbol_table.print()
+                f = open("./TreePlots/temp_temp_cleaned_output.dot", "w")
+                temp = self.get_ast().to_dot()
+                f.write(temp)
+                f.close()
+                os.system("dot -Tpng ./TreePlots/temp_temp_cleaned_output.dot -o ./TreePlots/temp_temp_cleaned.png")
 
     def print_symbol_table(self):
         self.__symbol_table.print()
@@ -720,6 +726,9 @@ class ASTCleaner:
         if self.__entered_branch:
             return ""
 
+        print("{}: {}".format(node.get_line(), node.get_label()))
+        print(node.get_children()[1].get_label())
+
         operand_1 = self.clean(node.get_children()[0])
         op = node.get_children()[1].get_label()
         operand_2 = self.clean(node.get_children()[2])
@@ -751,20 +760,22 @@ class ASTCleaner:
         if node.get_children()[0].get_label() == "Type Name":
             # pop a potential const
             if node.get_children()[0] \
-                .get_children()[0] \
-                .get_label() == "Type Qualifier":
+                    .get_children()[0] \
+                    .get_label() == "Type Qualifier":
                 if node.get_children()[0] \
-                    .get_children()[0] \
-                    .get_children()[0] \
-                    .get_label() == "const":
+                        .get_children()[0] \
+                        .get_children()[0] \
+                        .get_label() == "const":
                     node.get_children()[0].get_children()[0].get_children().pop(0)
                     if len(node.get_children()[0].get_children()[0].get_children()) == 0:
                         node.get_children()[0].get_children().pop(0)
 
             type_spec = node.get_children()[0].get_children()[0]
             type_def = type_spec.get_children()[0]
+            operation = node.get_children()[1].get_children()[0].get_label()
             if (type_spec.get_label() == "Type Specifier" and
-                    type_def.get_label() == "Type Def Name"):
+                    type_def.get_label() == "Type Def Name" and
+                    operation in ["+", "-", "*", "/"]):
                 value = type_def.get_children()[0].get_label()
                 if self.__symbol_table.symbol_exists(value):
                     self.revert_cast(node)
@@ -1492,15 +1503,7 @@ class ASTCleaner:
                 return ""
 
             elif node.get_children()[1].get_label() in {".", "->"}:
-                op = node.get_children()[1].get_label()
-                val = node.get_children()[2].get_label()
-                resulting_val = "Val = {}".format(
-                    self.__symbol_table.get_group_array_value(
-                        original[5:], val))
-                result = "ID = {}".format(original[5:] + op + val)
-                if node.get_parent().get_label() != "Assignment Expression":
-                    self.clean_node(node, resulting_val)
-                return result
+                return ""
 
             elif "." in operand_1 and \
                     node.get_children()[1].get_label() == "[":
@@ -1739,6 +1742,7 @@ class ASTCleaner:
             return ""
 
     def clean(self, node: AbstractSyntaxTree):
+        print("{}: {}".format(node.get_line(), node.get_label()))
         result = ""
 
         # this is the root of the ast

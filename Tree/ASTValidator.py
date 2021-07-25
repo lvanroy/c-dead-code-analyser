@@ -349,12 +349,17 @@ class ASTValidator:
                 parameter_name = node_children[0].get_label()
             elif len(node.get_children()) == 1:
                 children = node.get_children()[0].get_children()
-                for i in range(len(children) - 1):
-                    child = children[i]
-                    if parameter_type == "":
-                        parameter_type = self.get_flattened_type(child)
-                    else:
-                        parameter_type += " {}".format(self.get_flattened_type(child))
+                if len(children) != 1:
+                    for i in range(len(children) - 1):
+                        child = children[i]
+                        if parameter_type == "":
+                            parameter_type = self.get_flattened_type(child)
+                        else:
+                            parameter_type += " {}".format(self.get_flattened_type(child))
+
+                # parameter without name such as void
+                else:
+                    parameter_type = self.get_flattened_type(children[0])
 
                 parameter_name = children[-1].get_label()
 
