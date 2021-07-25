@@ -22,13 +22,13 @@ class PreProcessor:
         self.ifdef_pattern = "^#ifdef .*"
         self.ifndef_pattern = "^#ifndef .*"
         self.if_pattern = "^#if .*"
-        self.define_func_pattern = "^#define [a-z]*\([^,]*?,[^,]*?\).*"
+        self.define_func_pattern = "^#define .*\([^,]*?,[^,]*?\).*"
         self.defined_pattern = "^#defined .*"
         self.else_pattern = "^#else"
         self.elif_pattern = "^#elif .*"
         self.endif_pattern = "^#endif"
         self.equality_pattern = ".*? == .*?"
-        self.error_pattern = "#error .*"
+        self.error_pattern = "#.*error .*"
 
         # keep track of what macros are currently active
         # a define mapping will make it so that every next line we encounter which contains
@@ -86,7 +86,22 @@ class PreProcessor:
                 if old_func in line:
                     invocations = re.findall(r'{}\([^,]*?,[^,]*?\)'.format(old_func), line)
                     for invocation in invocations:
-                        content[i] = line.replace(invocation, "")
+                        parameter_string = invocation.split("(", 1)[1].rsplit(")", 1)[0]
+                        parameters = list()
+                        if parameter_string != "":
+                            parameter_tokens = parameter_string.split(",")
+                            parameter = ""
+                            while parameter_tokens:
+                                parameter += "{} ".format(parameter_tokens.pop(0))
+                                open_round = parameter.count("(") - parameter.count(")")
+                                open_string = parameter.count("\"") % 2
+                                open_char = parameter.count("\'") % 2
+                                if open_round == 0 and open_string == 0 and open_char == 0:
+                                    parameters.append(parameter[1:])
+                                    parameter = ""
+
+                        new = self.defined_functions[old_func].new.format(*parameters)
+                        content[i] = line.replace(invocation, new)
 
             if re.match(self.endif_pattern, line):
                 self.handle_endif(tokens)
@@ -171,13 +186,9 @@ class PreProcessor:
         # get the new token, this is done by ensuring that there are no open brackets
         # the old and new field are seperated by a space but words can be grouped between brackets
         if len(tokens) > 0:
-            open = tokens[0].count("(")
-            closed = tokens[0].count(")")
             new = tokens.pop(0)
-            while open - closed != 0:
+            while tokens:
                 new += tokens.pop(0)
-                open = new.count("(")
-                closed = new.count(")")
         else:
             new = ""
 
@@ -190,6 +201,10 @@ class PreProcessor:
             arguments = arguments.split(",")
             for i in range(len(arguments)):
                 new = new.replace(arguments[i], "{" + str(i) + "}")
+
+        if "__attribute__" in new:
+            new = ""
+        print("{} -> {}".format(old, new))
         func_rep = FunctionReplacement(function_name, nr_of_arguments, new)
 
         # add the function definition to the class dict
@@ -234,8 +249,7 @@ class PreProcessor:
         # for our specific use case. For files in the local directories we do not guarantee any
         # ordering
         include = tokens.pop(0).replace("\"", "").replace("\n", "").replace(">", "").replace("<", "")
-        directory = self.file_name.replace("./", "").split("/")[0]
-        local_file = glob.glob("./{}/**/{}".format(directory, include), recursive=True)
+        local_file = glob.glob("./{}/**/{}".format("xrdp-devel", include), recursive=True)
 
         if len(local_file) == 0:
             return
@@ -299,7 +313,6 @@ class PreProcessor:
                     else:
                         condition = condition.replace(token, "0")
 
-        print(condition)
         return eval(condition)
 
     def handle_if(self, tokens):

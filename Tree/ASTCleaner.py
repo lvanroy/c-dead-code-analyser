@@ -710,8 +710,16 @@ class ASTCleaner:
 
     def clean_parameter_declaration(self, node):
         if len(node.get_children()) > 1:
-            parameter_type = self.clean(node.get_children()[0])
-            parameter_name = self.clean(node.get_children()[1])
+            parameter_type = ""
+            for child in node.get_children():
+                if child.get_label() == "Declarator":
+                    break
+                addend = self.clean(child)
+                if parameter_type == "":
+                    parameter_type = addend
+                else:
+                    parameter_type += " {}".format(addend)
+            parameter_name = self.clean(node.get_children()[-1])
             self.__symbol_table.add_symbol(parameter_type, parameter_name)
             self.__symbol_table.set_initial_value(
                 parameter_name, parameter_name)

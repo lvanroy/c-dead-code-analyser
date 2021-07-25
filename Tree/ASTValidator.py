@@ -343,10 +343,16 @@ class ASTValidator:
             parameter_type = ""
             parameter_name = ""
             if len(node.get_children()) > 1:
-                parameter_type = self.get_flattened_type(node.get_children()[0])
+                for i in range(len(node.get_children()) - 1):
+                    addend = self.get_flattened_type(node.get_children()[i])
+                    if parameter_type == "":
+                        parameter_type = addend
+                    else:
+                        parameter_type += " {}".format(addend)
+                if "const" in parameter_type:
+                    parameter_type = parameter_type.replace("const ", "").replace(" const", "")
 
-                node_children = node.get_children()[1].get_children()
-                parameter_name = node_children[0].get_label()
+                parameter_name = node.get_children()[-1].get_children()[0].get_label()
             elif len(node.get_children()) == 1:
                 children = node.get_children()[0].get_children()
                 if len(children) != 1:
