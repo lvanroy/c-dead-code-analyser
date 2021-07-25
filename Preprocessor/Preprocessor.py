@@ -42,7 +42,8 @@ class PreProcessor:
             "__LITTLE_ENDIAN__": "",
             "CONFIG_AC_H": "",
             "HAVE_FUNC_ATTRIBUTE_FORMAT": "",
-            "MDE_CPU_X64": ""
+            "MDE_CPU_X64": "",
+            "OPENSSL_VERSION_NUMBER": "0x10100000L"
         }
 
         self.defined_functions = dict()
@@ -272,7 +273,7 @@ class PreProcessor:
         if len(local_file) == 0:
             return
 
-        print(local_file)
+        # print(local_file)
 
         local_file = local_file[0]
         if local_file in self.processed_imports:
@@ -330,6 +331,10 @@ class PreProcessor:
                         continue
                     else:
                         condition = condition.replace(token, "0")
+
+        hexes = re.findall(r'0x[0-9a-f]*L', condition)
+        for hex in hexes:
+            condition = condition.replace(hex, hex[:-1])
 
         return eval(condition)
 
