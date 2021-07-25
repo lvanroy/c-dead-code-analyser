@@ -123,11 +123,11 @@ class ASTCleaner:
             if trace:
                 print("Optimization cycle finished")
                 self.__symbol_table.print()
-                f = open("./TreePlots/temp_temp_cleaned_output.dot", "w")
-                temp = self.get_ast().to_dot()
-                f.write(temp)
-                f.close()
-                os.system("dot -Tpng ./TreePlots/temp_temp_cleaned_output.dot -o ./TreePlots/temp_temp_cleaned.png")
+                # f = open("./TreePlots/temp_temp_cleaned_output.dot", "w")
+                # temp = self.get_ast().to_dot()
+                # f.write(temp)
+                # f.close()
+                # os.system("dot -Tpng ./TreePlots/temp_temp_cleaned_output.dot -o ./TreePlots/temp_temp_cleaned.png")
 
     def print_symbol_table(self):
         self.__symbol_table.print()

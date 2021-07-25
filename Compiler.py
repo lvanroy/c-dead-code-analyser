@@ -92,11 +92,11 @@ class Compiler:
             if temp[-2:] == '.c':
                 file_name = temp[:-2]
 
-        f = open("./TreePlots/{}_output.dot".format(file_name), "w")
-        f.write(self.ast.to_dot())
-        f.close()
-
         if self.image_output:
+            f = open("./TreePlots/{}_output.dot".format(file_name), "w")
+            f.write(self.ast.to_dot())
+            f.close()
+
             os.system("dot -Tpng ./TreePlots/{0}_output.dot -o ./TreePlots/{0}.png".format(file_name))
 
         if self.trace:
@@ -107,12 +107,12 @@ class Compiler:
         self.cleaner.perform_full_clean(self.trace)
         self.cleaned_ast = self.cleaner.get_ast()
 
-        f = open("./TreePlots/{}_cleaned_output.dot".format(file_name), "w")
-        temp = self.cleaned_ast.to_dot()
-        f.write(temp)
-        f.close()
-
         if self.image_output:
+            f = open("./TreePlots/{}_cleaned_output.dot".format(file_name), "w")
+            temp = self.cleaned_ast.to_dot()
+            f.write(temp)
+            f.close()
+
             os.system("dot -Tpng ./TreePlots/{0}_cleaned_output.dot -o ./TreePlots/{0}_cleaned.png"
                       .format(file_name))
 
@@ -145,9 +145,10 @@ class Compiler:
         for counter in function_names.keys():
             function_name = function_names[counter]
             dot = dots[counter]
-            f = open("./TreePlots/{}_reachability_automaton_{}.dot".format(file_name, function_name), "w")
-            f.write(dot)
-            f.close()
+            if self.image_output:
+                f = open("./TreePlots/{}_reachability_automaton_{}.dot".format(file_name, function_name), "w")
+                f.write(dot)
+                f.close()
 
         if self.image_output:
             for function_name in function_names.values():
