@@ -226,15 +226,16 @@ class Generator:
                 variable = node.get_children()[0].get_label()
                 op = node.get_children()[1].get_label()
 
-                if variable[5:] in self.__counters[self.__functions_counter -
-                                                   1] and op in {"++", "--"}:
-                    counters = self.__counters[self.__functions_counter - 1]
-                    first_use = counters[variable[5:]].get_first_used_line()
-                    last_use = counters[variable[5:]].get_last_used_line()
-                    if first_use <= node.get_line() <= last_use:
-                        if self.__next_label != "":
-                            self.__next_label += ", "
-                        self.__next_label += "{} {}".format(op[0], 1)
+                if self.__functions_counter - 1 in self.__counters:
+                    if variable[5:] in self.__counters[self.__functions_counter -
+                                                       1] and op in {"++", "--"}:
+                        counters = self.__counters[self.__functions_counter - 1]
+                        first_use = counters[variable[5:]].get_first_used_line()
+                        last_use = counters[variable[5:]].get_last_used_line()
+                        if first_use <= node.get_line() <= last_use:
+                            if self.__next_label != "":
+                                self.__next_label += ", "
+                            self.__next_label += "{} {}".format(op[0], 1)
 
         elif node.get_label() == "Selection Statement":
             # get the automaton object for the current function

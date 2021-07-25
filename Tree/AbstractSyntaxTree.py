@@ -31,7 +31,10 @@ class AbstractSyntaxTree:
         self.__children.insert(index, node)
 
     def find_child(self, child):
-        return self.__children.index(child)
+        if child in self.__children:
+            return self.__children.index(child)
+        else:
+            return None
 
     def get_ctx(self):
         return self.__ctx

@@ -216,7 +216,8 @@ class ASTCleaner:
         parent = node.get_parent()
         index = parent.find_child(node)
 
-        parent.pop_child(index)
+        if index is not None:
+            parent.pop_child(index)
 
     def is_counter(self, variable):
         return self.__symbol_table.is_counter(variable)

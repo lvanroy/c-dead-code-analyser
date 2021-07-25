@@ -76,6 +76,7 @@ class PreProcessor:
         content = re.sub(r'\\\n *', '', content)
         content = re.sub(r',\n *', ', ', content)
         content = re.sub(r'\"\n *\"', "", content)
+        content = re.sub(r'\/\*(?:.*?\n?)*?.*?\*\/', "", content)
         content = content.split("\n")
 
         for i in range(len(content)):
