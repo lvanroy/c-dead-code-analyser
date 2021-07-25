@@ -36,7 +36,6 @@ class PreProcessor:
         #   the LHS will be replaced by the RHS
         # an undefined will remove its corresponding define from the map
         self.defined = {
-            "_WIN32": "",
             "_WIN64": "",
             "L_ENDIAN": "",
             "__LITTLE_ENDIAN__": "",
