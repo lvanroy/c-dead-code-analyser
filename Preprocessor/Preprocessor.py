@@ -84,7 +84,8 @@ class PreProcessor:
             # check if any of the func defines affect the current line
             for old_func in self.defined_functions:
                 if old_func in line:
-                    invocations = re.findall(r'{}\([^,]*?,[^,]*?\)'.format(old_func), line)
+                    invocations = re.findall(r'{}\((?:[^()]*?|\([^()]*?\))*?\)'
+                                             .format(old_func), line)
                     for invocation in invocations:
                         parameter_string = invocation.split("(", 1)[1].rsplit(")", 1)[0]
                         parameters = list()
@@ -92,7 +93,7 @@ class PreProcessor:
                             parameter_tokens = parameter_string.split(",")
                             parameter = ""
                             while parameter_tokens:
-                                parameter += "{} ".format(parameter_tokens.pop(0))
+                                parameter += " {}".format(parameter_tokens.pop(0))
                                 open_round = parameter.count("(") - parameter.count(")")
                                 open_string = parameter.count("\"") % 2
                                 open_char = parameter.count("\'") % 2
@@ -192,6 +193,8 @@ class PreProcessor:
         else:
             new = ""
 
+        new = new.replace("{", "{{").replace("}", "}}")
+
         function_name = old.split("(", 1)[0]
         arguments = old.split("(", 1)[1].rsplit(")", 1)[0]
         if arguments == "":
@@ -200,11 +203,12 @@ class PreProcessor:
             nr_of_arguments = arguments.count(",") + 1
             arguments = arguments.split(",")
             for i in range(len(arguments)):
-                new = new.replace(arguments[i], "{" + str(i) + "}")
+                new = re.sub(r'(?<![a-zA-Z0-9]){}(?![a-zA-Z0-9])'.format(arguments[i]),
+                             "{" + str(i) + "}", new)
 
         if "__attribute__" in new:
             new = ""
-        print("{} -> {}".format(old, new))
+        # print("{} -> {}".format(old, new))
         func_rep = FunctionReplacement(function_name, nr_of_arguments, new)
 
         # add the function definition to the class dict
@@ -254,7 +258,7 @@ class PreProcessor:
         if len(local_file) == 0:
             return
 
-        print(local_file)
+        # print(local_file)
 
         local_file = local_file[0]
         if local_file in self.processed_imports:

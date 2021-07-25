@@ -740,8 +740,8 @@ class ASTCleaner:
         if self.__entered_branch:
             return ""
 
-        print("{}: {}".format(node.get_line(), node.get_label()))
-        print(node.get_children()[1].get_label())
+        # print("{}: {}".format(node.get_line(), node.get_label()))
+        # print(node.get_children()[1].get_label())
 
         operand_1 = self.clean(node.get_children()[0])
         op = node.get_children()[1].get_label()
@@ -1368,12 +1368,16 @@ class ASTCleaner:
             for child in node.get_children()[1].get_children():
                 self.clean(child)
             if node.get_children()[3].get_label() != "Expression":
-                counter = node.get_children()[3].get_children()[0].get_label()
+                if len(node.get_children()[3].get_children()) != 0:
+                    counter = node.get_children()[3].get_children()[0].get_label()
+                    counter2 = node.get_children()[3].get_children()[2].get_label()
+                else:
+                    counter = node.get_children()[3].get_label()
+                    counter2 = ""
                 if counter[:5] == "ID = " and \
                         not self.__symbol_table.is_parameter(counter[5:]):
                     self.__symbol_table.set_counter(True, counter[5:])
 
-                counter2 = node.get_children()[3].get_children()[2].get_label()
                 if counter2[:5] == "ID = " and \
                         not self.__symbol_table.is_parameter(counter2[5:]):
                     self.__symbol_table.set_counter(True, counter2[5:])
@@ -1765,7 +1769,7 @@ class ASTCleaner:
             return ""
 
     def clean(self, node: AbstractSyntaxTree):
-        print("{}: {}".format(node.get_line(), node.get_label()))
+        # print("{}: {}".format(node.get_line(), node.get_label()))
         result = ""
 
         # this is the root of the ast
