@@ -175,9 +175,15 @@ if __name__ == '__main__':
         if len(sys.argv) != 3 and len(sys.argv) != 4 and len(sys.argv) != 5:
             print("Error: incorrect number of arguments.")
         if len(sys.argv) >= 4:
-            compiler.trace = sys.argv[3]
+            if sys.argv[3] in ["0", "false", "False"]:
+                compiler.trace = False
+            else:
+                compiler.trace = True
         if len(sys.argv) >= 5:
-            compiler.image_output = sys.argv[4]
+            if sys.argv[4] in ["0", "false", "False"]:
+                compiler.image_output = False
+            else:
+                compiler.image_output = True
 
         file = sys.argv[2]
         compiler.preprocess(file)
