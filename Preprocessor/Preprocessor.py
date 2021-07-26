@@ -30,6 +30,7 @@ class PreProcessor:
         self.endif_pattern = "^#endif"
         self.equality_pattern = ".*? == .*?"
         self.error_pattern = "#.*error .*"
+        self.warning_pattern = "#.*warning .*"
 
         # keep track of what macros are currently active
         # a define mapping will make it so that every next line we encounter which contains
@@ -42,7 +43,11 @@ class PreProcessor:
             "CONFIG_AC_H": "",
             "HAVE_FUNC_ATTRIBUTE_FORMAT": "",
             "MDE_CPU_X64": "",
-            "OPENSSL_VERSION_NUMBER": "0x10100000L"
+            "OPENSSL_VERSION_NUMBER": "0x10100000L",
+            "XRDP_CFG_PATH": "\"./xrdp\"",
+            "XRDP_SBIN_PATH": "\"sbindir\"",
+            "XRDP_SHARE_PATH": "\"./xrdp\"",
+            "XRDP_PID_PATH=": "\"./run\""
         }
 
         self.defined_functions = dict()
@@ -75,7 +80,8 @@ class PreProcessor:
         content = f.read()
         content = re.sub(r'\\\n *', '', content)
         content = re.sub(r',\n *', ', ', content)
-        content = re.sub(r'\"\n *\"', "", content)
+        content = re.sub(r'\"\n *\"', '', content)
+        content = re.sub(r'\?\n *', '', content)
         content = re.sub(r'\/\*(?:.*?\n?)*?.*?\*\/ *', "", content)
         content = content.split("\n")
 
@@ -86,17 +92,37 @@ class PreProcessor:
 
             # check if any of the defines affect the current line
             for old in self.defined:
-                if old in tokens:
-                    for ind in range(len(tokens)):
-                        if tokens[ind] == old:
-                            tokens[ind] = self.defined[old]
-                    content[i] = " ".join(tokens)
+                if old in line:
+                    # print("{} -> {}".format(old, self.defined[old]))
+                    # print(line)
+                    indices = [m.start() for m in re.finditer(r'(?<![a-zA-Z0-9_-]){}[^a-zA-Z0-9_-]'.format(old), line)]
+                    for index in reversed(indices):
+                        line = "".join((line[:index], self.defined[old], line[index + len(old):]))
+                    content[i] = line
+                    tokens = line.split(" ")
+                    tokens = [token for token in tokens if token]
+                    # print(line)
+                    # print("=====")
 
             # check if any of the func defines affect the current line
             for old_func in self.defined_functions:
                 if old_func in line:
-                    invocations = re.findall(r'{}\((?:[^()]*?|\([^()]*?\))*?\)'
-                                             .format(old_func), line)
+                    invocations = list()
+                    indices = [m.end() for m in re.finditer(r'(?<![a-zA-Z0-9_-]){}\('.format(old_func), line)]
+                    # print(line)
+                    for index in indices:
+                        full_function = '{}('.format(old_func)
+                        open_count = 1
+                        for j in range(index, len(line)):
+                            full_function += line[j]
+                            if line[j] == "(":
+                                open_count += 1
+                            if line[j] == ")":
+                                open_count -= 1
+                            if open_count == 0:
+                                break
+                        invocations.append(full_function)
+
                     for invocation in invocations:
                         parameter_string = invocation.split("(", 1)[1].rsplit(")", 1)[0]
                         parameters = list()
@@ -114,6 +140,12 @@ class PreProcessor:
 
                         new = self.defined_functions[old_func].new.format(*parameters)
                         content[i] = line.replace(invocation, new)
+
+                    line = content[i]
+                    tokens = line.split(" ")
+                    tokens = [token for token in tokens if token]
+                    # print(content[i])
+                    # print("====")
 
             # check for endif pattern
             if re.match(self.endif_pattern, line):
@@ -172,6 +204,10 @@ class PreProcessor:
 
             # check for error
             elif re.match(self.error_pattern, line):
+                self.marked_for_removal.append(i)
+
+            # check for warning
+            elif re.match(self.warning_pattern, line):
                 self.marked_for_removal.append(i)
 
         self.marked_for_removal.sort(reverse=True)

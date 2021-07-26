@@ -316,7 +316,10 @@ class ASTValidator:
             return success
 
         # register parameter definition
-        elif node.get_label() == "Parameter Declaration":
+        # parameter only needs to specifically be recorded in case we are
+        # dealing with a function, parameters can also occur in different
+        # contexts such as structs
+        elif node.get_label() == "Parameter Declaration" and self.__function is not None:
             parameter_type = ""
             parameter_name = ""
             if len(node.get_children()) > 1:
