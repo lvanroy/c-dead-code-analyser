@@ -70,7 +70,7 @@ class PreProcessor:
         self.unclosed_ifs = 0
 
     def analyze(self):
-        f = open(self.file_name, "r")
+        f = open(self.file_name, "r", encoding="utf-8")
 
         content = f.read()
         content = re.sub(r'\\\n *', '', content)
