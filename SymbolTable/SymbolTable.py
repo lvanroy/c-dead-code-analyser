@@ -71,8 +71,10 @@ class SymbolTable:
             self.__symbols[self.__scopes[scope]] = dict()
 
     def clear_scopes(self):
+        root = self.__scopes["0"]
         self.__scopes = dict()
-        self.__scopes["0"] = Scope("0")
+        self.__scopes["0"] = root
+
 
     def add_symbol(self, symbol_type, symbol_name, symbol_value=None):
         if "*" in symbol_type:
@@ -526,6 +528,9 @@ class SymbolTable:
 class Scope:
     def __init__(self, label, parent=None):
         self.__label = label
+        self.__parent_scope = parent
+
+    def set_parent(self, parent):
         self.__parent_scope = parent
 
     def get_parent(self):
