@@ -28,7 +28,7 @@ class SymbolTable:
         self.__current_scope = self.__scopes["0"]
 
         self.__symbols = dict()
-        self.__symbols[self.__scopes["0"]] = dict()
+        self.__symbols["0"] = dict()
 
         self.__group_definitions = dict()
         self.__group_definitions[self.__scopes["0"]] = dict()
@@ -48,7 +48,8 @@ class SymbolTable:
             self.__current_scope = new_scope
             self.__scopes[label] = new_scope
 
-            self.__symbols[new_scope] = dict()
+            if label not in self.__symbols:
+                self.__symbols[label] = dict()
             self.__group_definitions[new_scope] = dict()
             self.__group_instances[new_scope] = dict()
             self.__references[new_scope] = dict()
@@ -68,13 +69,12 @@ class SymbolTable:
     def clear_symbols(self):
         self.__symbols = dict()
         for scope in self.__scopes:
-            self.__symbols[self.__scopes[scope]] = dict()
+            self.__symbols[scope] = dict()
 
     def clear_scopes(self):
         root = self.__scopes["0"]
         self.__scopes = dict()
         self.__scopes["0"] = root
-
 
     def add_symbol(self, symbol_type, symbol_name, symbol_value=None):
         if "*" in symbol_type:
@@ -83,7 +83,8 @@ class SymbolTable:
             self.add_group_instance(symbol_name, symbol_type)
         else:
             new_symbol = Symbol(symbol_type, symbol_name, None, symbol_value)
-            self.__symbols[self.__current_scope][symbol_name] = new_symbol
+            label = self.__current_scope.get_label()
+            self.__symbols[label][symbol_name] = new_symbol
 
     @staticmethod
     def create_group_symbol(symbol_type, symbol_name, symbol_size=None):
@@ -98,8 +99,9 @@ class SymbolTable:
     def symbol_exists(self, symbol_name, scope=None):
         if scope is None:
             scope = self.__current_scope
-        if symbol_name in self.__symbols[scope]:
-            return self.__symbols[scope][symbol_name]
+        label = self.__current_scope.get_label()
+        if symbol_name in self.__symbols[label]:
+            return self.__symbols[label][symbol_name]
         if scope.get_label() == "0":
             return False
         else:
@@ -139,7 +141,8 @@ class SymbolTable:
             symbol_name,
             symbol_size,
             symbol_value)
-        self.__symbols[self.__current_scope][symbol_name] = new_symbol
+        label = self.__current_scope.get_label()
+        self.__symbols[label][symbol_name] = new_symbol
 
     def add_reference(self, symbol_name, symbol_type, refenced_object=None):
         new_reference = Reference(symbol_name, symbol_type, refenced_object)
@@ -175,10 +178,11 @@ class SymbolTable:
         elif scope.get_parent() is None:
             return
         else:
-            self.set_referenced_object(symbol_name, referenced_object, scope.get_parent())
+            self.set_referenced_object(symbol_name, referenced_object,
+                                       scope.get_parent())
 
     def get_symbols(self, scope):
-        return self.__symbols[self.__scopes[scope]].keys()
+        return self.__symbols[scope].keys()
 
     def get_group_instances(self, scope):
         return self.__group_instances[self.__scopes[scope]].keys()
@@ -197,16 +201,18 @@ class SymbolTable:
             scope = self.__current_scope
         if self.__scopes["0"] == scope:
             return False
-        if symbol_name in self.__symbols[scope]:
-            return self.__symbols[scope][symbol_name].is_initialised()
+        label = scope.get_label()
+        if symbol_name in self.__symbols[label]:
+            return self.__symbols[label][symbol_name].is_initialised()
         else:
             return self.is_initialized(symbol_name, scope.get_parent())
 
     def set_initialized(self, symbol_name, initialized, scope=None):
         if scope is None:
             scope = self.__current_scope
-        if symbol_name in self.__symbols[scope]:
-            return self.__symbols[scope][symbol_name].set_initialized(
+        label = scope.get_label()
+        if symbol_name in self.__symbols[label]:
+            return self.__symbols[label][symbol_name].set_initialized(
                 initialized)
         elif self.__scopes["0"] == scope:
             return False
@@ -217,8 +223,9 @@ class SymbolTable:
     def set_used(self, symbol_name, value, scope=None):
         if scope is None:
             scope = self.__current_scope
-        if symbol_name in self.__symbols[scope]:
-            self.__symbols[scope][symbol_name].set_used(value)
+        label = scope.get_label()
+        if symbol_name in self.__symbols[label]:
+            self.__symbols[label][symbol_name].set_used(value)
         elif self.__scopes["0"] == scope:
             return False
         else:
@@ -227,17 +234,19 @@ class SymbolTable:
     def get_value(self, symbol_name, scope=None):
         if scope is None:
             scope = self.__current_scope
-        if symbol_name in self.__symbols[scope]:
-            self.__symbols[scope][symbol_name].set_used(True)
-            return self.__symbols[scope][symbol_name].get_value()
+        label = scope.get_label()
+        if symbol_name in self.__symbols[label]:
+            self.__symbols[label][symbol_name].set_used(True)
+            return self.__symbols[label][symbol_name].get_value()
         else:
             return self.get_value(symbol_name, scope.get_parent())
 
     def set_value(self, symbol_name, value, scope=None):
         if scope is None:
             scope = self.__current_scope
-        if symbol_name in self.__symbols[scope]:
-            return self.__symbols[scope][symbol_name].set_value(value)
+        label = scope.get_label()
+        if symbol_name in self.__symbols[label]:
+            return self.__symbols[label][symbol_name].set_value(value)
         elif scope.get_parent() is None:
             return ""
         else:
@@ -304,8 +313,9 @@ class SymbolTable:
     def get_type(self, symbol_name, scope=None):
         if scope is None:
             scope = self.__current_scope
-        if symbol_name in self.__symbols[scope]:
-            return self.__symbols[scope][symbol_name].get_type()
+        label = scope.get_label()
+        if symbol_name in self.__symbols[label]:
+            return self.__symbols[label][symbol_name].get_type()
         elif scope.get_parent() is None:
             return ""
         else:
@@ -314,8 +324,9 @@ class SymbolTable:
     def get_size(self, symbol_name, scope=None):
         if scope is None:
             scope = self.__current_scope
-        if symbol_name in self.__symbols[scope]:
-            return self.__symbols[scope][symbol_name].get_size()
+        label = scope.get_label()
+        if symbol_name in self.__symbols[label]:
+            return self.__symbols[label][symbol_name].get_size()
         elif scope.get_parent() is None:
             return
         else:
@@ -324,8 +335,9 @@ class SymbolTable:
     def is_used(self, symbol_name, scope):
         if type(scope) == str:
             scope = self.__scopes[scope]
-        if symbol_name in self.__symbols[scope]:
-            return self.__symbols[scope][symbol_name].get_used()
+        label = scope.get_label()
+        if symbol_name in self.__symbols[label]:
+            return self.__symbols[label][symbol_name].get_used()
         else:
             return self.is_used(symbol_name, scope.get_parent())
 
@@ -334,16 +346,16 @@ class SymbolTable:
             scope = self.__scopes[scope]
         elif scope is None:
             scope = self.__current_scope
-        if symbol_name in self.__symbols[scope]:
-            return self.__symbols[scope][symbol_name].get_counter()
+        label = scope.get_label()
+        if symbol_name in self.__symbols[label]:
+            return self.__symbols[label][symbol_name].get_counter()
         elif scope.get_parent() is None:
             return False
         else:
             return self.is_counter(symbol_name, scope.get_parent())
 
-    def is_global(self, symbol_name, scope=None):
-        scope = self.__scopes["0"]
-        if symbol_name in self.__symbols[scope]:
+    def is_global(self, symbol_name):
+        if symbol_name in self.__symbols["0"]:
             return True
         else:
             return False
@@ -351,8 +363,9 @@ class SymbolTable:
     def set_counter(self, counter_val, symbol_name, scope=None):
         if scope is None:
             scope = self.__current_scope
-        if symbol_name in self.__symbols[scope]:
-            return self.__symbols[scope][symbol_name].set_counter(counter_val)
+        label = scope.get_label()
+        if symbol_name in self.__symbols[label]:
+            return self.__symbols[label][symbol_name].set_counter(counter_val)
         else:
             if scope.get_label() == "0":
                 return False
@@ -362,8 +375,9 @@ class SymbolTable:
     def symbol_has_initial_value(self, symbol_name, scope=None):
         if scope is None:
             scope = self.__current_scope
-        if symbol_name in self.__symbols[scope]:
-            return self.__symbols[scope][symbol_name].has_initial_value()
+        label = scope.get_label()
+        if symbol_name in self.__symbols[label]:
+            return self.__symbols[label][symbol_name].has_initial_value()
         else:
             return self.symbol_has_initial_value(
                 symbol_name, scope.get_parent())
@@ -371,8 +385,9 @@ class SymbolTable:
     def set_initial_value(self, symbol_name, initial_value, scope=None):
         if scope is None:
             scope = self.__current_scope
-        if symbol_name in self.__symbols[scope]:
-            self.__symbols[scope][symbol_name].set_initial_value(initial_value)
+        label = scope.get_label()
+        if symbol_name in self.__symbols[label]:
+            self.__symbols[label][symbol_name].set_initial_value(initial_value)
         else:
             if scope.get_label() == "0":
                 return False
@@ -382,8 +397,9 @@ class SymbolTable:
     def get_initial_value(self, symbol_name, scope=None):
         if scope is None:
             scope = self.__current_scope
-        if symbol_name in self.__symbols[scope]:
-            return self.__symbols[scope][symbol_name].get_initial_value()
+        label = scope.get_label()
+        if symbol_name in self.__symbols[label]:
+            return self.__symbols[label][symbol_name].get_initial_value()
         else:
             return self.get_initial_value(symbol_name, scope.get_parent())
 
@@ -392,8 +408,9 @@ class SymbolTable:
             scope = self.__scopes[scope]
         elif scope is None:
             scope = self.__current_scope
-        if symbol_name in self.__symbols[scope]:
-            return self.__symbols[scope][symbol_name].get_parameter()
+        label = scope.get_label()
+        if symbol_name in self.__symbols[label]:
+            return self.__symbols[label][symbol_name].get_parameter()
         elif scope.get_parent() is None:
             return False
         else:
@@ -402,8 +419,9 @@ class SymbolTable:
     def set_parameter(self, parameter_val, symbol_name, scope=None):
         if scope is None:
             scope = self.__current_scope
-        if symbol_name in self.__symbols[scope]:
-            return self.__symbols[scope][symbol_name].set_parameter(
+        label = scope.get_label()
+        if symbol_name in self.__symbols[label]:
+            return self.__symbols[label][symbol_name].set_parameter(
                 parameter_val)
         if scope.get_parent() is None:
             return
@@ -430,9 +448,10 @@ class SymbolTable:
     def get_array_value_at_index(self, symbol_name, index, scope=None):
         if scope is None:
             scope = self.__current_scope
-        if symbol_name in self.__symbols[scope]:
-            self.__symbols[scope][symbol_name].set_used(True)
-            return self.__symbols[scope][symbol_name].get_array_value_at_index(
+        label = scope.get_label()
+        if symbol_name in self.__symbols[label]:
+            self.__symbols[label][symbol_name].set_used(True)
+            return self.__symbols[label][symbol_name].get_array_value_at_index(
                 index)
         elif scope.get_parent() is None:
             return
@@ -485,17 +504,19 @@ class SymbolTable:
     def print(self):
         output = ""
         for scope in self.__scopes.values():
+            label = scope.get_label()
             if (
-                scope in self.__symbols and self.__symbols[scope]) or (
-                scope in self.__group_instances and
-                self.__group_instances[scope]) or (
-                scope in self.__references and self.__references[scope]) or (
+                    label in self.__symbols and self.__symbols[label]) or (
+                    scope in self.__group_instances and
+                    self.__group_instances[scope]) or (
+                    scope in self.__references and self.__references[
+                scope]) or (
                     scope in self.__enumerators and self.__enumerators[scope]):
                 output += "================= {} =================\n".format(
                     scope.get_label())
-            if scope in self.__symbols and self.__symbols[scope]:
-                for symbol in self.__symbols[scope]:
-                    output += str(self.__symbols[scope][symbol]) + "\n"
+            if label in self.__symbols and self.__symbols[label]:
+                for symbol in self.__symbols[label]:
+                    output += str(self.__symbols[label][symbol]) + "\n"
             if scope in self.__group_instances and \
                     self.__group_instances[scope]:
                 for instance in self.__group_instances[scope]:
@@ -622,12 +643,12 @@ class Symbol:
     def __str__(self):
         if self.__size is None and self.__initial_value is not None:
             output = "symbol {} with type {} has initial " \
-                     "value {} and final value {}"\
+                     "value {} and final value {}" \
                 .format(self.__name, self.__type,
                         self.__initial_value, self.__value)
         elif self.__initialized:
             output = "symbol {} with type {} has size {}, " \
-                     "initial value {} and final value {}"\
+                     "initial value {} and final value {}" \
                 .format(self.__name, self.__type,
                         self.__size, self.__initial_value, self.__value)
         else:
@@ -659,7 +680,7 @@ class GroupDefinition:
     def __str__(self):
         output = "Group {} with group type {} has the " \
                  "following variables\n".format(
-                  self.__group_name, self.__group_type)
+            self.__group_name, self.__group_type)
         for variable in self.__group_variables:
             output += "\t{}\n".format(str(variable))
         return output
@@ -783,18 +804,18 @@ class GroupInstanceVariable:
             else:
                 return "Symbol {} with type {} and size {} " \
                        "has value {}.".format(
-                        self.__name, self.__type, self.__size, self.__value)
+                    self.__name, self.__type, self.__size, self.__value)
         else:
             if self.__size is None:
                 return "Symbol {} with type {} has " \
                        "value {} or {} in ascii.".format(
-                        self.__name, self.__type,
-                        self.__value, chr(int(self.__value)))
+                    self.__name, self.__type,
+                    self.__value, chr(int(self.__value)))
             else:
                 return "Symbol {} with type {} and " \
                        "size {} has value {} or {} in ascii.".format(
-                        self.__name, self.__type, self.__size,
-                        self.__value, chr(int(self.__value)))
+                    self.__name, self.__type, self.__size,
+                    self.__value, chr(int(self.__value)))
 
 
 class Reference:
